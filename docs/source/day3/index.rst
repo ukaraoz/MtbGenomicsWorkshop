@@ -1,6 +1,15 @@
-Welcome to M. tuberculosis Bioinformatics Workshop
-===================================================================
+********
+Day 3
+********
+
+Microbial Genome Assembly
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
+   datasets
+   dataprep
+   read_qc
+   assembly
+   assembly_qc
+   assembly_curation
