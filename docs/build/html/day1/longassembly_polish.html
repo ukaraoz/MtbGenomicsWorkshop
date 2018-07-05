@@ -1,0 +1,118 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Improving the accuracy of the long read assembly &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Microbial Genome Annotation" href="genome_annotation.html" />
+    <link rel="prev" title="Assessing the quality of the assemblies" href="assembly_qc.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="genome_annotation.html" title="Microbial Genome Annotation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="assembly_qc.html" title="Assessing the quality of the assemblies"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Day 1</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="improving-the-accuracy-of-the-long-read-assembly">
+<h1>Improving the accuracy of the long read assembly<a class="headerlink" href="#improving-the-accuracy-of-the-long-read-assembly" title="Permalink to this headline">¶</a></h1>
+<p>In the lecture, we have seen that PacBio long reads have a significantly higher error rate compared to Illumina short reads. As a result, the long read assembly will have many errors in the consensus sequence (primarily indels). We can increase the accuracy of the consensus sequences using the Illumina reads, which will provide more coverage and higher quality bases. This process of improving the accuracy of the long reads using high fidelity short reads is sometimes referred to as <em>polishing</em>.</p>
+<p>To polish PacBio assembly, we will use <code class="docutils literal notranslate"><span class="pre">pilon</span></code> which will generate a new consensus sequence for the assembly. The details of the following commands will be clear in the next lecture. For now, run the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir ~/wgs_assembly/results/short_long_reads_assembly/correct_pacbio_assembly
+PACBIO_ASSEMBLY=~/wgs_assembly/results/short_long_reads_assembly/assemblies/MTB_pacbio_assembly.fasta
+cd ~/wgs_assembly/results/short_long_reads_assembly
+bwa index $PACBIO_ASSEMBLY
+bwa mem -t 4 -p $PACBIO_ASSEMBLY ~/wgs_assembly/results/qc/MTB_illumina60X_qced_R1R2.fastq | samtools sort -T tmp -o ~/wgs_assembly/results/short_long_reads_assembly/correct_pacbio_assembly/MTB_illumina60X_qced.mapped_to_pacbio_contigs.sorted.bam -
+samtools index ~/wgs_assembly/results/short_long_reads_assembly/correct_pacbio_assembly/MTB_illumina60X_qced.mapped_to_pacbio_contigs.sorted.bam
+java -Xmx8G -jar /opt/pilon-1.22.jar --genome $PACBIO_ASSEMBLY --frags ~/wgs_assembly/results/short_long_reads_assembly/correct_pacbio_assembly/MTB_illumina60X_qced.mapped_to_pacbio_contigs.sorted.bam --output MTB_pacbio_assembly_shortreadcorrected
+</pre></div>
+</div>
+<p>Rerun quast with 4 assemblies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">quast</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">R</span> <span class="o">../</span><span class="n">NC_000962</span><span class="o">.</span><span class="mf">3.</span><span class="n">fna</span> <span class="o">-</span><span class="n">o</span> <span class="n">quast_4assemblies_qc</span> <span class="o">./</span><span class="n">MTB_illumina20X_assembly</span><span class="o">.</span><span class="n">fasta</span> <span class="o">./</span><span class="n">MTB_illumina60X_assembly</span><span class="o">.</span><span class="n">fasta</span> <span class="o">./</span><span class="n">MTB_pacbio_assembly</span><span class="o">.</span><span class="n">fasta</span> <span class="o">./</span><span class="n">MTB_pacbio_assembly_shortreadcorrected</span><span class="o">.</span><span class="n">fasta</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="assembly_qc.html"
+                        title="previous chapter">Assessing the quality of the assemblies</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="genome_annotation.html"
+                        title="next chapter">Microbial Genome Annotation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/day1/longassembly_polish.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="genome_annotation.html" title="Microbial Genome Annotation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="assembly_qc.html" title="Assessing the quality of the assemblies"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Day 1</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ulas Karaoz.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

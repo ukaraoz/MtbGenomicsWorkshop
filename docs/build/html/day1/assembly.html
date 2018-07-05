@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Copying data and preparing the directories &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <title>Assembly &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -15,8 +15,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Copying data and preparing the directories" href="assembly_qc.html" />
-    <link rel="prev" title="Copying data and preparing the directories" href="read_qc.html" /> 
+    <link rel="next" title="Assessing the quality of the assemblies" href="assembly_qc.html" />
+    <link rel="prev" title="Pre-assembly Quality Control" href="preassembly_qc.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,10 +25,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="assembly_qc.html" title="Copying data and preparing the directories"
+          <a href="assembly_qc.html" title="Assessing the quality of the assemblies"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="read_qc.html" title="Copying data and preparing the directories"
+          <a href="preassembly_qc.html" title="Pre-assembly Quality Control"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Day 1</a> &#187;</li> 
@@ -40,29 +40,47 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="copying-data-and-preparing-the-directories">
-<h1>Copying data and preparing the directories<a class="headerlink" href="#copying-data-and-preparing-the-directories" title="Permalink to this headline">¶</a></h1>
-<p>First let’s create a variable pointing to the data directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATA</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">mtb_upm</span><span class="o">/</span><span class="n">data</span>
+  <div class="section" id="assembly">
+<h1>Assembly<a class="headerlink" href="#assembly" title="Permalink to this headline">¶</a></h1>
+<p>We can now proceed with the assembly of short and long reads. We will assemble each library (2 short and 1 long reads library) reseparately and compare the assemblies.</p>
+<p>Create a directory to hold the assembly results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span>
+<span class="n">cd</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span>
 </pre></div>
 </div>
-<p>Next, create a directory named <code class="docutils literal notranslate"><span class="pre">`wgs_assembly`</span></code> and move into that directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">wgs_assembly</span>
-<span class="n">cd</span> <span class="o">~/</span><span class="n">wgs_assembly</span>
+<div class="section" id="assembly-using-illumina-short-reads">
+<h2>Assembly using Illumina short reads<a class="headerlink" href="#assembly-using-illumina-short-reads" title="Permalink to this headline">¶</a></h2>
+<p>We will assemble the <em>M. tuberculosis</em> genome using the <em>qced</em> short reads, separately for 20X and 60X libraries. We will be using <code class="docutils literal notranslate"><span class="pre">SPAdes</span></code> assembler, which is a <code class="docutils literal notranslate"><span class="pre">de</span> <span class="pre">Bruijn</span> <span class="pre">graph</span></code> based short read assembler.</p>
+<p>The parameters that go into a short read assembler can be tricky to optimize and tuning them is quite time consuming. The most important parameter is the <code class="docutils literal notranslate"><span class="pre">k-mer</span></code> size to be used to built the <code class="docutils literal notranslate"><span class="pre">de</span> <span class="pre">Bruijn</span> <span class="pre">graph</span></code>. <code class="docutils literal notranslate"><span class="pre">SPAdes</span></code> makes the parameterization quite easy and will select parameter values automatically.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">SPAdes</span></code> as follows using 4 threads (<code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">4</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spades</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">o</span> <span class="n">MTB_illumina20X_spades</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> <span class="o">-</span><span class="mi">12</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina20X_qced_R1R2</span><span class="o">.</span><span class="n">fastq</span>
+<span class="n">spades</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">o</span> <span class="n">MTB_illumina60X_spades</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> <span class="o">-</span><span class="mi">12</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina60X_qced_R1R2</span><span class="o">.</span><span class="n">fastq</span>
 </pre></div>
 </div>
-<p>Inside that directory, create the following directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span>
+<p>The assembly for the 20X library will be computed quickly but for the 60X library the computation will take about 1 hour. Copy the precalculated assembly directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp -r $DAY1_PRECALCULATED/MTB_illumina60X_spades ./MTB_illumina60X_spades
 </pre></div>
 </div>
-<p>Copy the contents of the data directory into your data directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp -r $DATA/* ~/wgs_assembly/data/
+</div>
+<div class="section" id="assembly-using-pacbio-long-reads">
+<h2>Assembly using PacBio long reads<a class="headerlink" href="#assembly-using-pacbio-long-reads" title="Permalink to this headline">¶</a></h2>
+<p>Now, we will generate an assembly of the <em>M. tuberculosis</em> genome using PacBio long reads. Longer reads are better at resolving repeats and therefor will typically give more contiguous assemblies compared to short reads. However, long reads have a significantly higher error rate so consensus base qualities are expected to be much lower.</p>
+<p>To assemble long reads, we will use <code class="docutils literal notranslate"><span class="pre">canu</span></code>, an <code class="docutils literal notranslate"><span class="pre">overlap-layour-consensus</span></code> assembler. Generate the assembly with the following command (this will take about ~30 min.).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>canu gnuplotTested=true -p MTB_pacbio_canu -d MTB_pacbio_canu_auto genomeSize=4.4m -pacbio-raw MTB_pacbio_circular-consensus-sequence-reads.fastq
+
+Copy the precomputed assembly:
+::
+
+cp -r $DAY1_PRECALCULATED/MTB_pacbio_canu_auto ./MTB_pacbio_canu_auto
 </pre></div>
 </div>
-<p>Next, create the directories to hold your results:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span>
-<span class="n">mkdir</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">assemblies</span>
+<p>Now you should have 3 separate <em>M. tuberculosis</em> assemblies. Copy the <code class="docutils literal notranslate"><span class="pre">fasta</span></code> files for the assembled contigs into a separate directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">assemblies</span>
+<span class="n">cp</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">MTB_pacbio_canu_auto</span><span class="o">/</span><span class="n">MTB_pacbio_canu</span><span class="o">.</span><span class="n">contigs</span><span class="o">.</span><span class="n">fasta</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">assemblies</span><span class="o">/</span><span class="n">MTB_pacbio_assembly</span><span class="o">.</span><span class="n">fasta</span>
+<span class="n">cp</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">MTB_illumina20X_spades</span><span class="o">/</span><span class="n">contigs</span><span class="o">.</span><span class="n">fasta</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">assemblies</span><span class="o">/</span><span class="n">MTB_illumina20X_assembly</span><span class="o">.</span><span class="n">fasta</span>
+<span class="n">cp</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">MTB_illumina60X_spades</span><span class="o">/</span><span class="n">contigs</span><span class="o">.</span><span class="n">fasta</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">assemblies</span><span class="o">/</span><span class="n">MTB_illumina60X_assembly</span><span class="o">.</span><span class="n">fasta</span>
 </pre></div>
+</div>
 </div>
 </div>
 
@@ -72,12 +90,21 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Assembly</a><ul>
+<li><a class="reference internal" href="#assembly-using-illumina-short-reads">Assembly using Illumina short reads</a></li>
+<li><a class="reference internal" href="#assembly-using-pacbio-long-reads">Assembly using PacBio long reads</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
-  <p class="topless"><a href="read_qc.html"
-                        title="previous chapter">Copying data and preparing the directories</a></p>
+  <p class="topless"><a href="preassembly_qc.html"
+                        title="previous chapter">Pre-assembly Quality Control</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="assembly_qc.html"
-                        title="next chapter">Copying data and preparing the directories</a></p>
+                        title="next chapter">Assessing the quality of the assemblies</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -108,10 +135,10 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="assembly_qc.html" title="Copying data and preparing the directories"
+          <a href="assembly_qc.html" title="Assessing the quality of the assemblies"
              >next</a> |</li>
         <li class="right" >
-          <a href="read_qc.html" title="Copying data and preparing the directories"
+          <a href="preassembly_qc.html" title="Pre-assembly Quality Control"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Day 1</a> &#187;</li> 

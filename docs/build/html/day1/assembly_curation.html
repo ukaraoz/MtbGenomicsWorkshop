@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Copying data and preparing the directories &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <title>Improving the accuracy of the PacBio long read assembly &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,9 +14,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Day 2" href="../day2/index.html" />
-    <link rel="prev" title="Copying data and preparing the directories" href="assembly_qc.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -24,14 +22,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../day2/index.html" title="Day 2"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="assembly_qc.html" title="Copying data and preparing the directories"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Day 1</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -40,30 +31,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="copying-data-and-preparing-the-directories">
-<h1>Copying data and preparing the directories<a class="headerlink" href="#copying-data-and-preparing-the-directories" title="Permalink to this headline">¶</a></h1>
-<p>First let’s create a variable pointing to the data directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATA</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">mtb_upm</span><span class="o">/</span><span class="n">data</span>
-</pre></div>
-</div>
-<p>Next, create a directory named <code class="docutils literal notranslate"><span class="pre">`wgs_assembly`</span></code> and move into that directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">wgs_assembly</span>
-<span class="n">cd</span> <span class="o">~/</span><span class="n">wgs_assembly</span>
-</pre></div>
-</div>
-<p>Inside that directory, create the following directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span>
-</pre></div>
-</div>
-<p>Copy the contents of the data directory into your data directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp -r $DATA/* ~/wgs_assembly/data/
-</pre></div>
-</div>
-<p>Next, create the directories to hold your results:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span>
-<span class="n">mkdir</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">assemblies</span>
-</pre></div>
-</div>
+  <div class="section" id="improving-the-accuracy-of-the-pacbio-long-read-assembly">
+<h1>Improving the accuracy of the PacBio long read assembly<a class="headerlink" href="#improving-the-accuracy-of-the-pacbio-long-read-assembly" title="Permalink to this headline">¶</a></h1>
+<p>As PacBio and Nanopore reads have a higher error rate than Illumina reads it is expected that the long read assemblies has errors in the consensus sequence (mostly insertions and deletions). We can increase the accuracy of our consensus sequence by using more coverage (up to around 100x), or by “polishing” the assembly (inferring a better consensus sequence) with high-accuracy Illumina reads. We’ll use Pilon to calculate a new consensus sequence for our PacBio assembly. First we have to map the Illumina reads to our assembly using bwa.</p>
+<p>bwa index assemblies/ecoli.pacbio.25x.canu-contigs.fasta
+bwa mem -t 4 -p assemblies/ecoli.pacbio.25x.canu-contigs.fasta ecoli.illumina.50x.fastq | samtools sort -T tmp -o ecoli.illumina.50x.mapped_to_pacbio_contigs.sorted.bam -
+samtools index ecoli.illumina.50x.mapped_to_pacbio_contigs.sorted.bam
+Now we can run pilon:</p>
+<p>java -Xmx4G -jar /usr/local/pilon/pilon_2.11-1.21-one-jar.jar –genome assemblies/ecoli.pacbio.25x.canu-contigs.fasta –frags ecoli.illumina.50x.mapped_to_pacbio_contigs.sorted.bam –output assemblies/ecoli.pacbio.25x.canu-contigs-pilon</p>
 </div>
 
 
@@ -72,12 +47,6 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="assembly_qc.html"
-                        title="previous chapter">Copying data and preparing the directories</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../day2/index.html"
-                        title="next chapter">Day 2</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -107,14 +76,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="../day2/index.html" title="Day 2"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="assembly_qc.html" title="Copying data and preparing the directories"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >Day 1</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

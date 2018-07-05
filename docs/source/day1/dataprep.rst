@@ -1,5 +1,5 @@
 Copying data and preparing the directories
-================
+==========================================
 
 First let's create a variable pointing to the data directory::
 
