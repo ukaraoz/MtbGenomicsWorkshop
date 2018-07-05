@@ -7,4 +7,4 @@ Microbial Genome Assembly
 .. toctree::
    :maxdepth: 1
 
-   phylogenetics
+   reproducible_research
