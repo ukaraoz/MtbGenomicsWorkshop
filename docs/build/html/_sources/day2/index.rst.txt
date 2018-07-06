@@ -7,4 +7,5 @@ Microbial Genome Assembly
 .. toctree::
    :maxdepth: 1
 
+   dataset
    mapping
