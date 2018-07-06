@@ -14,7 +14,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Advanced Beginner/Intermediate Shell" href="unixintermediate.html" />
+    <link rel="prev" title="Day 0" href="index.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -22,7 +24,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="unixintermediate.html" title="Advanced Beginner/Intermediate Shell"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Day 0"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Day 0</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -33,18 +42,21 @@
             
   <div class="section" id="introductory-unix-shell">
 <h1>Introductory Unix Shell<a class="headerlink" href="#introductory-unix-shell" title="Permalink to this headline">¶</a></h1>
-<p>Updated June 2018 by Ulas Karaoz</p>
+<p><strong>Updated June 2018 by Ulas Karaoz</strong></p>
 <div class="section" id="credits">
 <h2>Credits<a class="headerlink" href="#credits" title="Permalink to this headline">¶</a></h2>
-<p>Original author: Tracy Teal for Data Carpentry (<a class="reference external" href="http://datacarpentry.org">http://datacarpentry.org</a>).</p>
-<p>Original contributors:
-Paul Wilson, Milad Fatenejad, Sasha Wood and Radhika Khetani for
-Software Carpentry (<a class="reference external" href="http://software-carpentry.org/">http://software-carpentry.org/</a>)</p>
-<p>Additional contributors:
-Titus Brown, Karen Word (<a class="reference external" href="https://github.com/ngs-docs/2015-shell-genomics/blob/gh-pages/README.rst">https://github.com/ngs-docs/2015-shell-genomics/blob/gh-pages/README.rst</a>)</p>
+<p><strong>Original author</strong>: <em>Tracy Teal for</em>
+<a class="reference external" href="http://datacarpentry.org">Data Carpentry</a></p>
+<p><strong>Original contributors</strong>: <em>Paul Wilson, Milad Fatenejad, Sasha Wood and Radhika Khetani for</em>
+<a class="reference external" href="http://software-carpentry.org">Software Carpentry</a></p>
+<p><strong>Additional contributors</strong>: <em>Titus Brown, Karen Word</em> (<a class="reference external" href="https://github.com/ngs-docs/2015-shell-genomics/">https://github.com/ngs-docs/2015-shell-genomics/</a>)</p>
 </div>
-<div class="section" id="objectives">
-<h2>Objectives<a class="headerlink" href="#objectives" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>This workshop operates under the <a class="reference external" href="http://software-carpentry.org/conduct/">Software Carpentry Code of conduct</a></p>
+</div>
+<div class="section" id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>What is the shell?</li>
 <li>How do you access it?</li>
@@ -57,12 +69,28 @@ Titus Brown, Karen Word (<a class="reference external" href="https://github.com/
 </li>
 <li>Where are resources where I can learn more?</li>
 </ul>
+<hr class="docutils" />
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p>Before starting:</p>
+<ol class="arabic simple">
+<li>Download the test data. Launch your shell terminal, type or copy/paste the following:</li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">s3</span><span class="o">-</span><span class="n">us</span><span class="o">-</span><span class="n">west</span><span class="o">-</span><span class="mf">1.</span><span class="n">amazonaws</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">mtb</span><span class="o">-</span><span class="n">bioinformatics</span><span class="o">-</span><span class="n">workshop</span><span class="o">/</span><span class="n">shell</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
+</pre></div>
 </div>
-<div class="section" id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
-<p>This workshop operates under the Software Carpentry Code of conduct:
-<a class="reference external" href="http://software-carpentry.org/conduct/">http://software-carpentry.org/conduct/</a></p>
+<ol class="arabic simple" start="2">
+<li>Unpack the <cite>.zip</cite> archive:</li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">unzip</span> <span class="n">shell</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
+</pre></div>
 </div>
+<ol class="last arabic simple" start="3">
+<li>We’ll be posting code snippets to: <a class="reference external" href="https://public.etherpad-mozilla.org/p/mtb_bioinformatics_shell">https://public.etherpad-mozilla.org/p/mtb_bioinformatics_shell</a></li>
+</ol>
+</div>
+</div>
+<hr class="docutils" />
 <div class="section" id="what-is-the-shell">
 <h2>What is the shell?<a class="headerlink" href="#what-is-the-shell" title="Permalink to this headline">¶</a></h2>
 <p>The <em>shell</em> is a program that presents a command line interface
@@ -87,7 +115,7 @@ transformative.</li>
 power tool, with its own deep internal logic with lots of details.
 The joke is that Unix is user-friendly - it’s just very selective
 about who its friends are!</p>
-<p>shell cheat sheets:</p>
+<p>Shell cheat sheets:</p>
 <ul class="simple">
 <li><a class="reference external" href="http://fosswire.com/post/2007/08/unixlinux-command-cheat-sheet/">http://fosswire.com/post/2007/08/unixlinux-command-cheat-sheet/</a></li>
 <li><a class="reference external" href="https://github.com/swcarpentry/boot-camps/blob/master/shell/shell_cheatsheet.md">https://github.com/swcarpentry/boot-camps/blob/master/shell/shell_cheatsheet.md</a></li>
@@ -98,40 +126,30 @@ components of a shell command are doing.</p>
 <li><a class="reference external" href="http://explainshell.com">http://explainshell.com</a></li>
 <li><a class="reference external" href="http://www.commandlinefu.com">http://www.commandlinefu.com</a></li>
 </ul>
-<p>(We’ll look at these at the bottom.)</p>
 </div>
 <div class="section" id="starting-with-the-shell">
 <h2>Starting with the shell<a class="headerlink" href="#starting-with-the-shell" title="Permalink to this headline">¶</a></h2>
 <p>We will spend most of our time learning about the basics of the shell
-by manipulating some experimental data.</p>
-<p>Now we’re going to download the data for the tutorial. For this you’ll need
-internet access, because you’re going to get it off the web.</p>
-<p>Open up the shell and type the command:</p>
+by manipulating some experimental data we downloaded (see above)</p>
+<p>Open up the shell and type the command</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pwd</span>
 </pre></div>
 </div>
-<p>and then hit ENTER - this will give you a directory name. Remember it!</p>
-<p>We next want to use our Web browser to download the file:</p>
-<blockquote>
-<div><a class="reference external" href="https://s3-us-west-1.amazonaws.com/dib-training.ucdavis.edu/shell-data.zip">https://s3-us-west-1.amazonaws.com/dib-training.ucdavis.edu/shell-data.zip</a></div></blockquote>
-<p>to our computer, and then use the file browser to copy it to the directory shown by <code class="docutils literal notranslate"><span class="pre">pwd</span></code> above.
-Now, then unpack it in that directory (probably by double clicking on it).</p>
+<p>and then hit ENTER - this will give you a directory name.</p>
 <p>Once that’s done, type:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span>
 </pre></div>
 </div>
 <p>and hit ENTER.  You should see a listing of files, with ‘shell-data.zip’ and
-‘data’ among them.</p>
-<p>Once you see that, put up your green stickies.  If you don’t know where to
-start, put up your pink sticky.</p>
+<cite>data</cite> among them.</p>
 </div>
 <div class="section" id="running-commands">
 <h2>Running commands<a class="headerlink" href="#running-commands" title="Permalink to this headline">¶</a></h2>
-<p>‘pwd’ and ‘ls’ are examples of commands - programs you run at the shell
-prompt that do stuff. pwd stands for ‘print working directory’, while
-‘ls’ stands for ‘list files’.</p>
-<p>Another command you’ll find yourself using a lot is ‘cd’, which stands
-for ‘change directory’.  Try typing:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pwd</span></code> and <code class="docutils literal notranslate"><span class="pre">ls</span></code> are examples of commands - programs you run at the shell
+prompt that do stuff. pwd stands for <cite>print working directory</cite>, while
+<code class="docutils literal notranslate"><span class="pre">ls</span></code> stands for <cite>list files</cite>.</p>
+<p>Another command you’ll find yourself using a lot is <code class="docutils literal notranslate"><span class="pre">cd</span></code>, which stands
+for <cite>change directory</cite>.  Try typing:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">data</span>
 </pre></div>
 </div>
@@ -139,23 +157,23 @@ for ‘change directory’.  Try typing:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pwd</span>
 </pre></div>
 </div>
-<p>You should see that you’re now in the data/ subdirectory (or folder)
-underneath the original directory. Type ‘ls’ to see what files are in
+<p>You should see that you’re now in the data/subdirectory (or folder)
+underneath the original directory. Type <code class="docutils literal notranslate"><span class="pre">ls</span></code> to see what files are in
 here.</p>
-<p>What’s going on?</p>
-<p>The shell has a concept of “working directory”, which is basically the
+<p>What’s going on? The shell has a concept of <cite>working directory</cite>, which is basically the
 default location for commands to look when you run them.  When you run
-‘ls’, by default it looks in your current working directory; when you
-run ‘cd’, it changes your current working directory.</p>
-<p>What’s the difference between ‘cd’ and ‘data’? Here, ‘cd’ is the command,
-and ‘data’ is an <em>argument</em> to that command - think of the command as the
+<code class="docutils literal notranslate"><span class="pre">ls</span></code>, by default it looks in your current working directory; when you
+run <code class="docutils literal notranslate"><span class="pre">cd</span></code>, it changes your current working directory.</p>
+<p>What’s the difference between <code class="docutils literal notranslate"><span class="pre">cd</span></code> and <cite>data</cite>? Here, <code class="docutils literal notranslate"><span class="pre">cd</span></code> is the command,
+and <cite>data</cite> is an <cite>argument</cite> to that command - think of the command as the
 verb, and the argument as the noun upon which the verb acts.</p>
+<p>In this tutorial, commands are shown as <code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">am</span> <span class="pre">a</span> <span class="pre">command:</span> <span class="pre">you</span> <span class="pre">can</span> <span class="pre">type</span> <span class="pre">me</span> <span class="pre">in</span> <span class="pre">your</span> <span class="pre">shell</span> <span class="pre">terminal</span></code>.</p>
 <p>Now type:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">..</span>
 </pre></div>
 </div>
-<p>and type ‘ls’.  You should see at least two entries,
-<code class="docutils literal notranslate"><span class="pre">shell-data.zip</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code>.  Here you’re using shorthand notation
+<p>and type <code class="docutils literal notranslate"><span class="pre">ls</span></code>.  You should see at least two entries,
+<cite>shell-data.zip</cite> and <cite>data</cite>.  Here you’re using shorthand notation
 to go back up a directory.</p>
 <p>Type:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="n">data</span>
@@ -170,7 +188,7 @@ directory.  This is equivalent to:</p>
 </div>
 <div class="section" id="files-and-directories">
 <h3>Files and directories<a class="headerlink" href="#files-and-directories" title="Permalink to this headline">¶</a></h3>
-<p>Go back into the ‘data’ directory and list the files:</p>
+<p>Go back into the <cite>data</cite> directory and list the files:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">data</span>
 <span class="n">ls</span>
 </pre></div>
@@ -180,25 +198,25 @@ we want to know which is which, we can type:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">-</span><span class="n">F</span>
 </pre></div>
 </div>
-<p>Anything with a “/” after it is a directory.  Things with a “*” after
+<p>Anything with a <strong>/</strong> after it is a directory.  Things with a <strong>*</strong> after
 them are programs.  It there’s nothing there it’s an otherwise
 unremarkable file (e.g. a data file).</p>
 <p>You can also use the command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">-</span><span class="n">l</span>
 </pre></div>
 </div>
-<p>to see whether items in a directory are files or directories. <cite>ls -l</cite>
+<p>to see whether items in a directory are files or directories. <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">-l</span></code>
 gives a lot more information too, such as the size of the file.</p>
 </div>
 <div class="section" id="command-line-options">
 <h3>Command line options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h3>
-<p>Most programs take additional options (or “arguments”) that control
-their exact behavior. For example, <cite>-F</cite> and <cite>-l</cite> are arguments to
-<cite>ls</cite>.  The <cite>ls</cite> program, like many programs, take a lot of
+<p>Most programs take additional options (or <strong>arguments</strong>) that control
+their exact behavior. For example, <cite>-F</cite> and <cite>-l</cite> are <strong>arguments</strong> to
+<code class="docutils literal notranslate"><span class="pre">ls</span></code>.  The <code class="docutils literal notranslate"><span class="pre">ls</span></code> program, like many programs, take a lot of
 arguments. But how do we know what the options are to particular
 commands?</p>
 <p>Most commonly used shell programs have a manual. You can access the
-manual using the <cite>man</cite> program. Try entering:</p>
+manual using the <code class="docutils literal notranslate"><span class="pre">man</span></code> program. Try entering:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">man</span> <span class="n">ls</span>
 </pre></div>
 </div>
@@ -223,16 +241,16 @@ people run in to with command line bioinformatics programs is not having the
 data in the place the program expects it to be.</p>
 <div class="section" id="moving-around-the-file-system">
 <h3>Moving around the file system<a class="headerlink" href="#moving-around-the-file-system" title="Permalink to this headline">¶</a></h3>
-<p>Let’s practice moving around a bit.</p>
-<p>We’re going to work in that <code class="docutils literal notranslate"><span class="pre">data</span></code> directory we just downloaded.</p>
+<p>Let’s practice moving around the file system a bit.</p>
+<p>We’re going to work in that <cite>data</cite> directory we just downloaded.</p>
 <p>First let’s navigate there using the regular way by clicking on the
 different folders.</p>
 <p>First we did something like go to the folder of our username. Then we opened
-‘data’</p>
+<cite>data</cite></p>
 <p>This is called a hierarchical file system structure, like an upside down tree
-with root (/) at the base that looks like this.</p>
+with root (<strong>/</strong>) at the base that looks like this.</p>
 <img alt="../_images/unix-tree.jpg" src="../_images/unix-tree.jpg" />
-<p>That (/) at the base is often also called the ‘top’ level.</p>
+<p>That (<strong>/</strong>) at the base is often also called the <cite>top</cite> level.</p>
 <p>When you are working at your computer or log in to a remote computer,
 you are on one of the branches of that tree, your home directory
 (/home/mtb_upm)</p>
@@ -242,7 +260,7 @@ you are on one of the branches of that tree, your home directory
 </pre></div>
 </div>
 <p>This puts you in your home directory. This folder here.</p>
-<p>Now using <code class="docutils literal notranslate"><span class="pre">cd</span></code> and <code class="docutils literal notranslate"><span class="pre">ls</span></code>, go in to the ‘data’ directory and list its
+<p>Now using <code class="docutils literal notranslate"><span class="pre">cd</span></code> and <code class="docutils literal notranslate"><span class="pre">ls</span></code>, go in to the <cite>data</cite> directory and list its
 contents.</p>
 <p>Let’s also check to see where we are. Sometimes when we’re wandering
 around in the file system, it’s easy to lose track of where we are and
@@ -251,25 +269,25 @@ get lost.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pwd</span>
 </pre></div>
 </div>
-<p>What if we want to move back up and out of the ‘data’ directory? Can we just
+<p>What if we want to move back up and out of the <cite>data</cite> directory? Can we just
 type <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">home</span></code>? Try it and see what happens.</p>
-<p>To go ‘back up a level’ we need to use <code class="docutils literal notranslate"><span class="pre">..</span></code>.</p>
+<p>To go <strong>back up a level</strong> we need to use <cite>..</cite>.</p>
 <p>Type:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">..</span>
 </pre></div>
 </div>
 <p>Now do <code class="docutils literal notranslate"><span class="pre">ls</span></code> and <code class="docutils literal notranslate"><span class="pre">pwd</span></code>. See now that we went back up in to the home
-directory. <code class="docutils literal notranslate"><span class="pre">..</span></code> means go back up to the enclosing folder level.</p>
+directory. <cite>..</cite> means go back up to the enclosing folder level.</p>
 </div>
-<div class="section" id="looking-within-folders-within-folder-within">
-<h3>Looking within folders within folder within…<a class="headerlink" href="#looking-within-folders-within-folder-within" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="looking-folder-within-folder-within-folder-within">
+<h3>Looking folder within folder within folder within…<a class="headerlink" href="#looking-folder-within-folder-within-folder-within" title="Permalink to this headline">¶</a></h3>
 <p>Try entering:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">data</span><span class="o">/</span><span class="n">hidden</span>
 </pre></div>
 </div>
-<p>and you will jump directly to <code class="docutils literal notranslate"><span class="pre">hidden</span></code> without having to go through
-the intermediate directory.  Here, we’re telling cd to go into ‘data’
-first, and then ‘hidden’.</p>
+<p>and you will jump directly to <cite>hidden</cite> without having to go through
+the intermediate directory.  Here, we’re telling cd to go into <cite>data</cite>
+first, and then <cite>hidden</cite>.</p>
 <p>Then do:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">../..</span>
 </pre></div>
@@ -293,60 +311,60 @@ directory name. For example, type <code class="docutils literal notranslate"><sp
 </pre></div>
 </div>
 <p>The shell will fill in the rest of the directory name for
-‘data’. Now cd to data/IlluminaReads and try:</p>
+<cite>data</cite>. Now cd to data/IlluminaReads and try:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="n">S1</span><span class="o">&lt;</span><span class="n">tab</span><span class="o">&gt;&lt;</span><span class="n">tab</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>When you hit the first tab, nothing happens. The reason is that there
 are multiple directories in the home directory which start with
-<code class="docutils literal notranslate"><span class="pre">S1</span></code>. Thus, the shell does not know which one to fill in. When you hit
+<cite>S1</cite>. Thus, the shell does not know which one to fill in. When you hit
 tab again, the shell will list the possible choices.</p>
 <p>Tab completion can also fill in the names of programs. For example,
-enter <code class="docutils literal notranslate"><span class="pre">e&lt;tab&gt;&lt;tab&gt;</span></code>. You will see the name of every program that
-starts with an <code class="docutils literal notranslate"><span class="pre">e</span></code>. One of those is <code class="docutils literal notranslate"><span class="pre">echo</span></code>. If you enter <code class="docutils literal notranslate"><span class="pre">ec&lt;tab&gt;</span></code> you
+enter <cite>e&lt;tab&gt;&lt;tab&gt;</cite>. You will see the name of every program that
+starts with an <cite>e</cite>. One of those is <code class="docutils literal notranslate"><span class="pre">echo</span></code>. If you enter <cite>ec&lt;tab&gt;</cite> you
 will see that tab completion works.</p>
 </div>
 </div>
 <div class="section" id="full-vs-relative-paths">
 <h2>Full vs. Relative Paths<a class="headerlink" href="#full-vs-relative-paths" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">cd</span></code> command takes an argument which is the directory
-name. Directories can be specified using either a <em>relative</em> path or a
-full <em>path</em>. The directories on the computer are arranged into a
+name. Directories can be specified using either a <strong>relative path</strong> or a
+<strong>full path</strong>. The directories on the computer are arranged into a
 hierarchy. The full path tells you where a directory is in that
 hierarchy. Navigate to the home directory. Now, enter the <code class="docutils literal notranslate"><span class="pre">pwd</span></code>
 command and you should see:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">mtb_upm</span>
 </pre></div>
 </div>
-<p>which is the full name of your home directory. This tells you that you
-are in a directory called <code class="docutils literal notranslate"><span class="pre">mtb_upm</span></code>, which sits inside a directory called
-<code class="docutils literal notranslate"><span class="pre">home</span></code> which sits inside the very top directory in the hierarchy. The
-very top of the hierarchy is a directory called <code class="docutils literal notranslate"><span class="pre">/</span></code> which is usually
-referred to as the <em>root directory</em>. So, to summarize: <code class="docutils literal notranslate"><span class="pre">mtb_upm</span></code> is a
-directory in <code class="docutils literal notranslate"><span class="pre">home</span></code> which is a directory in <code class="docutils literal notranslate"><span class="pre">/</span></code>.</p>
+<p>which is the full name of your <strong>home directory</strong>. This tells you that you
+are in a directory called <cite>mtb_upm</cite>, which sits inside a directory called
+<cite>home</cite> which sits inside the very top directory in the hierarchy. The
+very top of the hierarchy is a directory called <cite>/</cite> which is usually
+referred to as the <strong>root directory</strong>. So, to summarize: <code class="docutils literal notranslate"><span class="pre">mtb_upm</span></code> is a
+directory in <cite>home</cite> which is a directory in <cite>/</cite>.</p>
 <p>Now enter the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">mtb_upm</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">hidden</span>
 </pre></div>
 </div>
-<p>This jumps to <code class="docutils literal notranslate"><span class="pre">hidden</span></code>. Now go back to the home directory (cd). We saw
+<p>This jumps to <cite>hidden</cite>. Now go back to the home directory (<code class="docutils literal notranslate"><span class="pre">cd</span></code>). We saw
 earlier that the command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">data</span><span class="o">/</span><span class="n">hidden</span>
 </pre></div>
 </div>
-<p>had the same effect - it took us to the <code class="docutils literal notranslate"><span class="pre">hidden</span></code> directory. But,
+<p>had the same effect - it took us to the <cite>hidden</cite> directory. But,
 instead of specifying the full path
-(<code class="docutils literal notranslate"><span class="pre">/home/mtb_upm/data</span></code>), we specified a <em>relative path</em>. In
+(<cite>/home/mtb_upm/data</cite>), we specified a <strong>relative path</strong>. In
 other words, we specified the path relative to our current
-directory. A full path always starts with a <code class="docutils literal notranslate"><span class="pre">/</span></code>. A relative path does
+directory. A full path always starts with a <cite>/</cite>. A <strong>relative path</strong> does
 not.</p>
-<p>A relative path is like getting directions from someone on the
+<p>A <strong>relative path</strong> is like getting directions from someone on the
 street. They tell you to “go right at the Stop sign, and then turn
 left on Main Street”. That works great if you’re standing there
 together, but not so well if you’re trying to tell someone how to get
 there from another country. A full path is like GPS coordinates.  It
 tells you exactly where something is no matter where you are right
 now.</p>
-<p>You can usually use either a full path or a relative path depending on
+<p>You can usually use either a <strong>full path</strong> or a <strong>relative path</strong> depending on
 what is most convenient. If we are in the home directory, it is more
 convenient to just enter the relative path since it involves less
 typing.</p>
@@ -359,8 +377,8 @@ navigate amongst them.</p>
 <div class="section" id="shortcuts">
 <h3>Shortcuts<a class="headerlink" href="#shortcuts" title="Permalink to this headline">¶</a></h3>
 <p>There are some shortcuts which you should know about. Dealing with the
-home directory is very common. So, in the shell the tilde character,
-“”~”“, is a shortcut for your home directory. Navigate to the <code class="docutils literal notranslate"><span class="pre">data</span></code>
+home directory is very common. So, in the shell the <strong>tilde character</strong>,
+<cite>~</cite>, is a shortcut for your home directory. Navigate to the <code class="docutils literal notranslate"><span class="pre">data</span></code>
 directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span>
 <span class="n">cd</span> <span class="n">data</span>
@@ -371,72 +389,71 @@ directory:</p>
 </pre></div>
 </div>
 <p>This prints the contents of your home directory, without you having to
-type the full path. The shortcut <code class="docutils literal notranslate"><span class="pre">..</span></code> always refers to the directory
-above your current directory. Thus:</p>
+type the full path. The shortcut <cite>..</cite> always refers to the directory
+above your <strong>current directory</strong>. Thus:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">..</span>
 </pre></div>
 </div>
-<p>prints the contents of the /home/mtb_upm directory. You can chain
+<p>prints the contents of the <cite>/home/mtb_upm</cite> directory. You can <strong>chain</strong>
 these together, so:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">../../</span>
 </pre></div>
 </div>
-<p>prints the contents of <code class="docutils literal notranslate"><span class="pre">/home'</span> <span class="pre">which</span> <span class="pre">is</span> <span class="pre">above</span> <span class="pre">your</span> <span class="pre">home</span>
-<span class="pre">directory.</span> <span class="pre">Finally,</span> <span class="pre">the</span> <span class="pre">special</span> <span class="pre">directory</span> <span class="pre">``.</span></code> always refers to your
-current directory. So, <code class="docutils literal notranslate"><span class="pre">ls</span></code>, <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">.</span></code>, and <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">././././.</span></code> all do the
-same thing, they print the contents of the current directory. This may
+<p>prints the contents of <cite>/home</cite> which is above your home
+directory. Finally, the special directory <cite>.</cite> always refers to your
+<strong>current directory</strong>. So, <code class="docutils literal notranslate"><span class="pre">ls</span></code>, <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">.</span></code>, and <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">././././.</span></code> all do the
+same thing, they print the contents of the <strong>current directory</strong>. This may
 seem like a useless shortcut right now, but we’ll see when it is
 needed in a little while.</p>
-<p>To summarize, while you are in the <code class="docutils literal notranslate"><span class="pre">shell</span></code> directory, the commands
+<p>To summarize, while you are in the <cite>data</cite> directory, the commands
 <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">~</span></code>, <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">~/.</span></code>, <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">../../</span></code>, and <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">/home/mtb_upm</span></code> all do
 exactly the same thing. These shortcuts are not necessary, they are
 provided for your convenience.</p>
 </div>
 </div>
-<div class="section" id="a-data-set-fastq-files">
-<h2>A data set: FASTQ files<a class="headerlink" href="#a-data-set-fastq-files" title="Permalink to this headline">¶</a></h2>
-<p>We whole-genome sequenced 9 bacterial genomes and generated paired-end Illumina reads.
+<div class="section" id="our-dataset-fastq-files">
+<h2>Our dataset: FASTQ files<a class="headerlink" href="#our-dataset-fastq-files" title="Permalink to this headline">¶</a></h2>
+<p>Assume that we whole-genome sequenced 9 bacterial genomes and generated paired-end Illumina reads.
 We get our data back from the sequencing center as FASTQ files, and we
-stick them all in a folder called IlluminaReads.</p>
-<p>We want to be able to look at these files and do some things with
-them.</p>
+stick them all in a folder called <cite>IlluminaReads</cite>. We want to be able to look at these files and
+do some things with them.</p>
 <div class="section" id="wild-cards">
 <h3>Wild cards<a class="headerlink" href="#wild-cards" title="Permalink to this headline">¶</a></h3>
-<p>Navigate to the <code class="docutils literal notranslate"><span class="pre">data/IlluminaReads</span></code> directory (hint: use <code class="docutils literal notranslate"><span class="pre">cd</span></code>). This
+<p>Navigate to the <cite>data/IlluminaReads</cite> directory (hint: use <code class="docutils literal notranslate"><span class="pre">cd</span></code>). This
 directory contains our FASTQ files and some other ones we’ll need for
 analyses. If we type <code class="docutils literal notranslate"><span class="pre">ls</span></code>, we will see that there are a bunch of
-files with long file names.  Some of them end with .fastq.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">*</span></code> character is a shortcut for “everything”. Thus, if you enter
+files with long file names.  Some of them end with <cite>.fastq</cite>.</p>
+<p>The <cite>*</cite> character is a shortcut for “everything”. Thus, if you enter
 <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">*</span></code>, you will see all of the contents of a given directory. Now try
 this command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">*</span><span class="n">fastq</span>
 </pre></div>
 </div>
-<p>This lists every file that ends with a <code class="docutils literal notranslate"><span class="pre">fastq</span></code>. This command:</p>
+<p>This lists every file that ends with a <cite>fastq</cite>. This command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/*.</span><span class="n">sh</span>
 </pre></div>
 </div>
-<p>Lists every file in <code class="docutils literal notranslate"><span class="pre">/usr/bin</span></code> that ends in the characters <code class="docutils literal notranslate"><span class="pre">.sh</span></code>.</p>
-<p>We have paired end sequencing, so for every sample we have two
+<p>Lists every file in <cite>/usr/bin</cite> that ends in the characters <cite>.sh</cite>.</p>
+<p>We have paired-end sequencing, so for every sample we have two
 files. If we want to just see the list of the files for the forward
 direction sequencing we can use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">*</span><span class="n">R1</span><span class="o">*</span><span class="n">fastq</span>
 </pre></div>
 </div>
-<p>lists every file in the current directory whose name contains the
-number <code class="docutils literal notranslate"><span class="pre">R1</span></code>, and ends with <code class="docutils literal notranslate"><span class="pre">fastq</span></code>. There are 18 such files which
+<p>lists every file in the <strong>current directory</strong> whose name contains the
+number <cite>R1</cite>, and ends with <cite>fastq</cite>. There are 18 such files which
 we would expect because we have 9 samples.</p>
-<p>So how does this actually work? Well…when the shell (bash) sees a
-word that contains the <code class="docutils literal notranslate"><span class="pre">*</span></code> character, it automatically looks for
+<p>So how does this actually work? Well…when the shell (we are using a particular flavor called
+<strong>bash shell</strong> for this tutorial) sees a word that contains the <cite>*</cite> character, it automatically looks for
 filenames that match the given pattern. In this case, it identified
-four such files. Then, it replaced the <code class="docutils literal notranslate"><span class="pre">*R1*fastq</span></code> with the list of
+four such files. Then, it replaced the <cite>*R1*fastq</cite> with the list of
 files, separated by spaces.</p>
 <p>What happens if you do <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">R1*fastq</span></code>?</p>
 </div>
 </div>
 <div class="section" id="when-wildcards-go-bad">
 <h2>When wildcards go bad<a class="headerlink" href="#when-wildcards-go-bad" title="Permalink to this headline">¶</a></h2>
-<p>TODO: explain how to deal with filenames that being with ‘-‘ (use ‘–’),
+<p>To discuss: Explain how to deal with filenames that being with <cite>-</cite> (use ‘–’),
 have spaces (use quotes/backslashes/tab completion), and/or quotes
 (use the other kind of quotes/backslashes/tab completion).</p>
 </div>
@@ -449,17 +466,17 @@ contents using the program <code class="docutils literal notranslate"><span clas
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="n">S190_L001_R1_001</span><span class="o">.</span><span class="n">fastq</span>
 </pre></div>
 </div>
-<p>This prints out the contents of the <code class="docutils literal notranslate"><span class="pre">S190_L001_R1_001.fastq</span></code> file.</p>
+<p>This prints out the contents of the <cite>S190_L001_R1_001.fastq</cite> file.</p>
 <ol class="arabic simple">
-<li>Print out the contents of the <code class="docutils literal notranslate"><span class="pre">~/data/IlluminaReads/upm.files</span></code>
+<li>Print out the contents of the <cite>~/data/IlluminaReads/upm.files</cite>
 file. What does this file contain?</li>
-<li>Without changing directories, (you should still be in <code class="docutils literal notranslate"><span class="pre">data</span></code>),
+<li>Without changing directories, (you should still be in <cite>data</cite>),
 use one short command to print the contents of all of the files in
-the <code class="docutils literal notranslate"><span class="pre">/home/mtb_upm/data/IlluminaReads</span></code> directory.</li>
+the <cite>/home/mtb_upm/data/IlluminaReads</cite> directory.</li>
 </ol>
 <hr class="docutils" />
 <p>Make sure we’re in the right place for the next set of the lessons. We
-want to be in the <code class="docutils literal notranslate"><span class="pre">IlluminaReads</span></code> directory. Check if you’re there with <code class="docutils literal notranslate"><span class="pre">pwd</span></code>
+want to be in the <cite>IlluminaReads</cite> directory. Check if you’re there with <code class="docutils literal notranslate"><span class="pre">pwd</span></code>
 and if not navigate there. One way to do that would be</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">data</span><span class="o">/</span><span class="n">IlluminaReads</span>
 </pre></div>
@@ -474,27 +491,47 @@ case. Enter the following command:</p>
 <p><code class="docutils literal notranslate"><span class="pre">less</span></code> opens the file, and lets you navigate through it. The commands
 are identical to the <code class="docutils literal notranslate"><span class="pre">man</span></code> program.</p>
 <p><strong>Some commands in ``less``</strong></p>
-<div class="line-block">
-<div class="line">key     | action |</div>
-<div class="line">——- | ———- |</div>
-<div class="line">“space” | to go forward |</div>
-<div class="line-block">
-<div class="line">“b”    | to go backwards |</div>
-<div class="line">“g”    | to go to the beginning |</div>
-<div class="line">“G”    | to go to the end |</div>
-<div class="line">“q”    | to quit |</div>
-</div>
-</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="73%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">key</th>
+<th class="head">action</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>“space”</td>
+<td>to go forward</td>
+</tr>
+<tr class="row-even"><td>“b”</td>
+<td>to go backwards</td>
+</tr>
+<tr class="row-odd"><td>“g”</td>
+<td>to go to the beginning</td>
+</tr>
+<tr class="row-even"><td>“G”</td>
+<td>to go to the end</td>
+</tr>
+<tr class="row-odd"><td>“q”</td>
+<td>to quit</td>
+</tr>
+</tbody>
+</table>
 <p><code class="docutils literal notranslate"><span class="pre">less</span></code> also gives you a way of searching through files. Just hit the
 “/” key to begin a search. Enter the name of the word you would like
 to search for and hit enter. It will jump to the next location where
-that word is found. Try searching the <code class="docutils literal notranslate"><span class="pre">S188_L001_R1_001.fastq</span></code> file for
+that word is found. Try searching the <cite>S188_L001_R1_001.fastq</cite> file for
 “TACGGAGGATGC”. If you hit “/” then “enter”, <code class="docutils literal notranslate"><span class="pre">less</span></code> will just repeat
 the previous search. <code class="docutils literal notranslate"><span class="pre">less</span></code> searches from the current location and
 works its way forward. If you are at the end of the file and search
 for the word “cat”, <code class="docutils literal notranslate"><span class="pre">less</span></code> will not find it. You need to go to the
 beginning of the file and search.</p>
-<p>For instance, let’s search for the sequence <code class="docutils literal notranslate"><span class="pre">1101:9376:4054</span></code> in our file.
+<p>For instance, let’s search for the sequence <cite>1101:9376:4054</cite> in our file.
 You can see that we go right to that sequence and can see
 what it looks like.</p>
 <p>Remember, the <code class="docutils literal notranslate"><span class="pre">man</span></code> program actually uses <code class="docutils literal notranslate"><span class="pre">less</span></code> internally and
@@ -509,8 +546,8 @@ the beginning and end of a file respectively.</p>
 <span class="n">tail</span> <span class="n">S188_L001_R1_001</span><span class="o">.</span><span class="n">fastq</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">-n</span></code> option to either of these commands can be used to print the
-first or last <code class="docutils literal notranslate"><span class="pre">n</span></code> lines of a file. To print the first/last line of the
+<p>The <cite>-n</cite> option to either of these commands can be used to print the
+first or last <cite>n</cite> lines of a file. To print the first/last line of the
 file use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">head</span> <span class="o">-</span><span class="n">n</span> <span class="mi">1</span> <span class="n">S188_L001_R1_001</span><span class="o">.</span><span class="n">fastq</span>
 <span class="n">tail</span> <span class="o">-</span><span class="n">n</span> <span class="mi">1</span> <span class="n">S188_L001_R1_001</span><span class="o">.</span><span class="n">fastq</span>
@@ -523,17 +560,16 @@ file use:</p>
 search within files without even opening them, using <code class="docutils literal notranslate"><span class="pre">grep</span></code>. Grep is a command-line
 utility for searching plain-text data sets for lines matching a string or regular expression.
 Let’s give it a try.</p>
-<p>Let’s search for that sequence <code class="docutils literal notranslate"><span class="pre">1101:9376:4054</span></code> in the S188_L001_R1_001.fastq file.</p>
+<p>Let’s search for that sequence <cite>1101:9376:4054</cite> in the S188_L001_R1_001.fastq file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">grep</span> <span class="mi">1101</span><span class="p">:</span><span class="mi">9376</span><span class="p">:</span><span class="mi">4054</span> <span class="n">S188_L001_R1_001</span><span class="o">.</span><span class="n">fastq</span>
 </pre></div>
 </div>
-<p>We get back the whole line that had ‘1101:14341’ in it. What if we wanted all
+<p>We get back the whole line that had <cite>1101:14341</cite> in it. What if we wanted all
 four lines, the whole part of that FASTQ sequence, back instead.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">grep</span> <span class="o">-</span><span class="n">A</span> <span class="mi">3</span> <span class="mi">1101</span><span class="p">:</span><span class="mi">9376</span><span class="p">:</span><span class="mi">4054</span> <span class="n">S188_L001_R1_001</span><span class="o">.</span><span class="n">fastq</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">-A</span></code> flag stands for “after match” so it’s returning the line that
-matches plus the three after it. The <code class="docutils literal notranslate"><span class="pre">-B</span></code> flag returns that number of lines
+<p><strong>Command flags</strong> are options that we use to change the behaviour of a program. The <cite>-A</cite> <strong>flag</strong> stands for “after match” so it’s returning the line that matches plus the three after it. The <cite>-B</cite> <strong>flag</strong> returns that number of lines
 before the match.</p>
 </div>
 <div class="section" id="creating-moving-copying-and-removing">
@@ -544,16 +580,16 @@ around or get rid of them. Sure we could do most of these things
 without the command line, but what fun would that be?! Besides it’s
 often faster to do it at the command line, or you’ll be on a remote
 server where you won’t have another option.</p>
-<p>The upm.files file is one that tells us what sample name
+<p>The <cite>upm.files</cite> file is one that tells us what sample name
 goes with what sequences. This is a really important file, so
 we want to make a copy so we don’t lose it.</p>
 <p>Lets copy the file using the <code class="docutils literal notranslate"><span class="pre">cp</span></code> command. The <code class="docutils literal notranslate"><span class="pre">cp</span></code>
-command backs up the file. Navigate to the <code class="docutils literal notranslate"><span class="pre">IlluminaReads</span></code> directory and enter:</p>
+command backs up the file. Navigate to the <cite>IlluminaReads</cite> directory and enter:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="n">upm</span><span class="o">.</span><span class="n">files</span> <span class="n">upm</span><span class="o">.</span><span class="n">files_backup</span>
 </pre></div>
 </div>
-<p>Now <code class="docutils literal notranslate"><span class="pre">upm.files_backup</span></code> has been created as a copy of <code class="docutils literal notranslate"><span class="pre">upm.files</span></code>.</p>
-<p>Let’s make a <code class="docutils literal notranslate"><span class="pre">backup</span></code> directory where we can put this file.</p>
+<p>Now <cite>upm.files_backup</cite> has been created as a copy of <cite>upm.files</cite>.</p>
+<p>Let’s make a <cite>backup</cite> directory where we can put this file.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">mkdir</span></code> command is used to make a directory. Just enter <code class="docutils literal notranslate"><span class="pre">mkdir</span></code>
 followed by a space, then the directory name.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">backup</span>
@@ -564,22 +600,22 @@ move files around using the command <code class="docutils literal notranslate"><
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="n">upm</span><span class="o">.</span><span class="n">files_backup</span> <span class="n">backup</span><span class="o">/</span>
 </pre></div>
 </div>
-<p>This moves <code class="docutils literal notranslate"><span class="pre">upm.files_backup</span></code> into the directory <code class="docutils literal notranslate"><span class="pre">backup/</span></code>;
-the full path would be <code class="docutils literal notranslate"><span class="pre">~/data/IlluminaReads/backup</span></code>.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">mv</span></code> command is also how you rename files. Since this file is so
-important, let’s rename it:</p>
+<p>This moves <cite>upm.files_backup</cite> into the directory <cite>backup/</cite>;
+the <strong>full path</strong> would be <cite>~/data/IlluminaReads/backup</cite>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">mv</span></code> command is also how you <strong>rename</strong> files. Since this file is so
+important, let’s <strong>rename</strong> it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="n">upm</span><span class="o">.</span><span class="n">files</span> <span class="n">upm</span><span class="o">.</span><span class="n">files_IMPORTANT</span>
 </pre></div>
 </div>
-<p>Now the file name has been changed to upm.files_IMPORTANT. Let’s delete
+<p>Now the file name has been changed to upm.files_IMPORTANT. Let’s <strong>delete</strong>
 the backup file now:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rm</span> <span class="n">backup</span><span class="o">/</span><span class="n">upm</span><span class="o">.</span><span class="n">files_backup</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">rm</span></code> file removes the file. Be careful with this command. It doesn’t
-just nicely put the files in the Trash. <strong>They’re really gone</strong>.</p>
-<p>By default, <code class="docutils literal notranslate"><span class="pre">rm</span></code>, will NOT delete directories. You can tell <code class="docutils literal notranslate"><span class="pre">rm</span></code> to
-delete a directory using the <code class="docutils literal notranslate"><span class="pre">-r</span></code> option; we could test it out on
+just nicely put the files in the Trash. <strong>THEY ARE REALLY GONE</strong>.</p>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">rm</span></code>, will NOT <strong>delete directories</strong>. You can tell <code class="docutils literal notranslate"><span class="pre">rm</span></code> to
+delete a directory using the <cite>-r</cite> option (<strong>flag</strong>); we could test it out on
 backup, but let’s not… ;)</p>
 </div>
 <div class="section" id="writing-files">
@@ -600,29 +636,29 @@ can remember it for later. We’ll name this file ‘awesome.sh’:</p>
 <img alt="../_images/nano2.jpg" src="../_images/nano2.jpg" />
 <p>Now we want to save the file and exit. At the bottom of nano, you see
 the “^X Exit”. That means that we use Ctrl-X to exit. Type
-<code class="docutils literal notranslate"><span class="pre">Ctrl-X</span></code>. It will ask if you want to save it. Type <code class="docutils literal notranslate"><span class="pre">y</span></code> for yes.  Then
-it asks if you want that file name. Hit ‘Enter’.</p>
+<cite>Ctrl-X</cite>. It will ask if you want to save it. Type <cite>y</cite> for yes.  Then
+it asks if you want that file name. Hit <cite>Enter</cite>.</p>
 <p>Now you’ve written a file. You can take a look at it with less or cat, or open it up again and edit it.</p>
 <p><strong>Exercise</strong></p>
-<p>Open ‘awesome.sh’ and add “echo AWESOME!” after the grep command and save the file.</p>
+<p>Open <cite>awesome.sh</cite> and add “echo AWESOME!” after the grep command and save the file.</p>
 <p>We’re going to come back and use this file in just a bit.</p>
 </div>
 <div class="section" id="running-programs-revisited">
 <h2>Running programs, revisited<a class="headerlink" href="#running-programs-revisited" title="Permalink to this headline">¶</a></h2>
 <p>Commands like <code class="docutils literal notranslate"><span class="pre">ls</span></code>, <code class="docutils literal notranslate"><span class="pre">rm</span></code>, <code class="docutils literal notranslate"><span class="pre">echo</span></code>, and <code class="docutils literal notranslate"><span class="pre">cd</span></code> are just ordinary programs
-on the computer. A program is just a file that you can <em>execute</em>. The
+on the computer. A program is just a file that you can <strong>execute</strong>. The
 program <code class="docutils literal notranslate"><span class="pre">which</span></code> tells you the location of a particular program. For
 example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">which</span> <span class="n">ls</span>
 </pre></div>
 </div>
-<p>will return “/bin/ls”. Thus, we can see that <code class="docutils literal notranslate"><span class="pre">ls</span></code> is a program that
-sits inside of the <code class="docutils literal notranslate"><span class="pre">/bin</span></code> directory. Now enter:</p>
+<p>will return <cite>/bin/ls</cite>. Thus, we can see that <code class="docutils literal notranslate"><span class="pre">ls</span></code> is a program that
+sits inside of the <cite>/bin</cite> directory. Now enter:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">which</span> <span class="n">find</span>
 </pre></div>
 </div>
 <p>You will see that <code class="docutils literal notranslate"><span class="pre">find</span></code> is a program that sits inside of the
-<code class="docutils literal notranslate"><span class="pre">/usr/bin</span></code> directory.</p>
+<cite>/usr/bin</cite> directory.</p>
 <p>So … when we enter a program name, like <code class="docutils literal notranslate"><span class="pre">ls</span></code>, and hit enter, how
 does the shell know where to look for that program? How does it know
 to run <code class="docutils literal notranslate"><span class="pre">/bin/ls</span></code> when we enter <code class="docutils literal notranslate"><span class="pre">ls</span></code>. The answer is that when we enter
@@ -633,27 +669,27 @@ the command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>echo $PATH
 </pre></div>
 </div>
-<p>This will print out the value of the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable.
+<p>This will print out the value of the <cite>PATH</cite> <strong>environment variable</strong>.
 Notice that a list of directories, separated by colon characters, is
 listed. These are the places the shell looks for programs to run. If
 your program is not in this list, then an error is printed. The shell
-ONLY checks in the places listed in the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable.</p>
-<p>Navigate to the <code class="docutils literal notranslate"><span class="pre">data</span></code> directory and list the contents. You will
-notice that there is a program (executable file) called <code class="docutils literal notranslate"><span class="pre">hello.sh</span></code> in
+ONLY checks in the places listed in the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> <strong>environment variable</strong>.</p>
+<p>Navigate to the <cite>data</cite> directory and list the contents. You will
+notice that there is a program (executable file) called <cite>hello.sh</cite> in
 this directory. Now, try to run the program by entering:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hello</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
 <p>You should get an error saying that hello.sh cannot be found. That is
-because the directory <code class="docutils literal notranslate"><span class="pre">/home/mtb_upm/data</span></code> is not in the
-<code class="docutils literal notranslate"><span class="pre">PATH</span></code>. You can run the <code class="docutils literal notranslate"><span class="pre">hello.sh</span></code> program by entering:</p>
+because the directory <cite>/home/mtb_upm/data</cite> is not in the
+<cite>PATH</cite>. You can run the <cite>hello.sh</cite> program by entering:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">hello</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
-<p>Remember that <code class="docutils literal notranslate"><span class="pre">.</span></code> is a shortcut for the current working
-directory. This tells the shell to run the <code class="docutils literal notranslate"><span class="pre">hello.sh</span></code> program which is
+<p>Remember that <cite>.</cite> is a shortcut for the current working
+directory. This tells the shell to run the <cite>hello.sh</cite> program which is
 located right here. So, you can run any program by entering the path
-to that program. You can run <code class="docutils literal notranslate"><span class="pre">hello.sh</span></code> equally well by specifying:</p>
+to that program. You can run <cite>hello.sh</cite> equally well by specifying:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">mtb_upm</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">hello</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
@@ -661,15 +697,15 @@ to that program. You can run <code class="docutils literal notranslate"><span cl
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">~/</span><span class="n">data</span><span class="o">/</span><span class="n">hello</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
-<p>When there are no <code class="docutils literal notranslate"><span class="pre">/</span></code> characters, the shell assumes you want to look
+<p>When there are no <cite>/</cite> characters, the shell assumes you want to look
 in one of the default places for the program.</p>
-<p>(Why doesn’t it look at your current directory by default? Any ideas?)</p>
+<p>(Why doesn’t it look at your <strong>current directory</strong> by default? Any ideas?)</p>
 </div>
 <div class="section" id="writing-scripts">
 <h2>Writing scripts<a class="headerlink" href="#writing-scripts" title="Permalink to this headline">¶</a></h2>
 <p>We know how to write files and run scripts, so I bet you can guess
-where this is headed. We’re going to run our own script!</p>
-<p>Go in to the ‘IlluminaReads’ directory where we created ‘awesome.sh’
+where this is headed. We’re going to run our own script.</p>
+<p>Go in to the <cite>IlluminaReads</cite> directory where we created <cite>awesome.sh</cite>
 before. Remember we wrote our favorite grep command in there. Since we
 like it so much, we might want to run it again, or even all the
 time. Instead of writing it out every time, we can just run it as a
@@ -680,9 +716,9 @@ script.</p>
 </div>
 <p>Alas, we get <code class="docutils literal notranslate"><span class="pre">-bash:</span> <span class="pre">./awesome.sh:</span> <span class="pre">Permission</span> <span class="pre">denied</span></code>. This is because
 we haven’t told the computer that it’s a program. To do that we have
-to make it ‘executable’. We do this by changing its mode. The command
+to <strong>make it executable</strong>. We do this by <strong>changing its mode</strong>. The command
 for that is <code class="docutils literal notranslate"><span class="pre">chmod</span></code> - change mode. We’re going to change the mode of
-this file, so that it’s executable and the computer knows it’s OK to
+this file, so that it’s <strong>executable</strong> and the computer knows it’s OK to
 run it as a program.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chmod</span> <span class="o">+</span><span class="n">x</span> <span class="n">awesome</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
@@ -691,7 +727,7 @@ run it as a program.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">awesome</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
-<p>Now you should have seen some output, and of course, it’s AWESOME!</p>
+<p>Now you should have seen some output.</p>
 <p>Congratulations, you just created your first shell script!</p>
 <div class="section" id="challenge">
 <h3>Challenge:<a class="headerlink" href="#challenge" title="Permalink to this headline">¶</a></h3>
@@ -704,7 +740,7 @@ run it as a program.:</p>
 <li>moves all of the R2 sequencing files into the right directory;</li>
 </ul>
 <hr class="docutils" />
-<p>And we’re done!</p>
+<p>WE ARE DONE!</p>
 </div>
 </div>
 <div class="section" id="more-resources">
@@ -739,8 +775,8 @@ don’t really need to automate….</p>
   <ul>
 <li><a class="reference internal" href="#">Introductory Unix Shell</a><ul>
 <li><a class="reference internal" href="#credits">Credits</a></li>
-<li><a class="reference internal" href="#objectives">Objectives</a></li>
 <li><a class="reference internal" href="#notes">Notes</a></li>
+<li><a class="reference internal" href="#learning-objectives">Learning Objectives</a></li>
 <li><a class="reference internal" href="#what-is-the-shell">What is the shell?</a></li>
 <li><a class="reference internal" href="#information-on-the-shell">Information on the shell</a></li>
 <li><a class="reference internal" href="#starting-with-the-shell">Starting with the shell</a></li>
@@ -751,7 +787,7 @@ don’t really need to automate….</p>
 </li>
 <li><a class="reference internal" href="#the-unix-directory-file-structure">The Unix directory file structure</a><ul>
 <li><a class="reference internal" href="#moving-around-the-file-system">Moving around the file system</a></li>
-<li><a class="reference internal" href="#looking-within-folders-within-folder-within">Looking within folders within folder within…</a></li>
+<li><a class="reference internal" href="#looking-folder-within-folder-within-folder-within">Looking folder within folder within folder within…</a></li>
 <li><a class="reference internal" href="#shortcut-tab-completion">Shortcut: Tab Completion</a></li>
 </ul>
 </li>
@@ -760,7 +796,7 @@ don’t really need to automate….</p>
 <li><a class="reference internal" href="#shortcuts">Shortcuts</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#a-data-set-fastq-files">A data set: FASTQ files</a><ul>
+<li><a class="reference internal" href="#our-dataset-fastq-files">Our dataset: FASTQ files</a><ul>
 <li><a class="reference internal" href="#wild-cards">Wild cards</a></li>
 </ul>
 </li>
@@ -779,6 +815,12 @@ don’t really need to automate….</p>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Day 0</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="unixintermediate.html"
+                        title="next chapter">Advanced Beginner/Intermediate Shell</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -808,7 +850,14 @@ don’t really need to automate….</p>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="unixintermediate.html" title="Advanced Beginner/Intermediate Shell"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Day 0"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Day 0</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -25,3 +25,5 @@
 .. warning::
   warning
 
+.. code-block::R
+	pop <- continents$population

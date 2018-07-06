@@ -14,7 +14,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Day 1" href="../day1/index.html" />
+    <link rel="prev" title="Introductory Unix Shell" href="unixintro.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -22,7 +24,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="../day1/index.html" title="Day 1"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="unixintro.html" title="Introductory Unix Shell"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Day 0</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -33,19 +42,19 @@
             
   <div class="section" id="advanced-beginner-intermediate-shell">
 <h1>Advanced Beginner/Intermediate Shell<a class="headerlink" href="#advanced-beginner-intermediate-shell" title="Permalink to this headline">¶</a></h1>
-<p>Updated June 2018 by Ulas Karaoz</p>
+<p><strong>Updated June 2018 by</strong> <a class="reference external" href="https://eesa.lbl.gov/profiles/ulas-karaoz/">Ulas Karaoz</a></p>
 <div class="section" id="credits">
 <h2>Credits<a class="headerlink" href="#credits" title="Permalink to this headline">¶</a></h2>
-<p>Original authors:</p>
-<p>Jessica Mizzi, Titus Brown, and Jessica Mizzi (<a class="reference external" href="http://dib-training.readthedocs.io/en/pub/2016-01-13-adv-beg-shell.html">http://dib-training.readthedocs.io/en/pub/2016-01-13-adv-beg-shell.html</a>).</p>
+<p><strong>Original authors</strong>: <em>Jessica Mizzi, Titus Brown, and Lisa K. Johnson at</em>
+<a class="reference external" href="http://ivory.idyll.org/dibsi/">Lab for Data Intensive Biology</a> (<a class="reference external" href="http://dib-training.readthedocs.io/en/pub/2016-01-13-adv-beg-shell.html">http://dib-training.readthedocs.io/en/pub/2016-01-13-adv-beg-shell.html</a>)</p>
 </div>
-<div class="section" id="learning-goals">
-<h2>Learning goals:<a class="headerlink" href="#learning-goals" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="learning-objectives">
+<h2>Learning objectives:<a class="headerlink" href="#learning-objectives" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>expose you to a bunch of syntax around shell use &amp; scripting.</li>
-<li>show you the proximal possibilities of shell use &amp; scripting.</li>
-<li>give you some useful tricks</li>
-<li>provide opportunity for discussion, so please ask questions!</li>
+<li>Expose you to a bunch of syntax around shell use &amp; scripting.</li>
+<li>Show you the proximal possibilities of shell use &amp; scripting.</li>
+<li>Give you some useful tricks</li>
+<li>Provide opportunity for discussion, so please ask questions!</li>
 </ul>
 <hr class="docutils" />
 <div class="admonition important">
@@ -54,48 +63,57 @@
 <ol class="arabic simple">
 <li>Make sure you have the test data. Download and unpack:</li>
 </ol>
-<blockquote>
-<div><a class="reference external" href="https://public.etherpad-mozilla.org/p/mtb_bioinformatics_shell">https://public.etherpad-mozilla.org/p/mtb_bioinformatics_shell</a></div></blockquote>
-<ol class="last arabic simple" start="2">
-<li>Set your current working directory to be the top level dir, ‘data/’.</li>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">s3</span><span class="o">-</span><span class="n">us</span><span class="o">-</span><span class="n">west</span><span class="o">-</span><span class="mf">1.</span><span class="n">amazonaws</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">mtb</span><span class="o">-</span><span class="n">bioinformatics</span><span class="o">-</span><span class="n">workshop</span><span class="o">/</span><span class="n">shell</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
+<span class="c1"># will unzip a folder called `data`</span>
+<span class="n">unzip</span> <span class="n">shell</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Set your current working directory to be the top level dir:</li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">data</span><span class="o">/</span>
+</pre></div>
+</div>
+<ol class="last arabic simple" start="3">
 <li>We’ll be posting code snippets to: <a class="reference external" href="https://public.etherpad-mozilla.org/p/mtb_bioinformatics_shell">https://public.etherpad-mozilla.org/p/mtb_bioinformatics_shell</a></li>
+<li>In this tutorial, commands are shown as <code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">am</span> <span class="pre">a</span> <span class="pre">command:</span> <span class="pre">you</span> <span class="pre">can</span> <span class="pre">type</span> <span class="pre">me</span> <span class="pre">in</span> <span class="pre">your</span> <span class="pre">shell</span> <span class="pre">terminal</span></code>.</li>
 </ol>
 </div>
 </div>
 <hr class="docutils" />
 <div class="section" id="exploring-directory-structures">
 <h2>Exploring directory structures<a class="headerlink" href="#exploring-directory-structures" title="Permalink to this headline">¶</a></h2>
-<p>So, if we do ‘ls’, we see a bunch of stuff.  We didn’t create this folder.
+<p>So, if we do <code class="docutils literal notranslate"><span class="pre">ls</span></code>, we see a bunch of stuff.  We didn’t create this folder.
 How do we figure out what’s in it?</p>
-<p>Here, ‘find’ is your first friend:</p>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">find</span></code> is your first friend:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">find</span> <span class="o">.</span> <span class="o">-</span><span class="nb">type</span> <span class="n">d</span>
 </pre></div>
 </div>
-<p>This walks systematically (recursively) through all files underneath ‘.’,
-finds all directories (type d), and prints them (assumed, if not other
+<p>This walks systematically (recursively) through all files underneath <cite>.</cite>,
+finds all directories (<cite>type d</cite>), and prints them (assumed, if not other
 actions).</p>
-<p>We’ll come back to ‘find’ later, when we use it for finding files.</p>
+<p>We’ll come back to <code class="docutils literal notranslate"><span class="pre">find</span></code> later, when we use it for finding files.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="renaming-a-bunch-of-files">
 <h2>Renaming a bunch of files<a class="headerlink" href="#renaming-a-bunch-of-files" title="Permalink to this headline">¶</a></h2>
-<p>Let’s go into the IlluminaReads directory:</p>
+<p>Let’s go into the <cite>IlluminaReads</cite> directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">IlluminaReads</span>
 </pre></div>
 </div>
-<p>and take a look with <cite>ls</cite>.</p>
+<p>and take a look with <code class="docutils literal notranslate"><span class="pre">ls</span></code>.</p>
 <p>For our first task, let’s pretend that we want to change the extension of all of the fastq
-files from <em>.fastq</em> to <em>.fq</em>.  Here, we get to use two commands - ‘for’ and ‘basename’.</p>
-<p>‘for’ lets you do something to every file in a list.  To see it in action:</p>
+files from <cite>*.fastq*</cite> to <cite>*.fq*</cite>.  Here, we get to use two commands - <code class="docutils literal notranslate"><span class="pre">for</span></code> and <code class="docutils literal notranslate"><span class="pre">basename</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">for</span></code> lets you do something to every file in a list.  To see it in action:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for i in *.fastq
 do
    echo $i
 done
 </pre></div>
 </div>
-<p>This is running the command ‘echo’ for every value of the variable ‘i’, which
-is set (one by one) to all the values in the expression ‘<a href="#id2"><span class="problematic" id="id3">*</span></a>.fastq’.</p>
-<p>If we want to get rid of the extension ‘.fastq’, we can use the ‘basename’
+<p>This is running the command <code class="docutils literal notranslate"><span class="pre">echo</span></code> for every value of the variable <cite>i</cite>, which
+is set (one by one) to all the values in the expression <cite>*.fastq</cite>.</p>
+<p>If we want to get rid of the extension <cite>.fastq</cite>, we can use the <code class="docutils literal notranslate"><span class="pre">basename</span></code>
 command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for i in *.fastq
 do
@@ -104,7 +122,7 @@ done
 </pre></div>
 </div>
 <p>Now, this doesn’t actually rename the files - it just prints out the name,
-with the suffix ‘.fastq’ removed.  To rename the files, we need to capture
+with the suffix <cite>.fastq</cite> removed.  To rename the files, we need to capture
 the new name in a variable:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for i in *.fastq
 do
@@ -113,10 +131,10 @@ do
 done
 </pre></div>
 </div>
-<p>What <code class="docutils literal notranslate"><span class="pre">$(</span> <span class="pre">...</span> <span class="pre">)</span></code> does is run the command in the middle, and then replace the
-<code class="docutils literal notranslate"><span class="pre">$(</span> <span class="pre">)</span></code> with the value of running the command.</p>
+<p>What <cite>$( … )</cite> does is run the command in the middle, and then replace the
+<cite>$( )</cite> with the value of running the command.</p>
 <p>Now we have the old name ($i) and the new name ($newname) and we’re ready
-to write the rename command –</p>
+to write the rename command, which is <code class="docutils literal notranslate"><span class="pre">mv</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for i in *.fastq
 do
    newname=$(basename $i .fastq).fq
@@ -135,38 +153,38 @@ done
 </div>
 <p>We have renamed all the files!</p>
 <hr class="docutils" />
-<p>Let’s also get rid of the annoying ‘_001’ that’s at the end of the
-files.  basename is all fine and good with the end of files, but what
-do we do about things in the middle? Now we get to use another useful command – ‘cut’.</p>
-<p>What ‘cut’ does is slide and dice strings.  So, for example,</p>
+<p>Let’s also get rid of the annoying <cite>_001</cite> that’s at the end of the
+files.  <code class="docutils literal notranslate"><span class="pre">basename</span></code> is all fine and good with the end of files, but what
+do we do about things in the middle? Now we get to use another useful command, <code class="docutils literal notranslate"><span class="pre">cut</span></code>.</p>
+<p>What <code class="docutils literal notranslate"><span class="pre">cut</span></code> does is slide and dice strings.  So, for example,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="n">hello</span><span class="p">,</span> <span class="n">world</span> <span class="o">|</span> <span class="n">cut</span> <span class="o">-</span><span class="n">c5</span><span class="o">-</span>
 </pre></div>
 </div>
-<p>will give you ‘o, world’.</p>
-<p>‘cut’ expects to take a bunch of lines of input from a file. By
-default it is happy to take them in from stdin (“standard input”), so
-you can specify ‘-‘ and give it some input via a pipe, which is what
+<p>will give you <cite>o, world</cite>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">cut</span></code> expects to take a bunch of lines of input from a file. By
+default it is happy to take them in from <strong>stdin</strong> (“<strong>standard input</strong>”), so
+you can specify <cite>-`</cite> and give it some input via a pipe, which is what
 we’re doing with echo:</p>
-<p>We’re taking the output of ‘echo hello, world’ and sending it to the
-input of cut with the <code class="docutils literal notranslate"><span class="pre">|</span></code> command (‘pipe’).</p>
-<p>You’ve probably already seen this with head or tail, but many UNIX
-commands take stdin and stdout.</p>
-<p>Let’s construct the cut command we want to use.  If we look at the names of
-the files, and we want to remove 001 only, we can see that each filename
-has a bunch of fields separated by ‘_’.  So we can ask ‘cut’ to pay attention
-to the first four fields, and omit the fifth, around the separator (or
-delimiter) ‘_’:</p>
+<p>We’re taking the output of <code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">hello,</span> <span class="pre">world</span></code> and sending it to the
+input of cut with the <code class="docutils literal notranslate"><span class="pre">|</span></code> command (<strong>pipe</strong>).</p>
+<p>You’ve probably already seen this with <code class="docutils literal notranslate"><span class="pre">head</span></code> or <code class="docutils literal notranslate"><span class="pre">tail</span></code>, but many UNIX
+commands take <strong>stdin</strong> and <strong>stdout</strong>.</p>
+<p>Let’s construct the <code class="docutils literal notranslate"><span class="pre">cut</span></code> command we want to use.  If we look at the names of
+the files, and we want to remove <cite>001</cite> only, we can see that each filename
+has a bunch of <strong>fields</strong> separated by <cite>_</cite>.  So we can ask <code class="docutils literal notranslate"><span class="pre">cut</span></code> to pay attention
+to the first four <strong>fields</strong>, and omit the fifth, around the <strong>separator</strong> (or
+<strong>delimiter</strong>) <cite>_</cite>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="n">S194_L001_R1_001</span><span class="o">.</span><span class="n">fq</span> <span class="o">|</span> <span class="n">cut</span> <span class="o">-</span><span class="n">d_</span> <span class="o">-</span><span class="n">f1</span><span class="o">-</span><span class="mi">4</span>
 </pre></div>
 </div>
-<p>That looks about right – let’s put it into a for loop:</p>
+<p>That looks about right, let’s put it into a <strong>for loop</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for i in *.fq
 do
    echo $i | cut -d_ -f1-4
 done
 </pre></div>
 </div>
-<p>Good - now assign it to a variable and append an ending:</p>
+<p>Good, now assign it to a <strong>variable</strong> and <strong>append</strong> <strong>an ending</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for i in *.fq
 do
    newname=$(echo $i | cut -d_ -f1-4).fq
@@ -174,7 +192,7 @@ do
 done
 </pre></div>
 </div>
-<p>and now construct the ‘mv’ command:</p>
+<p>and now construct the <code class="docutils literal notranslate"><span class="pre">mv</span></code> command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for i in *.fq
 do
    newname=$(echo $i | cut -d_ -f1-4).fq
@@ -193,7 +211,7 @@ done
 <p>You’ve renamed all your files.</p>
 <hr class="docutils" />
 <p>Let’s do something quite useful - subset a bunch of FASTQ files.</p>
-<p>If you look at one of the FASTQ files with head,</p>
+<p>If you look at one of the FASTQ files with <code class="docutils literal notranslate"><span class="pre">head</span></code>,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">head</span> <span class="n">S188_L001_R1</span><span class="o">.</span><span class="n">fq</span>
 </pre></div>
 </div>
@@ -205,16 +223,16 @@ So we would like to subset all of these files without modifying the originals.</
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chmod</span> <span class="n">u</span><span class="o">-</span><span class="n">w</span> <span class="o">*.</span><span class="n">fq</span>
 </pre></div>
 </div>
-<p>Now, let’s make a ‘subset’ directory:</p>
+<p>Now, let’s make a <cite>subset</cite> directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">subset</span>
 </pre></div>
 </div>
-<p>Now, to subset each file, we want to run a ‘head’ with an argument
+<p>Now, to subset each file, we want to run a <code class="docutils literal notranslate"><span class="pre">head</span></code> with an argument
 that is the total number of lines we want to take.  In this case, it
 should be a multiple of 4, because FASTQ records have 4 lines each.
-So let’s plan to take the first 100 lines of each file by using ‘head
--400’.</p>
-<p>The for loop will now look something like:</p>
+So let’s plan to take the first 100 lines of each file by using <code class="docutils literal notranslate"><span class="pre">head</span>
+<span class="pre">-400</span></code>.</p>
+<p>The <strong>for loop</strong> will now look something like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="o">*.</span><span class="n">fq</span>
 <span class="n">do</span>
    <span class="n">echo</span> <span class="s2">&quot;head -400 $i &gt; subset/$i&quot;</span>
@@ -229,41 +247,37 @@ done
 </pre></div>
 </div>
 <p>We now have our subsets.</p>
-<hr class="docutils" />
-<p>Exercise: Can you rename all of your files in subset/ to
-have ‘subset.fq’ at the end?</p>
-<p>(Work in small groups; start from working code; there are several ways
-to do it, all that matters is getting there.)</p>
+<p>—
+Exercise: Can you rename all of your files in subset/ to have <cite>subset.fq</cite> at the end?</p>
+<p>(Work in small groups; start from working code; there are several ways to do it, all that matters is getting there.)</p>
 </div>
 <div class="section" id="backtracking">
 <h2>Backtracking<a class="headerlink" href="#backtracking" title="Permalink to this headline">¶</a></h2>
 <p>Variables:</p>
-<p>You can use either $varname or ${varname}.  The latter is useful
+<p>You can use either <cite>$varname</cite> or <cite>${varname}</cite>.  The latter is useful
 when you want to construct a new filename, e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>MY${varname}SUBSET
 </pre></div>
 </div>
-<p>would expand ${varname} and then put MY .. SUBSET on either end, while</p>
+<p>would expand <cite>${varname}</cite> and then put MY .. SUBSET on either end, while</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>MY$varnameSUBSET
 </pre></div>
 </div>
-<p>would try to put MY in front of $varnameSUBSET which won’t work.</p>
+<p>would try to put MY in front of <cite>$varnameSUBSET</cite> which won’t work.</p>
 <p>(Unknown/uncreated variables give nothing.)</p>
-<p>—</p>
-<p>We used “$varname” above - what happens if we use ‘’?</p>
 <p>(Variables are interpreted inside of “”, and not inside of ‘’.)</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="pipes-and-redirection">
 <h2>Pipes and redirection:<a class="headerlink" href="#pipes-and-redirection" title="Permalink to this headline">¶</a></h2>
-<p>To redirect stdin and stdout, you can use:</p>
+<p>To <strong>redirect</strong> <strong>stdin</strong> and <strong>stdout</strong>, you can use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">send</span> <span class="n">stdout</span> <span class="n">to</span> <span class="n">a</span> <span class="n">file</span>
 <span class="o">&lt;</span> <span class="o">-</span> <span class="n">take</span> <span class="n">stdin</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">file</span>
 <span class="o">|</span> <span class="o">-</span> <span class="n">take</span> <span class="n">stdout</span> <span class="kn">from</span> <span class="nn">first</span> <span class="n">command</span> <span class="ow">and</span> <span class="n">make</span> <span class="n">it</span> <span class="n">stdin</span> <span class="k">for</span> <span class="n">second</span> <span class="n">command</span>
 <span class="o">&gt;&gt;</span> <span class="o">-</span> <span class="n">appends</span> <span class="n">stdout</span> <span class="n">to</span> <span class="n">a</span> <span class="n">previously</span><span class="o">-</span><span class="n">existing</span> <span class="n">file</span>
 </pre></div>
 </div>
-<p>stderr (errors) can be redirected:</p>
+<p><strong>stderr</strong> (for <cite>errors</cite>) can be redirected:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">send</span> <span class="n">stderr</span> <span class="n">to</span> <span class="n">a</span> <span class="n">file</span>
 </pre></div>
 </div>
@@ -274,20 +288,20 @@ when you want to construct a new filename, e.g.:</p>
 </div>
 <div class="section" id="editing-on-the-command-line">
 <h2>Editing on the command line:<a class="headerlink" href="#editing-on-the-command-line" title="Permalink to this headline">¶</a></h2>
-<p>Most prompts support ‘readline’-style editing. This uses <a class="reference external" href="https://www.tldp.org/HOWTO/pdf/Emacs-Beginner-HOWTO.pdf">emacs</a> control keys.</p>
-<p>Type something out; then type CTRL-a.  Now type CTRL-e.  Beginning and end…</p>
+<p>Most prompts support <cite>readline-style</cite> editing. This uses <a class="reference external" href="https://www.tldp.org/HOWTO/pdf/Emacs-Beginner-HOWTO.pdf">emacs</a> control keys (<cite>emacs</cite> is a very powerful editor, tough with a bit of steep learning curve)</p>
+<p>Type something out; then type <cite>CTRL-a</cite>.  Now type <cite>CTRL-e</cite>.  Beginning and end…</p>
 <p>Up arrows to recall previous command, left/right arrows, etc.</p>
 <hr class="docutils" />
-<p>Another useful command along with ‘basename’ is ‘dirname’. Any idea what it does?</p>
+<p>Another useful command along with <code class="docutils literal notranslate"><span class="pre">basename</span></code> is <code class="docutils literal notranslate"><span class="pre">dirname</span></code>. Any idea what it does?</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="working-with-collections-of-files-conditionals">
 <h2>Working with collections of files; conditionals<a class="headerlink" href="#working-with-collections-of-files-conditionals" title="Permalink to this headline">¶</a></h2>
-<p>Let’s go back to the ‘data’ directory and play around with loops some more.</p>
+<p>Let’s go back to the <cite>data</cite> directory and play around with loops some more.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">..</span>
 </pre></div>
 </div>
-<p>‘if’ acts on things conditionally:</p>
+<p><cite>if</cite> acts on things <strong>conditionally</strong>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for i in *
 do
    if [ -f $i ]; then
@@ -298,10 +312,11 @@ do
 done
 </pre></div>
 </div>
-<p>but what the heck is this <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">]</span></code> notation?  That’s actually running
-the ‘test’ command; try ‘help test | less’ to see the docs.  This is a
-weird syntax that lets you do all sorts of useful things with files –
-We can use it to get rid of empty files:</p>
+<p>but what is the <cite>[ ]</cite> notation?  That’s actually running
+the <code class="docutils literal notranslate"><span class="pre">test</span></code> command; try <code class="docutils literal notranslate"><span class="pre">help</span> <span class="pre">test</span> <span class="pre">|</span> <span class="pre">less</span></code> to see the docs.  This is a</p>
+<blockquote>
+<div>syntax that lets you do all sorts of useful things with files –</div></blockquote>
+<p>We can use it to get rid of empty files:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">touch</span> <span class="n">emptyfile</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
@@ -314,24 +329,24 @@ do
 done
 </pre></div>
 </div>
-<p>…and as you can see here, I’m using ‘!’ to say ‘not’.</p>
+<p>…and as you can see here, we are using <cite>!</cite> to say ‘not’.</p>
 </div>
 <div class="section" id="executing-things-conditionally-based-on-exit-status">
 <h2>Executing things conditionally based on exit status<a class="headerlink" href="#executing-things-conditionally-based-on-exit-status" title="Permalink to this headline">¶</a></h2>
-<p>Let’s create two scripts (you can use ‘nano’ here if you want) – in
-‘success.sh’, put:</p>
+<p>Let’s create two scripts (you can use <code class="docutils literal notranslate"><span class="pre">nano</span></code> here if you want) – in
+<cite>success.sh</cite>, put:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /bin/bash</span>
 <span class="n">echo</span> <span class="n">mesucceed</span>
 <span class="n">exit</span> <span class="mi">0</span>
 </pre></div>
 </div>
-<p>and in ‘fail.sh’, put:</p>
+<p>and in <cite>fail.sh</cite>, put:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /bin/bash</span>
 <span class="n">echo</span> <span class="n">mefail</span>
 <span class="n">exit</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p>You can do this with ‘here documents’. A ‘here document’ (or ‘heredoc’) is a way of getting text input into a script without having to feed it in from a separate file.</p>
+<p>You can do this with <cite>here documents</cite>. A <cite>here document</cite> (or <cite>heredoc</cite>) is a way of getting text input into a script without having to feed it in from a separate file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">&gt;</span> <span class="n">success</span><span class="o">.</span><span class="n">sh</span> <span class="o">&lt;&lt;</span><span class="n">EOF</span>
 <span class="c1">#! /bin/bash</span>
 <span class="n">echo</span> <span class="n">mesucceed</span>
@@ -349,16 +364,16 @@ done
 </pre></div>
 </div>
 <p>(Somewhat counterintuitively, an exit status of 0 means “success” in UNIX.)</p>
-<p>You can now use this to chain commands with <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> and <code class="docutils literal notranslate"><span class="pre">||</span></code> –</p>
+<p>You can now use this to chain commands with <cite>&amp;&amp;</cite> and <cite>||</cite>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">success</span><span class="o">.</span><span class="n">sh</span> <span class="o">&amp;&amp;</span> <span class="n">echo</span> <span class="n">this</span> <span class="n">succeeded</span> <span class="o">||</span> <span class="n">echo</span> <span class="n">this</span> <span class="n">failed</span>
 <span class="o">./</span><span class="n">fail</span><span class="o">.</span><span class="n">sh</span> <span class="o">&amp;&amp;</span> <span class="n">echo</span> <span class="n">this</span> <span class="n">succeeded</span> <span class="o">||</span> <span class="n">echo</span> <span class="n">this</span> <span class="n">failed</span>
 </pre></div>
 </div>
-<p>You can do this with R and python scripts too – in R, you set the
-exit status of a script with <code class="docutils literal notranslate"><span class="pre">quit(status=0,</span> <span class="pre">save='no')</span></code> and in
-Python with <code class="docutils literal notranslate"><span class="pre">sys.exit(0)</span></code>.  Any failure of the script due to an
+<p>You can do this with R and python scripts too. In R, you set the
+exit status of a script with <cite>quit(status=0, save=’no’)</cite> and in
+Python with <cite>sys.exit(0)</cite>.  Any failure of the script due to an
 exception will automatically set the exit status to non-zero.</p>
-<p>The exit status of the previous command can be examined with <code class="docutils literal notranslate"><span class="pre">$?</span></code>:</p>
+<p>The exit status of the previous command can be examined with <cite>$?</cite>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>./success.sh
 if [ $? -eq 0 ]; then echo succ; fi
 
@@ -369,21 +384,20 @@ if [ $? -ne 0 ]; then echo fail; fi
 </div>
 <div class="section" id="writing-shell-scripts">
 <h2>Writing shell scripts<a class="headerlink" href="#writing-shell-scripts" title="Permalink to this headline">¶</a></h2>
-<p>Always put ‘set -e’ at the top.</p>
-<p>Sometimes put ‘set -x’ at the top.</p>
-<p>You can take in command line parameters with ‘$1’, ‘$2’, etc. ‘$*’ gives
+<p>Always put <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">-e</span></code> at the top.</p>
+<p>Sometimes put <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">-x</span></code> at the top.</p>
+<p>You can take in <strong>command line parameters</strong> with <cite>$1</cite>, <cite>$2</cite>, etc. <cite>$*</cite> gives
 you all of them at once.</p>
 </div>
 <div class="section" id="other-bits-and-pieces">
 <h2>Other bits and pieces<a class="headerlink" href="#other-bits-and-pieces" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li>You can use to do line continuation in scripts (in R and Python, too!)</li>
 <li>Scripts exit in a subshell and can’t modify your environment variables.</li>
 </ul>
-<p>If you want to modify your environment, you need to use ‘.’ or ‘source’.</p>
+<p>If you want to modify your environment, you need to use <cite>.</cite> or <cite>source</cite>.</p>
 <ul>
 <li><p class="first">Subshells are ways to group commands with ( … ).</p>
-</li>
-<li><p class="first">You can use to do line continuation in scripts (in R and Python, too!)</p>
 </li>
 <li><p class="first"><a class="reference external" href="https://kb.iu.edu/d/acuy">screen</a> lets you use multiple windows at the same time. It is extremely useful.</p>
 </li>
@@ -406,19 +420,15 @@ you all of them at once.</p>
 <li>Use echo to debug!</li>
 </ul>
 </div>
-<div class="section" id="the-weird-awesomeness-that-is-find">
-<h2>The weird awesomeness that is ‘find’<a class="headerlink" href="#the-weird-awesomeness-that-is-find" title="Permalink to this headline">¶</a></h2>
-<p>Here is more useful things you can do with ‘find’ command:</p>
+<div class="section" id="more-things-you-can-do-with-find">
+<h2>More things you can do with <code class="docutils literal notranslate"><span class="pre">find</span></code><a class="headerlink" href="#more-things-you-can-do-with-find" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">find</span></code> can be extremely flexible and powerful. Here is more useful things you can do with <code class="docutils literal notranslate"><span class="pre">find</span></code> command:</p>
 <p>Print all files:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">find</span> <span class="o">.</span> <span class="o">-</span><span class="nb">type</span> <span class="n">f</span>
 </pre></div>
 </div>
 <p>Print all files w/details:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">find</span> <span class="o">.</span> <span class="o">-</span><span class="nb">type</span> <span class="n">f</span> <span class="o">-</span><span class="n">ls</span>
-</pre></div>
-</div>
-<p>Find all files not in git directories:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">find</span> <span class="o">.</span> <span class="o">-</span><span class="n">name</span> <span class="o">.</span><span class="n">git</span> <span class="o">-</span><span class="n">prune</span> <span class="o">-</span><span class="n">o</span> <span class="o">-</span><span class="nb">type</span> <span class="n">f</span> <span class="o">-</span><span class="nb">print</span>
 </pre></div>
 </div>
 <p>Find all directories in the current directory:</p>
@@ -429,8 +439,8 @@ you all of them at once.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">find</span> <span class="o">*</span> <span class="o">-</span><span class="n">prune</span> <span class="o">-</span><span class="nb">type</span> <span class="n">d</span> <span class="o">-</span><span class="n">exec</span> <span class="n">du</span> <span class="o">-</span><span class="n">skh</span> <span class="p">{}</span> \<span class="p">;</span>
 </pre></div>
 </div>
-<p>Here, ‘-exec’ runs the command specified up until the <code class="docutils literal notranslate"><span class="pre">\;</span></code>, and replaces
-the {} with the filename.</p>
+<p>Here, <cite>-exec</cite> runs the command specified up until the <cite>;</cite>, and replaces
+the <cite>{}</cite> with the filename.</p>
 <p>Same result, different command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">find</span> <span class="o">.</span> <span class="o">-</span><span class="n">depth</span> <span class="mi">1</span> <span class="o">-</span><span class="nb">type</span> <span class="n">d</span> <span class="o">-</span><span class="n">exec</span> <span class="n">du</span> <span class="o">-</span><span class="n">skh</span> <span class="p">{}</span> \<span class="p">;</span>
 </pre></div>
@@ -444,18 +454,19 @@ the {} with the filename.</p>
 </pre></div>
 </div>
 <p>(…and do things to them with -exec ;).</p>
-<p>Run ‘grep -l’ to find all files containing the string ‘CGTTATCCGGATTTATTGGGTTTA’:</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">grep</span> <span class="pre">-l</span></code> to find all files containing the string ‘CGTTATCCGGATTTATTGGGTTTA’:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">find</span> <span class="o">.</span> <span class="o">-</span><span class="nb">type</span> <span class="n">f</span> <span class="o">-</span><span class="n">exec</span> <span class="n">grep</span> <span class="o">-</span><span class="n">q</span> <span class="n">CGTTATCCGGATTTATTGGGTTTA</span> <span class="p">{}</span> \<span class="p">;</span> <span class="o">-</span><span class="nb">print</span>
 </pre></div>
 </div>
-<p>Note, you can use -a (and) and -o (or), along with <code class="docutils literal notranslate"><span class="pre">\(</span></code> and <code class="docutils literal notranslate"><span class="pre">\)</span></code>,
+<p>Note, you can use <cite>-a</cite> (and) and <cite>-o</cite> (or), along with <cite>(</cite> and <cite>)</cite>,
 to group conditions:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">find</span> <span class="o">.</span> \<span class="p">(</span> \<span class="p">(</span> <span class="o">-</span><span class="nb">type</span> <span class="n">f</span> <span class="o">-</span><span class="n">size</span> <span class="o">+</span><span class="mi">100</span><span class="n">k</span> \<span class="p">)</span> <span class="o">-</span><span class="n">o</span> \<span class="p">(</span> <span class="o">-</span><span class="nb">type</span> <span class="n">f</span> <span class="o">-</span><span class="n">size</span> <span class="o">-</span><span class="mi">1</span><span class="n">k</span> \<span class="p">)</span> \<span class="p">)</span>  <span class="o">-</span><span class="nb">print</span>
 </pre></div>
 </div>
-<p>…so it’s basically all programming…</p>
-<p>Note that you can ‘exec’ a Python, R, or shell script.</p>
-<p>Exercise: how would you copy all files containing a specific string
+<p>Note that you can <code class="docutils literal notranslate"><span class="pre">exec</span></code> a Python, R, or shell script.</p>
+<hr class="docutils" />
+<p>Exercise:</p>
+<p>How would you copy all files containing a specific string
 (‘CGTTATCCGGATTTATTGGGTTTA’, say) into a new directory? And what are the
 pros (and cons) of your approach?</p>
 <p>(Work in small groups; start from working code, say, the ‘find’
@@ -474,7 +485,7 @@ getting there.)</p>
   <ul>
 <li><a class="reference internal" href="#">Advanced Beginner/Intermediate Shell</a><ul>
 <li><a class="reference internal" href="#credits">Credits</a></li>
-<li><a class="reference internal" href="#learning-goals">Learning goals:</a></li>
+<li><a class="reference internal" href="#learning-objectives">Learning objectives:</a></li>
 <li><a class="reference internal" href="#exploring-directory-structures">Exploring directory structures</a></li>
 <li><a class="reference internal" href="#renaming-a-bunch-of-files">Renaming a bunch of files</a></li>
 <li><a class="reference internal" href="#backtracking">Backtracking</a></li>
@@ -485,11 +496,17 @@ getting there.)</p>
 <li><a class="reference internal" href="#writing-shell-scripts">Writing shell scripts</a></li>
 <li><a class="reference internal" href="#other-bits-and-pieces">Other bits and pieces</a></li>
 <li><a class="reference internal" href="#a-general-approach-you-can-use">A general approach you can use</a></li>
-<li><a class="reference internal" href="#the-weird-awesomeness-that-is-find">The weird awesomeness that is ‘find’</a></li>
+<li><a class="reference internal" href="#more-things-you-can-do-with-find">More things you can do with <code class="docutils literal notranslate"><span class="pre">find</span></code></a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="unixintro.html"
+                        title="previous chapter">Introductory Unix Shell</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../day1/index.html"
+                        title="next chapter">Day 1</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -519,7 +536,14 @@ getting there.)</p>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="../day1/index.html" title="Day 1"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="unixintro.html" title="Introductory Unix Shell"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Day 0</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
