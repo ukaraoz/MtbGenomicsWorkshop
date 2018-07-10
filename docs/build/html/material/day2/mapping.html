@@ -1,0 +1,187 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Mapping Reads &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mapping-reads">
+<h1>Mapping Reads<a class="headerlink" href="#mapping-reads" title="Permalink to this headline">¶</a></h1>
+<p>Mappers result in a SAM or BAM file
+(<a class="reference external" href="http://genome.sph.umich.edu/wiki/SAM">http://genome.sph.umich.edu/wiki/SAM</a>). Those are formats that contain the
+alignment information, where BAM is the binary version of the plain text SAM
+format. Describe:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Create directories to hold results
+BASE=/data2-raid/ukaraoz/Work/UPMWorkshop/ERS050945
+DATA=$BASE/data
+RESULTS=$BASE/results1
+mkdir -p $RESULTS/fastqc; mkdir -p $RESULTS/log; mkdir -p $RESULTS/qc; mkdir -p $RESULTS/mapping
+
+# Define the sample
+sample=ERS050945
+</pre></div>
+</div>
+<p>First, generate a <code class="docutils literal notranslate"><span class="pre">fastqc</span></code> report:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>fastqc $DATA/reads/${sample}_R1.fastq
+fastqc $DATA/reads/${sample}_R2.fastq
+</pre></div>
+</div>
+<p>Inspect the read quality profile and pick quality trimming parameters.
+Quality trim reads using <code class="docutils literal notranslate"><span class="pre">sickle</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sickle pe -t sanger -q 30 -l 50 -n 5 \
+-f $DATA/reads/${sample}_R1.fastq -r $DATA/reads/${sample}_R2.fastq \
+-o $RESULTS/qc/${sample}_qced_R1.fastq -p $RESULTS/qc/${sample}_qced_R2.fastq \
+-s $RESULTS/qc/${sample}_single.fastq 1&gt; $RESULTS/log/${sample}.sickle.log
+</pre></div>
+</div>
+<p>Question: How many paired reads remain after quality trimming?</p>
+<div class="section" id="mapping-reads-to-the-reference-genome-sequence">
+<h2>Mapping reads to the reference genome sequence<a class="headerlink" href="#mapping-reads-to-the-reference-genome-sequence" title="Permalink to this headline">¶</a></h2>
+<p>Next, using a “reference” <em>Mycobacterium tuberculosis</em> genome, we will determine the likely genomic positions from which the short reads might have been sampled.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The canonical reference genome sequence for <em>M. tuberculosis</em> is that of strain <a class="reference external" href="https://www.nature.com/articles/31159">H37Rv</a>, the first <em>M. tuberculosis</em> genome to have been sequenced. As such, <em>H37Rv</em> has a high quality genomic sequence and a wealth of information accumulated since then. It is important to realize that the reason <em>H37Rv</em> genome is being used as a reference is rather practically grounded.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>Read mapping</em>, <em>read aligment</em>, and <em>sequence alignment</em> are often used interchangeably but in fact they are different concepts. The purpose of sequence alignment is to identify the <em>homologous</em> positions between evolutionarily related sequences. With read mapping, our objective is to identify the genomic region(s) from which the read sequence might be coming from. A mapping is considered to be correct if it overlaps the true region. Once we identify these regions, then we want align the read, in other words find the detailed placement of each base in the read.</p>
+</div>
+<p>For mapping reads to the reference genome, we will use <code class="docutils literal notranslate"><span class="pre">BWA</span></code> suit of programs. In this workshop, we will only going to be using two programs within the suite: <code class="docutils literal notranslate"><span class="pre">bwa</span> <span class="pre">index</span></code> and <code class="docutils literal notranslate"><span class="pre">bwa</span> <span class="pre">mem</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">BWA</span></code> (<a class="reference external" href="https://academic.oup.com/bioinformatics/article/25/14/1754/225615">Burrows Wheeler Aligner</a>) uses Burrows Wheeler transform to rapidly map reads to the reference genome. Importantly, <code class="docutils literal notranslate"><span class="pre">BWA</span></code> allows for a certain number of mismatches as well as for insertions and deletions.
+Before starting mapping, first we first need to index the reference genome. <code class="docutils literal notranslate"><span class="pre">Indexing</span></code> means arranging the genome into easily searchable chunks.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>bwa index $DATA/ref/NC_000962.3.fna
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">bwa</span> <span class="pre">index</span></code> will  output some files with set extensions, which the main alignment program (<code class="docutils literal notranslate"><span class="pre">bwa</span> <span class="pre">mem</span></code>) knows the format of.
+Now, we will start aligning. Explore the mapping and alignment options that <code class="docutils literal notranslate"><span class="pre">bwa</span> <span class="pre">mem</span></code> has by typing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bwa</span> <span class="n">mem</span>
+</pre></div>
+</div>
+<p>In this workshop, we will use the default options, which work well for short reads:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>bwa mem $DATA/ref/NC_000962.3.fna $RESULTS/qc/${sample}_qced_R1.fastq $RESULTS/qc/${sample}_qced_R2.fastq &gt; $RESULTS/mapping/${sample}.mapped.sam
+</pre></div>
+</div>
+<p>which aligns <code class="docutils literal notranslate"><span class="pre">forward</span></code> and <code class="docutils literal notranslate"><span class="pre">reverse</span></code> reads against the reference, outputs them to the <code class="docutils literal notranslate"><span class="pre">stdout</span></code> in <code class="docutils literal notranslate"><span class="pre">.sam</span></code> format, which we then save to a file.
+Inspect the first few lines of the <code class="docutils literal notranslate"><span class="pre">.sam</span></code> output file with <code class="docutils literal notranslate"><span class="pre">more</span></code>. It should look as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># @SQ SN:NC_000962.3  LN:4411532</span>
+<span class="c1"># @PG ID:bwa  PN:bwa  VN:0.7.17-r1188 CL:bwa mem ERS050945/data/ref/NC_000962.3.fna ERS050945/results1/qc/</span>
+</pre></div>
+</div>
+<p>What does each line with sequences represent? Can you make sense of the information in different columns?</p>
+<p>While <code class="docutils literal notranslate"><span class="pre">.sam</span></code></p>
+</div>
+<div class="section" id="generating-mapping-statistics-from-the-sam-bam-file">
+<h2>Generating mapping statistics from the SAM/BAM file<a class="headerlink" href="#generating-mapping-statistics-from-the-sam-bam-file" title="Permalink to this headline">¶</a></h2>
+<p>You can determine mapping statistics directly from the bam file. Use for
+instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mapped reads only</span>
+<span class="n">samtools</span> <span class="n">view</span> <span class="o">-</span><span class="n">c</span> <span class="o">-</span><span class="n">F</span> <span class="mi">4</span> <span class="nb">map</span><span class="o">/</span><span class="n">contigs_pair</span><span class="o">-</span><span class="n">smds</span><span class="o">.</span><span class="n">bam</span>
+
+<span class="c1"># Unmapped reads only</span>
+<span class="n">samtools</span> <span class="n">view</span> <span class="o">-</span><span class="n">c</span> <span class="o">-</span><span class="n">f</span> <span class="mi">4</span> <span class="nb">map</span><span class="o">/</span><span class="n">contigs_pair</span><span class="o">-</span><span class="n">smds</span><span class="o">.</span><span class="n">bam</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pilon">
+<h2>Pilon<a class="headerlink" href="#pilon" title="Permalink to this headline">¶</a></h2>
+<p>Headers
+DP      Valid read depth; some reads may have been filtered”&gt;
+TD      Total read depth including bad pairs”&gt;
+PC      Physical coverage of valid inserts across locus”&gt;
+BQ      Mean base quality at locus”&gt;
+MQ      Mean read mapping quality at locus”&gt;
+QD      Variant confidence/quality by depth”&gt;
+BC      Count of As, Cs, Gs, Ts at locus”&gt;
+QP      Percentage of As, Cs, Gs, Ts weighted by Q &amp; MQ at locus”&gt;
+IC      Number of reads with insertion here”&gt;
+DC      Number of reads with deletion here”&gt;
+XC      Number of reads clipped here”&gt;
+AC      Allele count in genotypes, for each ALT allele, in the same order as listed”&gt;
+AF      Fraction of evidence in support of alternate allele(s)”&gt;
+SVTYPE  Type of structural variant”&gt;
+SVLEN   Difference in length between REF and ALT alleles”&gt;
+END     End position of the variant described in this record”&gt;
+IMPRECISE       Imprecise change from local reassembly (ALT contains Ns)</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Mapping Reads</a><ul>
+<li><a class="reference internal" href="#mapping-reads-to-the-reference-genome-sequence">Mapping reads to the reference genome sequence</a></li>
+<li><a class="reference internal" href="#generating-mapping-statistics-from-the-sam-bam-file">Generating mapping statistics from the SAM/BAM file</a></li>
+<li><a class="reference internal" href="#pilon">Pilon</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/material/day2/mapping.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ulas Karaoz.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

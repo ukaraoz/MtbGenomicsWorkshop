@@ -1,0 +1,156 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Read Quality Control and Trimming &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="read-quality-control-and-trimming">
+<h1>Read Quality Control and Trimming<a class="headerlink" href="#read-quality-control-and-trimming" title="Permalink to this headline">¶</a></h1>
+<p>To perform data quality control, we will use <code class="docutils literal notranslate"><span class="pre">FastQC</span></code>, a tool that processes reads and presents visual reports.</p>
+<p>First, peak into the first few lines of <code class="docutils literal notranslate"><span class="pre">.fastq</span></code> files for the Illumina reads from 60X sequencing run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>head -n 10 $MYDATADIR/MTB_illumina60X_R1.fastq
+head -n 10 $MYDATADIR/MTB_illumina60X_R2.fastq
+</pre></div>
+</div>
+<p>What can you tell about the headers? What is the <code class="docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span></code> for this run? Can you quickly count the number of reads (Hint: use <code class="docutils literal notranslate"><span class="pre">grep</span></code> and <code class="docutils literal notranslate"><span class="pre">wc</span></code>)?</p>
+<div class="section" id="running-fastqc">
+<h2>Running <code class="docutils literal notranslate"><span class="pre">fastqc</span></code><a class="headerlink" href="#running-fastqc" title="Permalink to this headline">¶</a></h2>
+<p>We will now run <code class="docutils literal notranslate"><span class="pre">fastqc</span></code>. For most tools used in practicals, you can get help by using <code class="docutils literal notranslate"><span class="pre">-h</span></code> or <code class="docutils literal notranslate"><span class="pre">-help</span></code> flag. Type the following to get help for <code class="docutils literal notranslate"><span class="pre">fastqc</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fastqc</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<p>Run <code class="docutils literal notranslate"><span class="pre">fastqc</span></code> for <code class="docutils literal notranslate"><span class="pre">forward</span></code> reads from 60X and 20X runs saving the results under your results directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_illumina60X_R1.fastq
+fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_illumina20X_R1.fastq
+</pre></div>
+</div>
+<p>Now run it again for <code class="docutils literal notranslate"><span class="pre">reverse</span></code> reads:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_illumina60X_R2.fastq
+fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_illumina20X_R2.fastq
+</pre></div>
+</div>
+<p>Repeat for PacBio reads.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_pacbio_subreads.fastq
+fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_pacbio_circular-consensus-sequence-reads.fastq
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">fastqc</span></code> performs a suite of tests and then for each indicates whether the test has been passed (green tick) or failed (red cross). Notice tough that <code class="docutils literal notranslate"><span class="pre">fastqc</span></code> has no idea about what your library should look like. All of its tests are based on a completely random library with 50% GC content and therefore it will show the test as failed if your sample doesn’t match these assumptions. For instance, you might have reads sampled from a high AT or high GC genome, and it will fail per sequence GC content. You need to be aware of how your library been generated and interpret the <code class="docutils literal notranslate"><span class="pre">fastqc</span></code> reports taking that into account.</p>
+<p>Question: For a whole genome shotgun library, what would you expect “per base sequence content” to look like?
+Question: What if you had amplicon sequences from a multiplex PCR assay?</p>
+<p>Now, open <code class="docutils literal notranslate"><span class="pre">fastqc</span></code> reports in a browser:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>firefox $MYRESULTSDIR/qc/MTB_illumina60X_R1_fastqc.html
+firefox $MYRESULTSDIR/qc/MTB_illumina60X_R2_fastqc.html
+firefox $MYRESULTSDIR/qc/MTB_illumina20X_R1_fastqc.html
+firefox $MYRESULTSDIR/qc/MTB_illumina20X_R2_fastqc.html
+firefox $MYRESULTSDIR/qc/MTB_pacbio_R1_fastqc.html
+firefox $MYRESULTSDIR/qc/MTB_pacbio_R2_fastqc.html
+</pre></div>
+</div>
+<ul class="simple">
+<li><strong>Per base sequence quality</strong>: This is probably one of the most important diagnostics. Inspecting this, you can determine what quality trimming parameters you should use in downstream analysis.</li>
+<li><strong>Per base sequence content</strong>: For a randomly sampled genome with a GC content of 50%, we would expect that at any given position within a read, there will be an equal probability of finding a A,C,G, or T base. Our library from <em>M. tuberculosis</em> is expected to reflect the GC content, which holds here. There seems to be some minor bias at the start of the read, which may be due to PCR duplicates during amplification or during library preparation.</li>
+<li><strong>Sequence duplication levels</strong>: In a whole genome shotgun library, very few reads are expected to occur more than once. In a shotgun library of a targeted region, a low level of duplication can simply be the result of high level of sampling (i.e. high coverage). In addition, duplication might also indicate some kind of enrichment bias (i.e. PCR overamplification)</li>
+</ul>
+<p><a class="reference external" href="https://sequencing.qcfail.com/">https://sequencing.qcfail.com/</a> is a good resource where people post about different ways a sequencing run might have failed.</p>
+</div>
+<div class="section" id="running-sickle-to-quality-trim-reads">
+<h2>Running <code class="docutils literal notranslate"><span class="pre">sickle</span></code> to quality trim reads:<a class="headerlink" href="#running-sickle-to-quality-trim-reads" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have an idea about the quality profile of our reads, we can do quality based trimming of reads. We will use a <code class="docutils literal notranslate"><span class="pre">Q-score</span></code> threshold of 30 (-q 30), remove all reads that are shorter than 100 bp after trimming (-l 100), and also trim 10 bp from 5’ end just to reduce bias. After trimming, singletons reads (reads whose pair dropped off) are save into a separate file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sickle pe -t sanger -q 30 -l 100 -n 10 \
+-f $MYDATADIR/MTB_illumina60X_R1.fastq \
+-r $MYDATADIR/MTB_illumina60X_R2.fastq \
+-o $MYRESULTSDIR/qc/MTB_illumina60X_qced_R1.fastq \
+-p $MYRESULTSDIR/qc/MTB_illumina60X_qced_R2.fastq \
+-s $MYRESULTSDIR/qc/MTB_illumina60X_qced_single.fastq 1&gt;$MYRESULTSDIR/qc/MTB_illumina60X_sickle.log
+
+sickle pe -t sanger -q 30 -l 100 -n 10 \
+-f $MYDATADIR/MTB_illumina20X_R1.fastq \
+-r $MYDATADIR/MTB_illumina20X_R2.fastq \
+-o $MYRESULTSDIR/qc/MTB_illumina20X_qced_R1.fastq \
+-p $MYRESULTSDIR/qc/MTB_illumina20X_qced_R2.fastq \
+-s $MYRESULTSDIR/qc/MTB_illumina20X_qced_single.fastq 1&gt;$MYRESULTSDIR/qc/MTB_illumina20X_sickle.log
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Read Quality Control and Trimming</a><ul>
+<li><a class="reference internal" href="#running-fastqc">Running <code class="docutils literal notranslate"><span class="pre">fastqc</span></code></a></li>
+<li><a class="reference internal" href="#running-sickle-to-quality-trim-reads">Running <code class="docutils literal notranslate"><span class="pre">sickle</span></code> to quality trim reads:</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/material/day1/read_qc.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ulas Karaoz.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

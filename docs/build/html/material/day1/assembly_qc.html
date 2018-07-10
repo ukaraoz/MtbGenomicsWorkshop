@@ -1,0 +1,108 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Assessing the quality of the assemblies &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="assessing-the-quality-of-the-assemblies">
+<h1>Assessing the quality of the assemblies<a class="headerlink" href="#assessing-the-quality-of-the-assemblies" title="Permalink to this headline">¶</a></h1>
+<p>We will now start assessing the quality of our assembly. Overall, we want an assembly that is in as few contigs as possible, as complete as possible (with respect to a reference), and as accurate as possible (ideally at single base pair resolution).  So, when evaluating an assembly, there are 3 factors to consider listed below. Usually, in any assembly strategy there are tradeoffs between these factors.</p>
+<ul class="simple">
+<li><strong>Contiguity</strong>: Long contigs are better than short contigs. Long contigs provide more information about the genomic structure (for instance gene order, synteny)</li>
+<li><strong>Completeness</strong>: We want the assembly to represent as much of the true genome as possible. The assumed genome size in our case is ~4.4 Mb</li>
+<li><strong>Accuracy</strong>: We want an assembly that has few large-scale misassemblies and consensus errors (mismatches or indels). The latter is especially critical for identification of nucleotide variants.</li>
+</ul>
+<p>To evaluate assemblies, we will use <code class="docutils literal notranslate"><span class="pre">quast</span></code> (Quality Assessment Tool for Genome Assemblies). In this case, we have a high quality reference assembly we can use for groundtruthing. Typically, there will be a lot of short “leftover” contigs that contain repetitive or low-complexity sequence or low-quality reads that cannot be assembled. To avoid biasing our evaluation, we will only use contigs that are at least 500 bp long (default threshold in <code class="docutils literal notranslate"><span class="pre">quast</span></code>).
+You can <code class="docutils literal notranslate"><span class="pre">quast</span></code> as follows on the 3 assemblies:</p>
+<p><strong>DO NOT RUN</strong>. We will use precomputed results.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># define a variable for the reference genome
+REF_GENOME=/home/mtb_upm/mtb_genomics_workshop_data/genome-assembly-annotation/data/NC_000962.3.fna
+quast.py -R $REF_GENOME -o $MYRESULTSDIR/short_long_reads_assembly/assemblies/quast_3assemblies_qc \
+$MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_illumina20X_assembly.fasta \
+$MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_illumina60X_assembly.fasta \
+$MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_pacbio_assembly.fasta
+</pre></div>
+</div>
+<p>Copy the precomputed results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp -r ~/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/assemblies/quast_3assemblies_qc/ $MYRESULTSDIR/short_long_reads_assembly/assemblies/
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">quast_3assemblies_qc</span></code> directory, open <code class="docutils literal notranslate"><span class="pre">report.html</span></code> file in a browser.</p>
+<dl class="docutils">
+<dt>::</dt>
+<dd>firefox $MYRESULTSDIR/short_long_reads_assembly/assemblies/quast_3assemblies_qc/report.html&amp;</dd>
+</dl>
+<p>When you opened the results web page, put your green stickies on. We will discuss these results in detail.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/material/day1/assembly_qc.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ulas Karaoz.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

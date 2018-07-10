@@ -1,0 +1,77 @@
+::::::::::
+Agenda
+::::::::::
+
+
+^^^^^^^
+Tuesday
+^^^^^^^
+
+PM
+++
+Intermediate to Advanced Unix Shell
+
+
+^^^^^^^
+Wednesday
+^^^^^^^
+
+AM
++++++++
+**Lecture**:: Whole-genome sequencing: technologies and data
+ + Overview of short and long read sequencing technologies
+ + Project design considerations: library complexity, data quantity and quality
+   
+**Lecture**:: Genomics of M. tuberculosis and Genome Assembly Algorithms
+    + Short intro to genomics and population genomics of M. tuberculosis
+    + Reference-based, de-novo, and hybrid genome assembly
+   
+PM
+++
+Hands-on practical: 
+ + Short and Long Read Genome Assembly
+ + Assembly Quality Control
+ + Genome Annotation
+
+^^^^^^^
+Thursday
+^^^^^^^
+
+AM
++++++++
+**Lecture**: Read Mapping and variant calling-Part 1
+
+**Lecture**: Read Mapping and variant calling-Part 2
+
+PM
+++
+Hands-on practical: 
+ + Read mapping
+ + Variant calling
+
+
+^^^^^^^
+Friday
+^^^^^^^
+
+AM
+++
+**Lecture**: Microbial phylogenetics and phylogenomics
+
+**Lecture**: Reproducible research in high-throughput biology and building bioinformatics pipelines 
+
+PM
+++
+Hands-on practical: 
+ + `M. tuberculosis` phylogenetics and phylogenomics
+ + Building computational pipelines with Snakemake
+
+
+^^^^^^^
+Saturday
+^^^^^^^
+
+AM
+++
+
+**Lecture & Practical**: An Introduction to Data Analysis with R
