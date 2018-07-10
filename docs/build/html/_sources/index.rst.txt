@@ -27,6 +27,7 @@ Keynote
 .. toctree::
 	:maxdepth: 2
     :caption: Table of Contents
+
    agenda/index
    material/index
    	day0/index

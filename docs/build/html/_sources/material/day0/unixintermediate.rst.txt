@@ -28,7 +28,7 @@ Learning objectives:
   
   ::
    
-   wget https://s3-us-west-1.amazonaws.com/mtb-bioinformatics-workshop/shell-data.zip
+   wget https://s3-ap-southeast-1.amazonaws.com/mtb-bioinformatics-workshop-singapore/shell-data.zip
    # will unzip a folder called `data`
    unzip shell-data.zip
 
