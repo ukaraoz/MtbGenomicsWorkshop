@@ -3,7 +3,7 @@ Workshop Hands-on Practicals
 ----------------------------------------------------------------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
 	day0/index
 	day1/index
