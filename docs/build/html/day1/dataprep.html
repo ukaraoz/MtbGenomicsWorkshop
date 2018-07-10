@@ -42,26 +42,21 @@
             
   <div class="section" id="copying-data-and-preparing-the-directories">
 <h1>Copying data and preparing the directories<a class="headerlink" href="#copying-data-and-preparing-the-directories" title="Permalink to this headline">¶</a></h1>
-<p>First let’s create a variable pointing to the data directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATA</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">mtb_upm</span><span class="o">/</span><span class="n">data</span>
-</pre></div>
-</div>
-<p>Next, create a directory named <code class="docutils literal notranslate"><span class="pre">`wgs_assembly`</span></code> and move into that directory:</p>
+<p>First let’s create a directory named <code class="docutils literal notranslate"><span class="pre">`wgs_assembly`</span></code> for this practical. And then, under that directory create subdirectories to hold our data and results:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">wgs_assembly</span>
-<span class="n">cd</span> <span class="o">~/</span><span class="n">wgs_assembly</span>
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span>
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span>
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span>
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span>
 </pre></div>
 </div>
-<p>Inside that directory, create the following directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span>
+<p>Now, copy the data into our data directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">mtb_upm</span><span class="o">/</span><span class="n">mtb_genomics_workshop_data</span><span class="o">/</span><span class="n">genome</span><span class="o">-</span><span class="n">assembly</span><span class="o">-</span><span class="n">annotation</span><span class="o">/</span><span class="n">data</span><span class="o">/*</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span>
 </pre></div>
 </div>
-<p>Copy the contents of the data directory into your data directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp -r $DATA/* ~/wgs_assembly/data/
-</pre></div>
-</div>
-<p>Next, create the directories to hold your results:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span>
-<span class="n">mkdir</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">assemblies</span>
+<p>Define variables for convenience:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MYDATADIR</span><span class="o">=~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span>
+<span class="n">MYRESULTSDIR</span><span class="o">=~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span>
 </pre></div>
 </div>
 </div>

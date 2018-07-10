@@ -44,19 +44,29 @@
 <h1>Improving the accuracy of the long read assembly<a class="headerlink" href="#improving-the-accuracy-of-the-long-read-assembly" title="Permalink to this headline">¶</a></h1>
 <p>In the lecture, we have seen that PacBio long reads have a significantly higher error rate compared to Illumina short reads. As a result, the long read assembly will have many errors in the consensus sequence (primarily indels). We can increase the accuracy of the consensus sequences using the Illumina reads, which will provide more coverage and higher quality bases. This process of improving the accuracy of the long reads using high fidelity short reads is sometimes referred to as <em>polishing</em>.</p>
 <p>To polish PacBio assembly, we will use <code class="docutils literal notranslate"><span class="pre">pilon</span></code> which will generate a new consensus sequence for the assembly. The details of the following commands will be clear in the next lecture. For now, run the following commands:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir ~/wgs_assembly/results/short_long_reads_assembly/correct_pacbio_assembly
-PACBIO_ASSEMBLY=~/wgs_assembly/results/short_long_reads_assembly/assemblies/MTB_pacbio_assembly.fasta
-cd ~/wgs_assembly/results/short_long_reads_assembly
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir $MYRESULTSDIR/short_long_reads_assembly/polished_pacbio_assembly
+PACBIO_ASSEMBLY=$MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_pacbio_assembly.fasta
+cd $MYRESULTSDIR/short_long_reads_assembly/
 bwa index $PACBIO_ASSEMBLY
-bwa mem -t 4 -p $PACBIO_ASSEMBLY ~/wgs_assembly/results/qc/MTB_illumina60X_qced_R1R2.fastq | samtools sort -T tmp -o ~/wgs_assembly/results/short_long_reads_assembly/correct_pacbio_assembly/MTB_illumina60X_qced.mapped_to_pacbio_contigs.sorted.bam -
-samtools index ~/wgs_assembly/results/short_long_reads_assembly/correct_pacbio_assembly/MTB_illumina60X_qced.mapped_to_pacbio_contigs.sorted.bam
-java -Xmx8G -jar /opt/pilon-1.22.jar --genome $PACBIO_ASSEMBLY --frags ~/wgs_assembly/results/short_long_reads_assembly/correct_pacbio_assembly/MTB_illumina60X_qced.mapped_to_pacbio_contigs.sorted.bam --output MTB_pacbio_assembly_shortreadcorrected
+bwa mem -t 4 -p $PACBIO_ASSEMBLY $MYRESULTSDIR/qc/MTB_illumina60X_qced_R1R2.fastq | samtools sort -T tmp -o $MYRESULTSDIR/short_long_reads_assembly/polished_pacbio_assembly/MTB_illumina60X_qced.mapped_to_pacbio_contigs.sorted.bam -
+samtools index $MYRESULTSDIR/short_long_reads_assembly/polished_pacbio_assembly/MTB_illumina60X_qced.mapped_to_pacbio_contigs.sorted.bam
+java -Xmx8G -jar /opt/pilon-1.22.jar --genome $PACBIO_ASSEMBLY --frags $MYRESULTSDIR/short_long_reads_assembly/polished_pacbio_assembly/MTB_illumina60X_qced.mapped_to_pacbio_contigs.sorted.bam --output $MYRESULTSDIR/short_long_reads_assembly/polished_pacbio_assembly/MTB_pacbio_assembly_shortreadcorrected
 </pre></div>
 </div>
-<p>Rerun quast with 4 assemblies:</p>
+<p>Do assembly qc with 4 assemblies. <strong>DONOT RUN</strong>, we will use precomputed results.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">quast</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">R</span> <span class="o">../</span><span class="n">NC_000962</span><span class="o">.</span><span class="mf">3.</span><span class="n">fna</span> <span class="o">-</span><span class="n">o</span> <span class="n">quast_4assemblies_qc</span> <span class="o">./</span><span class="n">MTB_illumina20X_assembly</span><span class="o">.</span><span class="n">fasta</span> <span class="o">./</span><span class="n">MTB_illumina60X_assembly</span><span class="o">.</span><span class="n">fasta</span> <span class="o">./</span><span class="n">MTB_pacbio_assembly</span><span class="o">.</span><span class="n">fasta</span> <span class="o">./</span><span class="n">MTB_pacbio_assembly_shortreadcorrected</span><span class="o">.</span><span class="n">fasta</span>
 </pre></div>
 </div>
+<p>Copy precomputed results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp -r ~/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/assemblies/quast_4assemblies_qc/ $MYRESULTSDIR/short_long_reads_assembly/assemblies/
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">quast_4assemblies_qc</span></code> directory, open <code class="docutils literal notranslate"><span class="pre">report.html</span></code> file in a browser. After you open, make sure you turn on the <cite>extended report</cite>.</p>
+<dl class="docutils">
+<dt>::</dt>
+<dd>firefox $MYRESULTSDIR/short_long_reads_assembly/assemblies/quast_4assemblies_qc/report.html&amp;</dd>
+</dl>
+<p>When you opened the results web page, put your green stickies on. We will discuss these results in detail.</p>
 </div>
 
 

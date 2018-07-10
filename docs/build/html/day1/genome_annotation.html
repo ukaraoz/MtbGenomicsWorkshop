@@ -45,12 +45,15 @@
 <p>Now that we have assembled the reads into contigs, we will annotate the genome. That means we will predict genes and assign functional annotation to them. <em>M. tuberculosis</em> is a very clonal organism and its genome is already well annotated so typically when we assemble a new <em>M. tuberculosis</em> isolate, there is no need to do <code class="docutils literal notranslate"><span class="pre">de</span> <span class="pre">novo</span></code> annotation. Although we are using <em>M. tuberculosis</em> as a working example here, the methodology is applicable to all microbial genomes.</p>
 <p>A set of programs are available for genome annotation tasks. Here we will use <code class="docutils literal notranslate"><span class="pre">Prokka</span></code>, a pipeline comprising several open source bioinformatic tools and databases. <code class="docutils literal notranslate"><span class="pre">Prokka</span></code> automates the process of locating open reading frames (ORFs) and RNA regions on contigs, translating ORFs to protein sequences, searching for protein homologs and producing standard output files. For gene finding and translation, <code class="docutils literal notranslate"><span class="pre">Prokka</span></code> uses a program named <code class="docutils literal notranslate"><span class="pre">prodigal</span></code>. Homology searches are then performed using <code class="docutils literal notranslate"><span class="pre">BLAST</span></code> and <code class="docutils literal notranslate"><span class="pre">HMMER</span></code> based on the translated protein sequences as queries against a set of public databases (CDD, PFAM, TIGRFAM) as well as custom databases that are included with <code class="docutils literal notranslate"><span class="pre">Prokka</span></code>.</p>
 <p>Create a directory to hold the annotation results:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">annotation</span><span class="o">/</span><span class="n">prokka</span>
-<span class="n">cd</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">annotation</span><span class="o">/</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir -p $MYRESULTSDIR/annotation
 </pre></div>
 </div>
-<p>Run <code class="docutils literal notranslate"><span class="pre">Prokka</span></code> (will take ~20 minutes for our assembly):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>prokka contigs.fa --outdir $SAMPLE --norrna --notrna --metagenome --cpus 8
+<p>Define a shell variable for the final contigs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FINALCONTIGS=$MYRESULTSDIR/short_long_reads_assembly/polished_pacbio_assembly/MTB_pacbio_assembly_shortreadcorrected.fasta
+</pre></div>
+</div>
+<p>Run <code class="docutils literal notranslate"><span class="pre">Prokka</span></code> (will take ~30 minutes for our assembly). <strong>DONOT RUN</strong>, copy the precalculated results.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>prokka $FINALCONTIGS --outdir $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected --norrna --notrna --metagenome --cpus 8
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">Prokka</span></code> produces several types of output:</p>
@@ -58,8 +61,13 @@
 <li>a <code class="docutils literal notranslate"><span class="pre">.gff</span></code> file, which is a standardised, tab-delimited, format for genome annotations</li>
 <li>a Genbank (<code class="docutils literal notranslate"><span class="pre">.gbk</span></code>) file, which is a more detailed description of nucleotide sequences and the genes encoded in these.</li>
 </ul>
+<p>Copy the precalculated results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir -p $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected/
+cp ~/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/prokka_precalculated/* $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected/
+</pre></div>
+</div>
 <p>When your dataset has been annotated you can view the annotations directly in the <code class="docutils literal notranslate"><span class="pre">gff</span></code> file. Peak into the <code class="docutils literal notranslate"><span class="pre">gff</span></code> file by doing:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">more</span> <span class="o">-</span><span class="n">S</span> <span class="n">PROKKA_11242015</span><span class="o">.</span><span class="n">gff</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>more -S $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected/PROKKA_07052018.gff
 </pre></div>
 </div>
 <p>Question: How many coding regions were found by Prodigal? (Hint: use <code class="docutils literal notranslate"><span class="pre">grep</span></code>)
@@ -72,6 +80,7 @@ Launch Artemis and load <code class="docutils literal notranslate"><span class="
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">art</span><span class="o">&amp;</span>
 </pre></div>
 </div>
+<p>Pick one of favorite <em>M. tuberculosis</em> genes, and try finding it (Goto–&gt;Navigator–&gt;Goto Feature with Key Name)</p>
 </div>
 </div>
 

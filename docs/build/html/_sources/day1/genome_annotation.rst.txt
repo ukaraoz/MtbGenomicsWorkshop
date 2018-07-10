@@ -7,22 +7,31 @@ A set of programs are available for genome annotation tasks. Here we will use ``
 Create a directory to hold the annotation results:
 ::
 
- mkdir -p ~/wgs_assembly/results/annotation/prokka
- cd ~/wgs_assembly/results/annotation/
+ mkdir -p $MYRESULTSDIR/annotation
 
-Run ``Prokka`` (will take ~20 minutes for our assembly):
+Define a shell variable for the final contigs:
 ::
- prokka contigs.fa --outdir $SAMPLE --norrna --notrna --metagenome --cpus 8
+
+ FINALCONTIGS=$MYRESULTSDIR/short_long_reads_assembly/polished_pacbio_assembly/MTB_pacbio_assembly_shortreadcorrected.fasta
+
+Run ``Prokka`` (will take ~30 minutes for our assembly). **DONOT RUN**, copy the precalculated results.
+::
+ prokka $FINALCONTIGS --outdir $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected --norrna --notrna --metagenome --cpus 8
 
 ``Prokka`` produces several types of output:
 
 * a ``.gff`` file, which is a standardised, tab-delimited, format for genome annotations
 * a Genbank (``.gbk``) file, which is a more detailed description of nucleotide sequences and the genes encoded in these.
 
+Copy the precalculated results:
+::
+  mkdir -p $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected/
+  cp ~/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/prokka_precalculated/* $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected/
+
 When your dataset has been annotated you can view the annotations directly in the ``gff`` file. Peak into the ``gff`` file by doing:
 ::
 
- more -S PROKKA_11242015.gff
+ more -S $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected/PROKKA_07052018.gff
 
 
 Question: How many coding regions were found by Prodigal? (Hint: use ``grep``)
@@ -36,5 +45,5 @@ Launch Artemis and load ``gff`` file:
 ::
  art&
  
-
+Pick one of favorite *M. tuberculosis* genes, and try finding it (Goto-->Navigator-->Goto Feature with Key Name)
 

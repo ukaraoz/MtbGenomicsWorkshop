@@ -43,12 +43,12 @@
   <div class="section" id="data-sets">
 <h1>Data Sets<a class="headerlink" href="#data-sets" title="Permalink to this headline">¶</a></h1>
 <p>The datasets we will use are sequencing reads from <em>M. tuberculosis</em> genome generated using Illumina and PacBio platforms.
-For the Illumina platform, there are two sets of reads covering the same genome at 20X and 60X. We will also use a reference assembly for <em>M. tuberculosis H37Rv</em> (<a class="reference external" href="https://www.ncbi.nlm.nih.gov/nuccore/NC_000962.3">NC_000962.3</a>). H37Rv genome is 4411532 bp long.</p>
-<p>The datasets are located under <cite>home/mtb_upm</cite> directory, which has the following content:</p>
+For the Illumina platform, there are two sets of reads covering the same library at 20X and 60X coverage. We will also use a reference assembly for <em>M. tuberculosis H37Rv</em> (<a class="reference external" href="https://www.ncbi.nlm.nih.gov/nuccore/NC_000962.3">NC_000962.3</a>). H37Rv genome is 4411532 bp long.</p>
+<p>The datasets are located under <cite>/home/mtb_upm/mtb_genomics_workshop_data/genome-assembly-annotation/data</cite> directory, which has the following content:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="39%" />
-<col width="61%" />
+<col width="42%" />
+<col width="58%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">File</th>
@@ -56,25 +56,22 @@ For the Illumina platform, there are two sets of reads covering the same genome 
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>data/reads/illumina/MTB_illumina_R1.fastq</td>
+<tr class="row-even"><td>MTB_illumina60X_R1.fastq</td>
 <td>60X coverage run, Illumina short reads, forward</td>
 </tr>
-<tr class="row-odd"><td>data/reads/illumina/MTB_illumina_R2.fastq</td>
+<tr class="row-odd"><td>MTB_illumina60X_R2.fastq</td>
 <td>60X coverage run, Illumina short reads, forward</td>
 </tr>
-<tr class="row-even"><td>data/reads/illumina/MTB_illumina20X_R1.fastq</td>
+<tr class="row-even"><td>MTB_illumina20X_R1.fastq</td>
 <td>20X coverage run, Illumina short reads, forward</td>
 </tr>
-<tr class="row-odd"><td>data/reads/illumina/MTB_illumina20X_R2.fastq</td>
+<tr class="row-odd"><td>MTB_illumina20X_R2.fastq</td>
 <td>20X coverage run, Illumina short reads, forward</td>
 </tr>
-<tr class="row-even"><td>data/reads/pacbio/MTB_pacbio_R1.fastq</td>
-<td>PacBio long reads, forward</td>
+<tr class="row-even"><td>MTB_pacbio_circular-consensus-sequence-reads.fastq</td>
+<td>PacBio long reads, circular consensus sequence</td>
 </tr>
-<tr class="row-odd"><td>data/reads/pacbio/MTB_pacbio_R2.fastq</td>
-<td>PacBio long reads, reverse</td>
-</tr>
-<tr class="row-even"><td>data/ref/NC_000962.3.fna</td>
+<tr class="row-odd"><td>NC_000962.3.fna</td>
 <td>Mycobacterium tuberculosis H37Rv reference assembly, 4411532 bp, linear</td>
 </tr>
 </tbody>

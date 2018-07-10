@@ -49,15 +49,26 @@
 <li><strong>Accuracy</strong>: We want an assembly that has few large-scale misassemblies and consensus errors (mismatches or indels). The latter is especially critical for identification of nucleotide variants.</li>
 </ul>
 <p>To evaluate assemblies, we will use <code class="docutils literal notranslate"><span class="pre">quast</span></code> (Quality Assessment Tool for Genome Assemblies). In this case, we have a high quality reference assembly we can use for groundtruthing. Typically, there will be a lot of short “leftover” contigs that contain repetitive or low-complexity sequence or low-quality reads that cannot be assembled. To avoid biasing our evaluation, we will only use contigs that are at least 500 bp long (default threshold in <code class="docutils literal notranslate"><span class="pre">quast</span></code>).
-Run <code class="docutils literal notranslate"><span class="pre">quast</span></code> as follows on the 3 assemblies:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># change directory
-cd ~/wgs_assembly/results/short_long_reads_assembly/assemblies
-# define a variable for the reference genome
-REF_GENOME=~/wgs_assembly/data/ref/NC_000962.3.fna
-quast.py -R $REF_GENOME -o quast_3assemblies_qc ./MTB_illumina20X_assembly.fasta ./MTB_illumina60X_assembly.fasta ./MTB_pacbio_assembly.fasta
+You can <code class="docutils literal notranslate"><span class="pre">quast</span></code> as follows on the 3 assemblies:</p>
+<p><strong>DO NOT RUN</strong>. We will use precomputed results.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># define a variable for the reference genome
+REF_GENOME=/home/mtb_upm/mtb_genomics_workshop_data/genome-assembly-annotation/data/NC_000962.3.fna
+quast.py -R $REF_GENOME -o $MYRESULTSDIR/short_long_reads_assembly/assemblies/quast_3assemblies_qc \
+$MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_illumina20X_assembly.fasta \
+$MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_illumina60X_assembly.fasta \
+$MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_pacbio_assembly.fasta
 </pre></div>
 </div>
-<p>In <code class="docutils literal notranslate"><span class="pre">quast_3assemblies_qc</span></code> directory, open <code class="docutils literal notranslate"><span class="pre">report.html</span></code> file in a browser or <code class="docutils literal notranslate"><span class="pre">report.pdf</span></code> file.</p>
+<p>Copy the precomputed results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp -r ~/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/assemblies/quast_3assemblies_qc/ $MYRESULTSDIR/short_long_reads_assembly/assemblies/
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">quast_3assemblies_qc</span></code> directory, open <code class="docutils literal notranslate"><span class="pre">report.html</span></code> file in a browser.</p>
+<dl class="docutils">
+<dt>::</dt>
+<dd>firefox $MYRESULTSDIR/short_long_reads_assembly/assemblies/quast_3assemblies_qc/report.html&amp;</dd>
+</dl>
+<p>When you opened the results web page, put your green stickies on. We will discuss these results in detail.</p>
 </div>
 
 

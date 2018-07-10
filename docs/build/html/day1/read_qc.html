@@ -44,9 +44,8 @@
 <h1>Read Quality Control and Trimming<a class="headerlink" href="#read-quality-control-and-trimming" title="Permalink to this headline">¶</a></h1>
 <p>To perform data quality control, we will use <code class="docutils literal notranslate"><span class="pre">FastQC</span></code>, a tool that processes reads and presents visual reports.</p>
 <p>First, peak into the first few lines of <code class="docutils literal notranslate"><span class="pre">.fastq</span></code> files for the Illumina reads from 60X sequencing run</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">reads</span><span class="o">/</span><span class="n">illumina</span><span class="o">/</span>
-<span class="n">head</span> <span class="o">-</span><span class="n">n</span> <span class="mi">10</span> <span class="n">MTB_illumina60X_R1</span><span class="o">.</span><span class="n">fastq</span>
-<span class="n">head</span> <span class="o">-</span><span class="n">n</span> <span class="mi">10</span> <span class="n">MTB_illumina60X_R2</span><span class="o">.</span><span class="n">fastq</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>head -n 10 $MYDATADIR/MTB_illumina60X_R1.fastq
+head -n 10 $MYDATADIR/MTB_illumina60X_R2.fastq
 </pre></div>
 </div>
 <p>What can you tell about the headers? What is the <code class="docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span></code> for this run? Can you quickly count the number of reads (Hint: use <code class="docutils literal notranslate"><span class="pre">grep</span></code> and <code class="docutils literal notranslate"><span class="pre">wc</span></code>)?</p>
@@ -57,56 +56,55 @@
 </pre></div>
 </div>
 <p>Run <code class="docutils literal notranslate"><span class="pre">fastqc</span></code> for <code class="docutils literal notranslate"><span class="pre">forward</span></code> reads from 60X and 20X runs saving the results under your results directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fastqc</span> <span class="o">-</span><span class="n">o</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span> <span class="o">./</span><span class="n">MTB_illumina60X_R1</span><span class="o">.</span><span class="n">fastq</span>
-<span class="n">fastqc</span> <span class="o">-</span><span class="n">o</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span> <span class="o">./</span><span class="n">MTB_illumina20X_R1</span><span class="o">.</span><span class="n">fastq</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_illumina60X_R1.fastq
+fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_illumina20X_R1.fastq
 </pre></div>
 </div>
 <p>Now run it again for <code class="docutils literal notranslate"><span class="pre">reverse</span></code> reads:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fastqc</span> <span class="o">-</span><span class="n">o</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span> <span class="o">./</span><span class="n">MTB_illumina60X_R2</span><span class="o">.</span><span class="n">fastq</span>
-<span class="n">fastqc</span> <span class="o">-</span><span class="n">o</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span> <span class="o">./</span><span class="n">MTB_illumina20X_R2</span><span class="o">.</span><span class="n">fastq</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_illumina60X_R2.fastq
+fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_illumina20X_R2.fastq
 </pre></div>
 </div>
-<p>Repeat for forward and reverse reads from the PacBio run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">reads</span><span class="o">/</span><span class="n">pacbio</span>
-<span class="n">fastqc</span> <span class="o">-</span><span class="n">o</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span> <span class="o">./</span><span class="n">MTB_pacbio_R1</span><span class="o">.</span><span class="n">fastq</span>
-<span class="n">fastqc</span> <span class="o">-</span><span class="n">o</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span> <span class="o">./</span><span class="n">MTB_pacbio_R2</span><span class="o">.</span><span class="n">fastq</span>
+<p>Repeat for PacBio reads.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_pacbio_subreads.fastq
+fastqc -o $MYRESULTSDIR/qc $MYDATADIR/MTB_pacbio_circular-consensus-sequence-reads.fastq
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">fastqc</span></code> performs a suite of tests and then for each indicates whether the test has been passed (green tick) or failed (red cross). Notice tough that <code class="docutils literal notranslate"><span class="pre">fastqc</span></code> has no idea about what your library should look like. All of its tests are based on a completely random library with 50% GC content and therefore it will show the test as failed if your sample doesn’t match these assumptions. For instance, you might have reads sampled from a high AT or high GC genome, and it will fail per sequence GC content. You need to be aware of how your library been generated and interpret the <code class="docutils literal notranslate"><span class="pre">fastqc</span></code> reports taking that into account.</p>
 <p>Question: For a whole genome shotgun library, what would you expect “per base sequence content” to look like?
 Question: What if you had amplicon sequences from a multiplex PCR assay?</p>
 <p>Now, open <code class="docutils literal notranslate"><span class="pre">fastqc</span></code> reports in a browser:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">firefox</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina60X_R1_fastqc</span><span class="o">.</span><span class="n">html</span>
-<span class="n">firefox</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina60X_R2_fastqc</span><span class="o">.</span><span class="n">html</span>
-<span class="n">firefox</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina20X_R1_fastqc</span><span class="o">.</span><span class="n">html</span>
-<span class="n">firefox</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina20X_R2_fastqc</span><span class="o">.</span><span class="n">html</span>
-<span class="n">firefox</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_pacbio_R1_fastqc</span><span class="o">.</span><span class="n">html</span>
-<span class="n">firefox</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_pacbio_R2_fastqc</span><span class="o">.</span><span class="n">html</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>firefox $MYRESULTSDIR/qc/MTB_illumina60X_R1_fastqc.html
+firefox $MYRESULTSDIR/qc/MTB_illumina60X_R2_fastqc.html
+firefox $MYRESULTSDIR/qc/MTB_illumina20X_R1_fastqc.html
+firefox $MYRESULTSDIR/qc/MTB_illumina20X_R2_fastqc.html
+firefox $MYRESULTSDIR/qc/MTB_pacbio_R1_fastqc.html
+firefox $MYRESULTSDIR/qc/MTB_pacbio_R2_fastqc.html
 </pre></div>
 </div>
 <ul class="simple">
-<li>Per base sequence quality: This is probably one of the most important diagnostics. Inspecting this, you can determine what quality trimming parameters you should use in downstream analysis.</li>
-<li>Per base sequence content: For a randomly sampled genome with a GC content of 50%, we would expect that at any given position within a read, there will be an equal probability of finding a A,C,G, or T base. Our library from <em>M. tuberculosis</em> is expected to reflect the GC content, which holds here. There seems to be some minor bias at the start of the read, which may be due to PCR duplicates during amplification or during library preparation.</li>
-<li>Sequence duplication levels: In a whole genome shotgun library, very few reads are expected to occur more than once. In a shotgun library of a targeted region, a low level of duplication can simply be the result of high level of sampling (i.e. high coverage). In addition, duplication might also indicate some kind of enrichment bias (i.e. PCR overamplification)</li>
+<li><strong>Per base sequence quality</strong>: This is probably one of the most important diagnostics. Inspecting this, you can determine what quality trimming parameters you should use in downstream analysis.</li>
+<li><strong>Per base sequence content</strong>: For a randomly sampled genome with a GC content of 50%, we would expect that at any given position within a read, there will be an equal probability of finding a A,C,G, or T base. Our library from <em>M. tuberculosis</em> is expected to reflect the GC content, which holds here. There seems to be some minor bias at the start of the read, which may be due to PCR duplicates during amplification or during library preparation.</li>
+<li><strong>Sequence duplication levels</strong>: In a whole genome shotgun library, very few reads are expected to occur more than once. In a shotgun library of a targeted region, a low level of duplication can simply be the result of high level of sampling (i.e. high coverage). In addition, duplication might also indicate some kind of enrichment bias (i.e. PCR overamplification)</li>
 </ul>
 <p><a class="reference external" href="https://sequencing.qcfail.com/">https://sequencing.qcfail.com/</a> is a good resource where people post about different ways a sequencing run might have failed.</p>
 </div>
 <div class="section" id="running-sickle-to-quality-trim-reads">
 <h2>Running <code class="docutils literal notranslate"><span class="pre">sickle</span></code> to quality trim reads:<a class="headerlink" href="#running-sickle-to-quality-trim-reads" title="Permalink to this headline">¶</a></h2>
 <p>Now that we have an idea about the quality profile of our reads, we can do quality based trimming of reads. We will use a <code class="docutils literal notranslate"><span class="pre">Q-score</span></code> threshold of 30 (-q 30), remove all reads that are shorter than 100 bp after trimming (-l 100), and also trim 10 bp from 5’ end just to reduce bias. After trimming, singletons reads (reads whose pair dropped off) are save into a separate file:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sickle</span> <span class="n">pe</span> <span class="o">-</span><span class="n">t</span> <span class="n">sanger</span> <span class="o">-</span><span class="n">q</span> <span class="mi">30</span> <span class="o">-</span><span class="n">l</span> <span class="mi">100</span> <span class="o">-</span><span class="n">n</span> <span class="mi">10</span> \
-<span class="o">-</span><span class="n">f</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">reads</span><span class="o">/</span><span class="n">MTB_illumina60X_R1</span><span class="o">.</span><span class="n">fastq</span> \
-<span class="o">-</span><span class="n">r</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">reads</span><span class="o">/</span><span class="n">MTB_illumina60X_R2</span><span class="o">.</span><span class="n">fastq</span> \
-<span class="o">-</span><span class="n">o</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina60X_qced_R1</span><span class="o">.</span><span class="n">fastq</span> \
-<span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina60X_qced_R2</span><span class="o">.</span><span class="n">fastq</span> \
-<span class="o">-</span><span class="n">s</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina60X_qced_single</span><span class="o">.</span><span class="n">fastq</span> <span class="mi">1</span><span class="o">&gt;~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina60X_sickle</span><span class="o">.</span><span class="n">log</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sickle pe -t sanger -q 30 -l 100 -n 10 \
+-f $MYDATADIR/MTB_illumina60X_R1.fastq \
+-r $MYDATADIR/MTB_illumina60X_R2.fastq \
+-o $MYRESULTSDIR/qc/MTB_illumina60X_qced_R1.fastq \
+-p $MYRESULTSDIR/qc/MTB_illumina60X_qced_R2.fastq \
+-s $MYRESULTSDIR/qc/MTB_illumina60X_qced_single.fastq 1&gt;$MYRESULTSDIR/qc/MTB_illumina60X_sickle.log
 
-<span class="n">sickle</span> <span class="n">pe</span> <span class="o">-</span><span class="n">t</span> <span class="n">sanger</span> <span class="o">-</span><span class="n">q</span> <span class="mi">30</span> <span class="o">-</span><span class="n">l</span> <span class="mi">100</span> <span class="o">-</span><span class="n">n</span> <span class="mi">10</span> \
-<span class="o">-</span><span class="n">f</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">reads</span><span class="o">/</span><span class="n">MTB_illumina20X_R1</span><span class="o">.</span><span class="n">fastq</span> \
-<span class="o">-</span><span class="n">r</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">reads</span><span class="o">/</span><span class="n">MTB_illumina20X_R2</span><span class="o">.</span><span class="n">fastq</span> \
-<span class="o">-</span><span class="n">o</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina20X_qced_R1</span><span class="o">.</span><span class="n">fastq</span> \
-<span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina20X_qced_R2</span><span class="o">.</span><span class="n">fastq</span> \
-<span class="o">-</span><span class="n">s</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina20X_qced_single</span><span class="o">.</span><span class="n">fastq</span> <span class="mi">1</span><span class="o">&gt;~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina20X_sickle</span><span class="o">.</span><span class="n">log</span>
+sickle pe -t sanger -q 30 -l 100 -n 10 \
+-f $MYDATADIR/MTB_illumina20X_R1.fastq \
+-r $MYDATADIR/MTB_illumina20X_R2.fastq \
+-o $MYRESULTSDIR/qc/MTB_illumina20X_qced_R1.fastq \
+-p $MYRESULTSDIR/qc/MTB_illumina20X_qced_R2.fastq \
+-s $MYRESULTSDIR/qc/MTB_illumina20X_qced_single.fastq 1&gt;$MYRESULTSDIR/qc/MTB_illumina20X_sickle.log
 </pre></div>
 </div>
 </div>

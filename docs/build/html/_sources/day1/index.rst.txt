@@ -4,7 +4,8 @@ Day 1
 
 Microbial Genome Assembly and Annotation
 
-In this lab we will perform de novo genome assembly of a bacterial genome. You will be guided through the genome assembly starting with data quality control, through to building contigs and analysis of the results. At the end of the lab you will know:
+In this lab we will perform de novo bacterial genome assembly. We will also annotate the assembled genome.
+Although we will specifically be assembling a *Mycobacteria tuberculosis* genome, the methodology presented here applies to any bacterial genome.You will be guided through the genome assembly starting with data quality control, through to building contigs and analysis of the results. At the end of the lab you will know:
 
 1. How to perform basic quality checks on the read data
 2. How to run a short read assembler on Illumina short reads

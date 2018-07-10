@@ -43,44 +43,41 @@
   <div class="section" id="assembly">
 <h1>Assembly<a class="headerlink" href="#assembly" title="Permalink to this headline">¶</a></h1>
 <p>We can now proceed with the assembly of short and long reads. We will assemble each library (2 short and 1 long reads library) reseparately and compare the assemblies.</p>
-<p>Create a directory to hold the assembly results:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span>
-<span class="n">cd</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span>
-</pre></div>
-</div>
 <div class="section" id="assembly-using-illumina-short-reads">
 <h2>Assembly using Illumina short reads<a class="headerlink" href="#assembly-using-illumina-short-reads" title="Permalink to this headline">¶</a></h2>
 <p>We will assemble the <em>M. tuberculosis</em> genome using the <em>qced</em> short reads, separately for 20X and 60X libraries. We will be using <code class="docutils literal notranslate"><span class="pre">SPAdes</span></code> assembler, which is a <code class="docutils literal notranslate"><span class="pre">de</span> <span class="pre">Bruijn</span> <span class="pre">graph</span></code> based short read assembler.</p>
 <p>The parameters that go into a short read assembler can be tricky to optimize and tuning them is quite time consuming. The most important parameter is the <code class="docutils literal notranslate"><span class="pre">k-mer</span></code> size to be used to built the <code class="docutils literal notranslate"><span class="pre">de</span> <span class="pre">Bruijn</span> <span class="pre">graph</span></code>. <code class="docutils literal notranslate"><span class="pre">SPAdes</span></code> makes the parameterization quite easy and will select parameter values automatically.</p>
-<p>Run <code class="docutils literal notranslate"><span class="pre">SPAdes</span></code> as follows using 4 threads (<code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">4</span></code>):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spades</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">o</span> <span class="n">MTB_illumina20X_spades</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> <span class="o">-</span><span class="mi">12</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina20X_qced_R1R2</span><span class="o">.</span><span class="n">fastq</span>
-<span class="n">spades</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">o</span> <span class="n">MTB_illumina60X_spades</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> <span class="o">-</span><span class="mi">12</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">qc</span><span class="o">/</span><span class="n">MTB_illumina60X_qced_R1R2</span><span class="o">.</span><span class="n">fastq</span>
+<p>The assembly for the 20X library will be computed quickly but for the 60X library the computation will take a few hours. <strong>ONLY RUN for 20X</strong>, <strong>DONOT RUN for 60X</strong>. For 60X, we will use precalculated results.</p>
+<p>You can run <code class="docutils literal notranslate"><span class="pre">SPAdes</span></code> as follows using 4 threads (<code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">4</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>spades.py -o $MYRESULTSDIR/short_long_reads_assembly/MTB_illumina20X_spades -t 4 --12 $MYRESULTSDIR/qc/MTB_illumina20X_qced_R1R2.fastq
+spades.py -o $MYRESULTSDIR/short_long_reads_assembly/MTB_illumina60X_spades -t 4 --12 $MYRESULTSDIR/qc/MTB_illumina60X_qced_R1R2.fastq
 </pre></div>
 </div>
-<p>The assembly for the 20X library will be computed quickly but for the 60X library the computation will take about 1 hour. Copy the precalculated assembly directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp -r $DAY1_PRECALCULATED/MTB_illumina60X_spades ./MTB_illumina60X_spades
+<p>Copy the precalculated assembly directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp -r ~/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/MTB_illumina60X_spades $MYRESULTSDIR/short_long_reads_assembly/MTB_illumina60X_spades
 </pre></div>
 </div>
 </div>
 <div class="section" id="assembly-using-pacbio-long-reads">
 <h2>Assembly using PacBio long reads<a class="headerlink" href="#assembly-using-pacbio-long-reads" title="Permalink to this headline">¶</a></h2>
 <p>Now, we will generate an assembly of the <em>M. tuberculosis</em> genome using PacBio long reads. Longer reads are better at resolving repeats and therefor will typically give more contiguous assemblies compared to short reads. However, long reads have a significantly higher error rate so consensus base qualities are expected to be much lower.</p>
-<p>To assemble long reads, we will use <code class="docutils literal notranslate"><span class="pre">canu</span></code>, an <code class="docutils literal notranslate"><span class="pre">overlap-layour-consensus</span></code> assembler. Generate the assembly with the following command (this will take about ~30 min.).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>canu gnuplotTested=true -p MTB_pacbio_canu -d MTB_pacbio_canu_auto genomeSize=4.4m -pacbio-raw MTB_pacbio_circular-consensus-sequence-reads.fastq
-
-Copy the precomputed assembly:
-::
-
-cp -r $DAY1_PRECALCULATED/MTB_pacbio_canu_auto ./MTB_pacbio_canu_auto
+<p>To assemble long reads, we will use <code class="docutils literal notranslate"><span class="pre">canu</span></code>, an <code class="docutils literal notranslate"><span class="pre">overlap-layour-consensus</span></code> assembler. Generate the assembly with the following command (this will take about ~30 min.).
+Again, we will use precomputed results.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">canu</span> <span class="n">gnuplotTested</span><span class="o">=</span><span class="n">true</span> <span class="o">-</span><span class="n">p</span> <span class="n">MTB_pacbio_canu</span> <span class="o">-</span><span class="n">d</span> <span class="n">MTB_pacbio_canu_auto</span> <span class="n">genomeSize</span><span class="o">=</span><span class="mf">4.4</span><span class="n">m</span> <span class="o">-</span><span class="n">pacbio</span><span class="o">-</span><span class="n">raw</span> <span class="n">MTB_pacbio_circular</span><span class="o">-</span><span class="n">consensus</span><span class="o">-</span><span class="n">sequence</span><span class="o">-</span><span class="n">reads</span><span class="o">.</span><span class="n">fastq</span>
 </pre></div>
 </div>
-<p>Now you should have 3 separate <em>M. tuberculosis</em> assemblies. Copy the <code class="docutils literal notranslate"><span class="pre">fasta</span></code> files for the assembled contigs into a separate directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">assemblies</span>
-<span class="n">cp</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">MTB_pacbio_canu_auto</span><span class="o">/</span><span class="n">MTB_pacbio_canu</span><span class="o">.</span><span class="n">contigs</span><span class="o">.</span><span class="n">fasta</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">assemblies</span><span class="o">/</span><span class="n">MTB_pacbio_assembly</span><span class="o">.</span><span class="n">fasta</span>
-<span class="n">cp</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">MTB_illumina20X_spades</span><span class="o">/</span><span class="n">contigs</span><span class="o">.</span><span class="n">fasta</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">assemblies</span><span class="o">/</span><span class="n">MTB_illumina20X_assembly</span><span class="o">.</span><span class="n">fasta</span>
-<span class="n">cp</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">MTB_illumina60X_spades</span><span class="o">/</span><span class="n">contigs</span><span class="o">.</span><span class="n">fasta</span> <span class="o">~/</span><span class="n">wgs_assembly</span><span class="o">/</span><span class="n">results</span><span class="o">/</span><span class="n">short_long_reads_assembly</span><span class="o">/</span><span class="n">assemblies</span><span class="o">/</span><span class="n">MTB_illumina60X_assembly</span><span class="o">.</span><span class="n">fasta</span>
+<dl class="docutils">
+<dt>Copy the precomputed assembly:</dt>
+<dd>cp -r ~/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/MTB_pacbio_canu_auto $MYRESULTSDIR/short_long_reads_assembly/MTB_pacbio_canu_auto</dd>
+</dl>
+<p>Now you should have 3 separate <em>M. tuberculosis</em> assemblies. Copy the <code class="docutils literal notranslate"><span class="pre">fasta</span></code> files for the assembled contigs into a separate directory for convenience:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir $MYRESULTSDIR/short_long_reads_assembly/assemblies
+cp $MYRESULTSDIR/short_long_reads_assembly/MTB_pacbio_canu_auto/MTB_pacbio_canu.contigs.fasta $MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_pacbio_assembly.fasta
+cp $MYRESULTSDIR/short_long_reads_assembly/MTB_illumina20X_spades/contigs.fasta $MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_illumina20X_assembly.fasta
+cp $MYRESULTSDIR/short_long_reads_assembly/MTB_illumina60X_spades/contigs.fasta $MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_illumina60X_assembly.fasta
 </pre></div>
 </div>
+<p>Next, we will look into these assemblies in detail.</p>
 </div>
 </div>
 

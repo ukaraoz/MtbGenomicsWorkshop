@@ -1,25 +1,20 @@
 Copying data and preparing the directories
 ==========================================
 
-First let's create a variable pointing to the data directory::
+First let's create a directory named ```wgs_assembly``` for this practical. And then, under that directory create subdirectories to hold our data and results:
+::
+ mkdir ~/wgs_assembly
+ mkdir -p ~/wgs_assembly/data
+ mkdir -p ~/wgs_assembly/results
+ mkdir -p ~/wgs_assembly/results/qc
+ mkdir -p ~/wgs_assembly/results/short_long_reads_assembly
 
-  DATA=/home/mtb_upm/data
+Now, copy the data into our data directory:
+::
+ cp -r /home/mtb_upm/mtb_genomics_workshop_data/genome-assembly-annotation/data/* ~/wgs_assembly/data
 
-Next, create a directory named ```wgs_assembly``` and move into that directory::
-
-  mkdir ~/wgs_assembly
-  cd ~/wgs_assembly
-
-Inside that directory, create the following directory::
-
-  mkdir -p ~/wgs_assembly/data
-
-Copy the contents of the data directory into your data directory::
-  
-  cp -r $DATA/* ~/wgs_assembly/data/
-
-Next, create the directories to hold your results::
-
-  mkdir ~/wgs_assembly/results/qc
-  mkdir ~/wgs_assembly/results/assemblies
+Define variables for convenience:
+::
+ MYDATADIR=~/wgs_assembly/data
+ MYRESULTSDIR=~/wgs_assembly/results
 
