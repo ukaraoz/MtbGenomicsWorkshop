@@ -33,11 +33,26 @@
             
   <div class="section" id="day-2">
 <h1>Day 2<a class="headerlink" href="#day-2" title="Permalink to this headline">¶</a></h1>
-<p>Microbial Genome Assembly</p>
+<p>Read mapping and variant calling</p>
+<p>In this lab we will map short reads against the reference <em>Mycobacteria tuberculosis</em> genome (H37Rv) and call variants based on the mapped reads. This pipeline is sometimes also called “reference based assembly” since you can use the called variants to generate a new genomic sequence.</p>
+<p>At the end of the lab you should:</p>
+<ol class="arabic simple">
+<li>know how to index the reference genome and map short reads</li>
+<li>be familiar with different file formats (<code class="docutils literal notranslate"><span class="pre">.bam</span></code>, <code class="docutils literal notranslate"><span class="pre">.sam</span></code>, <code class="docutils literal notranslate"><span class="pre">.vcf</span></code>)</li>
+<li>how to query and manipulate <code class="docutils literal notranslate"><span class="pre">.bam</span></code> files</li>
+<li>how to assess mapping quality</li>
+<li>how to deduplicate the alignments and how to do indel realignment</li>
+<li>how to filter by mapping quality</li>
+<li>how to call variants</li>
+</ol>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="dataset.html">Dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mapping.html">Mapping Reads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataprep_readqc.html">Data Prep and Read QC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mapping.html">Mapping Reads to the Reference Genome</a></li>
+<li class="toctree-l1"><a class="reference internal" href="igv.html">Visualizing the read alignments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mappingstats.html">Inspecting, summarizing, and manipulating the read alignments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignment_qc_filter.html">QCing and filtering the read alignments</a></li>
 </ul>
 </div>
 </div>

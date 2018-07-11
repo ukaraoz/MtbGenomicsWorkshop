@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Dataset &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <title>Data Prep and Read QC &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,9 +31,39 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="dataset">
-<h1>Dataset<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h1>
-<p>The dataset we will be using for today’s and tomorrow’s practicals is a subset of 1000 <em>M. tuberculosis</em> isolates from a Russian population. The results of this study was published by Casali et al.: <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3939361/">Evolution and transmission of drug-resistant tuberculosis in a Russian population</a>. These isolates have been whole-genome shotgun sequenced using Illumina platform (2x100 bp). Raw read data has been deposited to European Nucleotide Archive under Study Accession <a class="reference external" href="https://www.ebi.ac.uk/ena/data/view/PRJEB2138">PRJEB2138</a>. For this tutorial, we will focus on a subset of these isolates (n=99 isolates).</p>
+  <div class="section" id="data-prep-and-read-qc">
+<h1>Data Prep and Read QC<a class="headerlink" href="#data-prep-and-read-qc" title="Permalink to this headline">¶</a></h1>
+<p>Let’s create the directory structure to hold our results and define some variables for convenience:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir ~/mapping-variantcalling
+MYBASE=/home/mtb_upm/mapping-variantcalling
+MYDATA=$MYBASE/data
+MYRESULTS=$MYBASE/results
+mkdir -p $MYDATA/reads; mkdir -p $MYDATA/ref
+mkdir -p $MYRESULTS/fastqc; mkdir -p $MYRESULTS/log; mkdir -p $MYRESULTS/qc; mkdir -p $MYRESULTS/mapping
+</pre></div>
+</div>
+<p>We will start with a single isolate, <em>ERS050945</em> and then scale-up the analysis for all of the 99 isolates.
+We will define first a variable for the path to the folder with the source data and the precalculated results. We will then copy the data into our folder structure we created above:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>SRCBASE=/home/mtb_upm/mtb_genomics_workshop_data/mapping-variantcalling
+sample=ERS050945
+cp $SRCBASE/data/reads/${sample}_*.fastq $MYDATA/reads/
+cp $SRCBASE/data/ref/* $MYDATA/ref
+</pre></div>
+</div>
+<p>Generate a <code class="docutils literal notranslate"><span class="pre">fastqc</span></code> report:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>fastqc $MYDATA/reads/${sample}_R1.fastq
+fastqc $MYDATA/reads/${sample}_R2.fastq
+</pre></div>
+</div>
+<p>Inspect the read quality profile and pick quality trimming parameters.
+Quality trim reads using <code class="docutils literal notranslate"><span class="pre">sickle</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sickle pe -t sanger -q 30 -l 50 -n 5 \
+-f $MYDATA/reads/${sample}_R1.fastq -r $MYDATA/reads/${sample}_R2.fastq \
+-o $MYRESULTS/qc/${sample}_qced_R1.fastq -p $MYRESULTS/qc/${sample}_qced_R2.fastq \
+-s $MYRESULTS/qc/${sample}_single.fastq 1&gt; $MYRESULTS/log/${sample}.sickle.log
+</pre></div>
+</div>
+<p>Question: How many paired reads remain after quality trimming? (hint: inspect the <cite>sickle</cite> command above and try to guess where that information might be)</p>
 </div>
 
 
@@ -45,7 +75,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/material/day2/dataset.rst.txt"
+      <li><a href="../../_sources/material/day2/dataprep_readqc.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Dataset &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <title>Pilon &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,9 +31,26 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="dataset">
-<h1>Dataset<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h1>
-<p>The dataset we will be using for today’s and tomorrow’s practicals is a subset of 1000 <em>M. tuberculosis</em> isolates from a Russian population. The results of this study was published by Casali et al.: <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3939361/">Evolution and transmission of drug-resistant tuberculosis in a Russian population</a>. These isolates have been whole-genome shotgun sequenced using Illumina platform (2x100 bp). Raw read data has been deposited to European Nucleotide Archive under Study Accession <a class="reference external" href="https://www.ebi.ac.uk/ena/data/view/PRJEB2138">PRJEB2138</a>. For this tutorial, we will focus on a subset of these isolates (n=99 isolates).</p>
+  <div class="section" id="pilon">
+<h1>Pilon<a class="headerlink" href="#pilon" title="Permalink to this headline">¶</a></h1>
+<p>Headers
+DP      Valid read depth; some reads may have been filtered”&gt;
+TD      Total read depth including bad pairs”&gt;
+PC      Physical coverage of valid inserts across locus”&gt;
+BQ      Mean base quality at locus”&gt;
+MQ      Mean read mapping quality at locus”&gt;
+QD      Variant confidence/quality by depth”&gt;
+BC      Count of As, Cs, Gs, Ts at locus”&gt;
+QP      Percentage of As, Cs, Gs, Ts weighted by Q &amp; MQ at locus”&gt;
+IC      Number of reads with insertion here”&gt;
+DC      Number of reads with deletion here”&gt;
+XC      Number of reads clipped here”&gt;
+AC      Allele count in genotypes, for each ALT allele, in the same order as listed”&gt;
+AF      Fraction of evidence in support of alternate allele(s)”&gt;
+SVTYPE  Type of structural variant”&gt;
+SVLEN   Difference in length between REF and ALT alleles”&gt;
+END     End position of the variant described in this record”&gt;
+IMPRECISE       Imprecise change from local reassembly (ALT contains Ns)</p>
 </div>
 
 
@@ -45,7 +62,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/material/day2/dataset.rst.txt"
+      <li><a href="../../_sources/material/day2/inspect_vcf.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>

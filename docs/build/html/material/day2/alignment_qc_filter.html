@@ -1,0 +1,137 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>QCing and filtering the read alignments &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="qcing-and-filtering-the-read-alignments">
+<h1>QCing and filtering the read alignments<a class="headerlink" href="#qcing-and-filtering-the-read-alignments" title="Permalink to this headline">¶</a></h1>
+<p>Before we can attempt variant calling, we need to make sure that the alignments that are resulted from mapping artefacts are identified. We also want to get an overall picture on the mapping quality.</p>
+<div class="section" id="duplicate-marking">
+<h2>Duplicate marking<a class="headerlink" href="#duplicate-marking" title="Permalink to this headline">¶</a></h2>
+<p>During the lecture, you heard about library and optical duplicates, which if they exist will bias the variant calling. We will mark these duplicates using <code class="docutils literal notranslate"><span class="pre">picard</span></code>.</p>
+<p>First, let’s sort the <code class="docutils literal notranslate"><span class="pre">.bam</span></code> file, this time using <code class="docutils literal notranslate"><span class="pre">picard</span></code>. See the note in the previous section. This should give identical results to <code class="docutils literal notranslate"><span class="pre">samtools</span> <span class="pre">sort</span></code>, we are simply doing it this way for pipelining consistency.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>java -Xmx16g -Djava.io.tmpdir=/tmp -jar /opt/picard.jar SortSam \
+I=$MYRESULTS/mapping/${sample}.mapped.bam O=$MYRESULTS/mapping/${sample}.sorted.bam SORT_ORDER=coordinate
+</pre></div>
+</div>
+<p>Now, we can mark the duplicates:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>java -Xmx16g -Djava.io.tmpdir=/tmp -jar /opt/picard.jar MarkDuplicates \
+I=$MYRESULTS/mapping/${sample}.sorted.bam O=$MYRESULTS/mapping/${sample}.sorted.nodup.bam \
+REMOVE_DUPLICATES=true ASSUME_SORT_ORDER=coordinate M=$MYRESULTS/mapping/${sample}.sorted.dupmetrics
+</pre></div>
+</div>
+<p>The metrics file will contain some statistics about the de-duplication. In the resulting <code class="docutils literal notranslate"><span class="pre">bam</span></code> file, only one fragment from each duplicate group survives unchanged, other duplicate fragments are given a FLAG <code class="docutils literal notranslate"><span class="pre">0x400</span></code> and will NOT be used downstream. Optimally, detection and marking of duplicate fragments should be done per library, i.e., over all read groups corresponding to a given library. In practice, often it is fine to take a shortcut and is sufficient to do it per lane (read group) to keep things naively <em>parallelizable</em>.</p>
+</div>
+<div class="section" id="assessing-depth-of-coverage">
+<h2>Assessing depth of coverage<a class="headerlink" href="#assessing-depth-of-coverage" title="Permalink to this headline">¶</a></h2>
+<p>You might often want to take a peak at the depth of coverage using the read alignments. You can do this with <code class="docutils literal notranslate"><span class="pre">samtools</span> <span class="pre">depth</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools depth -a $MYRESULTS/mapping/${sample}.sorted.nodup.bam &gt; $MYRESULTS/mapping/${sample}.coverage.txt
+</pre></div>
+</div>
+<p>This will give you the depth of coverage for each position in the genome.</p>
+<p>Question: How many lines should be in this file?
+Question: Can you write an <code class="docutils literal notranslate"><span class="pre">awk</span></code> one-liner to quickly compute the average depth of average?</p>
+</div>
+<div class="section" id="assessing-mapping-qualities">
+<h2>Assessing mapping qualities<a class="headerlink" href="#assessing-mapping-qualities" title="Permalink to this headline">¶</a></h2>
+<p>Next, we will generate summary statistics on mapping qualities. For this, we will use <code class="docutils literal notranslate"><span class="pre">qualimap</span></code>.
+<code class="docutils literal notranslate"><span class="pre">qualimap</span></code> has a GUI but we don’t want to use it here. To avoid launching the GUI, we do <code class="docutils literal notranslate"><span class="pre">unset</span> <span class="pre">DISPLAY</span></code> first.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>unset DISPLAY;
+qualimap bamqc -bam $MYRESULTS/mapping/${sample}.sorted.nodup.bam --java-mem-size=4g -outformat PDF -outdir $MYRESULTS/mapping/${sample}.bam.qualimap
+</pre></div>
+</div>
+<p>The results will be in a text file named ${sample}.bam.qualimap/genome_results.txt. Later when we scale our analysis up to multiple isolates, we will parse out these files to get summary statistics for all of the isolates.</p>
+</div>
+<div class="section" id="indel-realignment-and-filtering-low-quality-alignments">
+<h2>Indel realignment and filtering low quality alignments<a class="headerlink" href="#indel-realignment-and-filtering-low-quality-alignments" title="Permalink to this headline">¶</a></h2>
+<p>We will use <code class="docutils literal notranslate"><span class="pre">pilon</span></code> to call our variants. This will give us a candidate list from a single sample, which we can further filter after we merge variants from multiple samples. <code class="docutils literal notranslate"><span class="pre">pilon</span></code> with its <code class="docutils literal notranslate"><span class="pre">--variant</span></code> option will perform <em>indel realignment</em>. We can also specify <em>depth</em> and mapping quality based filters. Run <code class="docutils literal notranslate"><span class="pre">pilon</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>java -Xmx16g -jar /opt/pilon-1.22.jar --genome $MYDATA/ref/NC_000962.3.fna --bam $MYRESULTS/mapping/${sample}.sorted.nodup.bam --output $MYRESULTS/mapping/${sample}_pilon --variant  --mindepth 10 --minmq 40 --minqual 20
+</pre></div>
+</div>
+<p>The output will be a <code class="docutils literal notranslate"><span class="pre">.vcf</span></code> file and a <code class="docutils literal notranslate"><span class="pre">.fasta</span></code> file. <code class="docutils literal notranslate"><span class="pre">.fasta</span></code> file has the sequence from this reference based assembly, which we won’t be using downstream.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">QCing and filtering the read alignments</a><ul>
+<li><a class="reference internal" href="#duplicate-marking">Duplicate marking</a></li>
+<li><a class="reference internal" href="#assessing-depth-of-coverage">Assessing depth of coverage</a></li>
+<li><a class="reference internal" href="#assessing-mapping-qualities">Assessing mapping qualities</a></li>
+<li><a class="reference internal" href="#indel-realignment-and-filtering-low-quality-alignments">Indel realignment and filtering low quality alignments</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/material/day2/alignment_qc_filter.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">M. tuberculosis Bioinformatics Workshop 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Ulas Karaoz.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
