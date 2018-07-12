@@ -1,5 +1,6 @@
-Building Bioinformatics Pipelines with ``Snakemake``
-====================================================
+========================================================================================================
+Building Bioinformatics Pipelines with `Snakemake <https://snakemake.readthedocs.io/en/stable/>`_
+========================================================================================================
 
 .. _documentation: https://snakemake.readthedocs.io/en/stable/#
 .. _tutorial: https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html#tutorial
