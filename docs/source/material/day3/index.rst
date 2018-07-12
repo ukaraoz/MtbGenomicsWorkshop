@@ -2,7 +2,7 @@
 Day 3
 ********
 
-Microbial Genome Assembly
+Building computational pipelines with Snakemake `Snakemake <https://snakemake.readthedocs.io/en/stable/>`_
 
 .. toctree::
    :maxdepth: 1
