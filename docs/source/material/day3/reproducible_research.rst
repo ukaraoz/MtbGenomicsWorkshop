@@ -366,9 +366,6 @@ We've learned:
 * How logging in Snakemake works.
 
 
-**Credit**: `NBIS Reproducible research course 
-<https://nbis-reproducible-research.readthedocs.io/en/latest/snakemake>`_.
-
 **Reference**: Koster, J. and Rahmann, S. (2012). Snakemake–a scalable bioinformatics workflow engine. Bioinformatics, 28(19), 2520–2522.
 
 **Resources**:
@@ -377,3 +374,6 @@ We've learned:
 * Here is the *official* tutorial_
 * Further questions? Check out stack overflow_.
 * There is a ``snakemake`` Googlegroups_.
+
+**Credit**: `NBIS Reproducible research course 
+<https://nbis-reproducible-research.readthedocs.io/en/latest/snakemake>`_.
