@@ -12,17 +12,3 @@ The datasets are located under `/home/mtb_upm/mtb_genomics_workshop_data/mapping
 +==========================+===============================================================================================+
 | Mtb_repeats.bed          | precalculated, coordinates of the repetitive regions in the reference *M.tuberculosis* genome |
 +--------------------------+-----------------------------------------------------------------------------------------------+
-| MTB_illumina60X_R2.fastq | 60X coverage run, Illumina short reads, forward                                               |
-+--------------------------+-----------------------------------------------------------------------------------------------+
-| MTB_illumina20X_R1.fastq | 20X coverage run, Illumina short reads, forward                                               |
-+--------------------------+-----------------------------------------------------------------------------------------------+
-
-
-
-.. _TBDreamDB: https://tbdreamdb.ki.se/CMS/Download.aspx
-
-.. _Python: http://www.python.org/
-
-`_TBDreamDB 
-<https://tbdreamdb.ki.se/CMS/Download.aspx/>`_.
-

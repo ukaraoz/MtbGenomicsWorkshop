@@ -22,7 +22,7 @@ Keynote
 .. image:: logo.png
 	:height: 357
 	:width: 570
-	:scale: 50
+	:scale: 100
 
 .. toctree::
 	:maxdepth: 2

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Processing and Merging SNVs from multiple isolates &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <title>Processing and Merging SNVs from multiple isolates to get an MSA &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,13 +31,23 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="processing-and-merging-snvs-from-multiple-isolates">
-<h1>Processing and Merging SNVs from multiple isolates<a class="headerlink" href="#processing-and-merging-snvs-from-multiple-isolates" title="Permalink to this headline">¶</a></h1>
-<p>What we need to do next is to get a set of high-quality <em>SNVs</em> across the whole genome. A <em>SNV</em>, single nucleotide variant (variant means substitution here), is defined as a variation in a single locus without any reference to its frequency in the population. A <em>SNP</em> or single nucleotide polymorphism, on the other hand is a variation for which we have evidence that it is fixed in the population. That means we should see in more than a certain (arbitrarily defined but often &gt;1%) number of individuals/isolates. Therefore, not all the SNVs are SNPs. Although this is the working definition we will be following, there is no consensus on this defition and all single nucleotide variants are called <em>SNPs</em> independent of their frequency in the population.</p>
+  <div class="section" id="processing-and-merging-snvs-from-multiple-isolates-to-get-an-msa">
+<h1>Processing and Merging SNVs from multiple isolates to get an MSA<a class="headerlink" href="#processing-and-merging-snvs-from-multiple-isolates-to-get-an-msa" title="Permalink to this headline">¶</a></h1>
+<p>What we need to do next is to get a set of high-quality <em>SNVs</em> across the whole genome. A <em>SNV</em>, single nucleotide variant (variant means substitution here), is defined as a variation in a single locus without any reference to its frequency in the population. A <em>SNP</em> or single nucleotide polymorphism, on the other hand is a variation for which we have evidence that it is fixed in the population. That means we should see it in more than a certain (arbitrarily defined but often &gt;1%) number of individuals/isolates. Therefore, not all the <a href="#id1"><span class="problematic" id="id2">*</span></a>SNV*s are <a href="#id3"><span class="problematic" id="id4">*</span></a>SNP*s. Although this is the working definition we will be following, there is no consensus on this defition and all single nucleotide variants are called <a href="#id5"><span class="problematic" id="id6">*</span></a>SNP*s independent of their frequency in the population.</p>
 <div class="section" id="previously-in-the-workshop">
 <h2>Previously in the workshop…<a class="headerlink" href="#previously-in-the-workshop" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">vcf</span></code> file we generated using  <code class="docutils literal notranslate"><span class="pre">pilon</span></code> contains unfiltered <em>SNVs</em> as well as <em>indels</em>. To remind, <code class="docutils literal notranslate"><span class="pre">pilon</span></code> did a series of filtering and quality control steps before coming up with this list <em>SNVs</em> and <em>indels</em>. These included, (1) indel realignment, (2) base quality score filtering, (3) mapping quality score filtering, and (4) depth of coverage filtering.</p>
-<p>So any variant in this list has been, to the best of our ability, stripped off any known read mapping/alignment artifacts, has a reasonably high base quality, depth of coverage, and mapping quality. Even after these steps, however, we expect a relatively high false positive rate within this list so we will need to do some further filtering. The assumption is that we are leaning towards minimizing false positive rate. We might be missing some true variants during this strict filtering steps. However, realize that we want to make sure that what we have as a final list (for instance to infer phylogeny) contain only true variants. That is we don’t care so much if we do miss few true variants here and there (that is higher false negative rate is somewhat acceptable).</p>
+<dl class="docutils">
+<dt><code class="docutils literal notranslate"><span class="pre">vcf</span></code> file we generated using  <code class="docutils literal notranslate"><span class="pre">pilon</span></code> contains unfiltered <em>SNV*s as well as *indels</em>. To remind, <code class="docutils literal notranslate"><span class="pre">pilon</span></code> did a series of filtering and quality control steps before coming up with this list <em>SNV*s and *indels</em>. These steps include</dt>
+<dd><ol class="first last arabic simple">
+<li>indel realignment</li>
+<li>base quality score filtering</li>
+<li>mapping quality score filtering</li>
+<li>depth of coverage filtering.</li>
+</ol>
+</dd>
+</dl>
+<p>So all <a href="#id7"><span class="problematic" id="id8">*</span></a>SNV*s in our <code class="docutils literal notranslate"><span class="pre">vcf</span></code> file have been, to the best of our ability, stripped off any known read mapping/alignment artifacts, has a reasonably high base quality, depth of coverage, and mapping quality.</p>
+<p>Even after these steps, we expect a relatively high false positive rate within this list so we will need to do some further filtering. The assumption is that we are leaning towards minimizing false positive rate. We might be missing some true variants during this strict filtering steps. However, realize that we want to make sure that what we have as a final list (for instance to infer phylogeny) contain only true variants. That is we don’t care so much if we do miss few true variants here and there (that is higher false negative rate is somewhat acceptable).</p>
 </div>
 <div class="section" id="why-are-we-doing-all-this">
 <h2>Why are we doing all this?<a class="headerlink" href="#why-are-we-doing-all-this" title="Permalink to this headline">¶</a></h2>
@@ -45,11 +55,11 @@
 </div>
 <div class="section" id="separating-snvs-and-indels-and-filtering-snvs-within-highly-repetitive-regions">
 <h2>Separating <em>SNVs</em> and <em>indels</em> and filtering <em>SNVs</em> within highly repetitive regions<a class="headerlink" href="#separating-snvs-and-indels-and-filtering-snvs-within-highly-repetitive-regions" title="Permalink to this headline">¶</a></h2>
-<p>First, we will need to get rid of the indels (insertion/deletion). As you’ve heard during the lecture, read mappers donot do a particularly good job with indels. Any called indel by any mapper, you should be very suspicious off. We want to remove them for phylogenetic analysis -we should already have lots of variation to infer phylogeny- as they will bias the phylogenetic inference. In the next step, we will use <code class="docutils literal notranslate"><span class="pre">vcftools</span></code> to make 2 separate <code class="docutils literal notranslate"><span class="pre">vcf</span></code> files, one that contains only SNVs and the other indels. Concurrently, we will also remove any variant that sits within a highly repetitive region. Next, a few words on why we want to do this, particularly in analyzing <em>M. tuberculosis</em> genomes.</p>
+<p>First, we will need to get rid of the indels (insertion/deletion). As you’ve heard during the lecture, read mappers donot do a particularly good job with indels. Any called indel by any mapper, you should be very suspicious of. We want to remove them for phylogenetic analysis -we should already have lots of variation to infer phylogeny- as they will bias the phylogenetic inference. In the next step, we will use <code class="docutils literal notranslate"><span class="pre">vcftools</span></code> to make 2 separate <code class="docutils literal notranslate"><span class="pre">vcf</span></code> files, one that contains only SNVs and the other indels. Concurrently, we will also remove any variant that sits within a highly repetitive region. Next, a few words on why we want to do this, particularly in analyzing <em>M. tuberculosis</em> genomes.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Repetitive regions in <em>M. tuberculosis</em> genome A significant portion of the genome of <em>Mycobacterium tuberculosis</em> contains highly repetitive regions (every microbial genome will have some level of tandem and more complex repetitive regions, regions with low sequence complexity). Short-read sequencing isn’t sufficient to make accurate SNV calls within these regions. Therefore we want to remove these regions from further analysis as they will confuse downstream phylogenetic analysis. We have precalculated the repetitive regions, which is provided in the <code class="docutils literal notranslate"><span class="pre">Mtb_repeats.bed</span></code> file in <code class="docutils literal notranslate"><span class="pre">bed</span></code> format. <a class="reference external" href="https://uswest.ensembl.org/info/website/upload/bed.html">bed</a> is a file format used to specify genomic intervals.
-Overall, the total length of repetitive regions specified in <code class="docutils literal notranslate"><span class="pre">Mtb_repeats.bed</span></code> is ~572 Kb (~13% of the genome). The majority of these regions (~10% of the genome) belong to two large unrelaed gene families (PE and PPE families) clustered in the genome. They code for glycine-rich proteins that are often based on multiple copies of the polymorphic repetitive sequences referred to as PGRSs <strong>r</strong>e<strong>s</strong>tructured <strong>t</strong>ext. (<a href="#id1"><span class="problematic" id="id2">**</span></a>P**olymorphic guanine cytosine–rich (GC-rich) repetitive sequences). Despite their prominence in the genome, we almost know nothing about the biological significance of these regions.</p>
+<p class="last"><strong>Repetitive regions in *M. tuberculosis* genome:</strong> A significant portion of the genome of <em>Mycobacterium tuberculosis</em> contains highly repetitive regions (every microbial genome will have some level of tandem and more complex repetitive regions, regions with low sequence complexity). Short-read sequencing isn’t sufficient to make accurate SNV calls within these regions. Therefore we want to remove these regions from further analysis as they will confuse downstream phylogenetic analysis. We have precalculated the repetitive regions, which is provided in the <code class="docutils literal notranslate"><span class="pre">Mtb_repeats.bed</span></code> file in <code class="docutils literal notranslate"><span class="pre">bed</span></code> format. <a class="reference external" href="https://uswest.ensembl.org/info/website/upload/bed.html">bed</a> is a file format used to specify genomic intervals.
+Overall, the total length of repetitive regions specified in <code class="docutils literal notranslate"><span class="pre">Mtb_repeats.bed</span></code> is ~572 Kb (~13% of the genome). The majority of these regions (~10% of the genome) belong to two large unrelaed gene families (PE and PPE families) clustered in the genome. They code for glycine-rich proteins that are often based on multiple copies of the polymorphic repetitive sequences referred to as PGRSs <strong>r</strong>e<strong>s</strong>tructured <strong>t</strong>ext. (<a href="#id9"><span class="problematic" id="id10">**</span></a>P**olymorphic guanine cytosine–rich (GC-rich) repetitive sequences). Despite their prominence in the genome, we almost know nothing about the biological significance of these regions.</p>
 </div>
 <p>Run <code class="docutils literal notranslate"><span class="pre">vcftools</span></code> to separate SNVs/indels and filter repetitive regions:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span># get rid of &quot;_pilon&quot; in the filename
@@ -73,7 +83,7 @@ more ${sample}.indels.log
 tabix -p vcf ${sample}.recode.vcf.gz
 </pre></div>
 </div>
-<p>We need change the sample header (which is “SAMPLE”, the very last column within the data fields) in the vcf file to specify that these variants are from <code class="docutils literal notranslate"><span class="pre">$sample</span></code>. This is to ensure data provenance: we will soon merge vcf files from multiple samples and they all have the same header at this point. You can do this with <code class="docutils literal notranslate"><span class="pre">bcftools</span></code> which requires the header name to be in a text file, so we write the sample name into a file called “sample”.</p>
+<p>We need to change the sample header (which is “SAMPLE”, the very last column within the data fields) in the vcf file to specify that these variants are from <code class="docutils literal notranslate"><span class="pre">$sample</span></code>. This is to ensure data provenance: we will soon merge vcf files from multiple samples and they all have the same header at this point. You can do this with <code class="docutils literal notranslate"><span class="pre">bcftools</span></code> which requires the header name to be stored in a text file, so we write the sample name into a file called “sample” first.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>echo $sample &gt; sample
 bcftools reheader -s sample ${sample}.recode.vcf.gz &gt; m.${sample}.recode.vcf.gz # we add this &quot;m&quot; just to make the filename different in this temp file
 mv -f m.${sample}.recode.vcf.gz ${sample}.recode.vcf.gz
@@ -89,7 +99,7 @@ mv -f temp ${sample}.recode.vcf.gz
 tabix -f -p vcf ${sample}.recode.vcf.gz
 </pre></div>
 </div>
-<p>All we did was here was modifying sample “header” and some “data massaging”. If you want, you can unzip the <code class="docutils literal notranslate"><span class="pre">${sample}.recode.vcf.gz</span></code> file, peek into it, and do some other quick sanity check:</p>
+<p>All we did here was modifying sample “header” and some simple “data massaging”. If you want, you can unzip the <code class="docutils literal notranslate"><span class="pre">${sample}.recode.vcf.gz</span></code> file, peek into it, and do some other quick sanity check:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span># OPTIONAL
 gunzip ${sample}.recode.vcf.gz
 # pay attention to the column name for the very last column, does it look ok?
@@ -101,7 +111,7 @@ wc ${sample}.recode.vcf
 </div>
 <div class="section" id="merge-vcf-files-from-multiple-isolates">
 <h2>Merge <code class="docutils literal notranslate"><span class="pre">vcf</span></code> files from multiple isolates<a class="headerlink" href="#merge-vcf-files-from-multiple-isolates" title="Permalink to this headline">¶</a></h2>
-<p>Assuming that we did read mapping etc. for multiple isolates, at this point we can merge all the vcf files from multiple samples into a single vcf file. We will use that file to define <em>SNPs</em>.</p>
+<p>Assuming that we did read mapping etc. for multiple isolates (which you will learn how to do using <code class="docutils literal notranslate"><span class="pre">snakemake</span></code>), at this point we can merge all the vcf files from multiple samples into a single vcf file. We will use that single <code class="docutils literal notranslate"><span class="pre">vcf</span></code> to define <a href="#id11"><span class="problematic" id="id12">*</span></a>SNP*s that be used for phylogenetic analysis:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># the way this following command is constructed is intentionally explicit so you can see what is happening</span>
 <span class="c1"># notice that this list of 99 isolates contains our prototyping isolate, &quot;ERS050945&quot;, and 98 additional ones</span>
 <span class="n">bcftools</span> <span class="n">merge</span> \
@@ -214,12 +224,15 @@ defined with respect to a reference genome, we don’t need to build an MSA, per
 <p class="last">Merging multiple vcf files, the way it has been implemented here, is highly compute heavy. It requires high memory instances when you have 100s t0 1000s of isolates.</p>
 </div>
 <p>In what follows, we first convert vcf to a fasta file using <code class="docutils literal notranslate"><span class="pre">vcf2phylip.py</span></code> (despite its name, it also does this) before calling SNPs. ** very compute heavy, DONOT RUN**</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -m: keep all SNVs independent of their frequency, typically with a larger number of isolates</span>
-<span class="c1"># we would want to impose a threshold</span>
-<span class="n">vcf2phylip</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">fasta</span> <span class="o">--</span><span class="n">phylip</span><span class="o">-</span><span class="n">disable</span> <span class="o">-</span><span class="n">m</span> <span class="mi">1</span> <span class="o">--</span><span class="nb">input</span> <span class="n">merged</span><span class="o">-</span><span class="mi">99</span><span class="n">RussianIsolates</span><span class="o">.</span><span class="n">vcf</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># -m: keep all SNVs independent of their frequency, typically with a larger number of isolates
+# we would want to impose a threshold
+vcf2phylip.py --fasta --phylip-disable -m 1 --input merged-99RussianIsolates.vcf
 
-<span class="c1"># -m: output fasta, -v: output VCF, -p: output PHYLIP</span>
-<span class="n">snp</span><span class="o">-</span><span class="n">sites</span> <span class="o">-</span><span class="n">m</span> <span class="n">merged</span><span class="o">-</span><span class="n">test</span><span class="o">.</span><span class="n">min1</span><span class="o">.</span><span class="n">fasta</span> <span class="o">-</span><span class="n">o</span> <span class="mi">99</span><span class="n">RussianIsolates</span><span class="o">.</span><span class="n">fasta</span>
+# -m: output fasta, -v: output VCF, -p: output PHYLIP
+snp-sites -m merged-99RussianIsolates.min1.fasta -o 99RussianIsolates.msa.fasta
+
+
+``99RussianIsolates.msa.fasta`` contains our multiple sequence alignment.
 </pre></div>
 </div>
 </div>
@@ -233,7 +246,7 @@ defined with respect to a reference genome, we don’t need to build an MSA, per
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Processing and Merging SNVs from multiple isolates</a><ul>
+<li><a class="reference internal" href="#">Processing and Merging SNVs from multiple isolates to get an MSA</a><ul>
 <li><a class="reference internal" href="#previously-in-the-workshop">Previously in the workshop…</a></li>
 <li><a class="reference internal" href="#why-are-we-doing-all-this">Why are we doing all this?</a></li>
 <li><a class="reference internal" href="#separating-snvs-and-indels-and-filtering-snvs-within-highly-repetitive-regions">Separating <em>SNVs</em> and <em>indels</em> and filtering <em>SNVs</em> within highly repetitive regions</a></li>
