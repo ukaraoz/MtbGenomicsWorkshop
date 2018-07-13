@@ -61,7 +61,7 @@ A ``Snakemake`` workflow is based on rules which take some file(s) as input, per
     output:
         "a.upper.txt"
     shell:
-        tr [a-z] [A-Z] < {input} > {output}
+        "tr [a-z] [A-Z] < {input} > {output}"
 
 .. important::
     Indentation is important in Snakefiles, so make sure that you have the correct number of spaces before `input`/`output`/`shell` and their respective subsections. The number of spaces per level doesn't matter as long as you're consistent. Here we use four, but you could just as well use two for a more compact look. Don't use tabs (unless your editor automatically converts them to spaces).
@@ -191,7 +191,7 @@ Rename the rule to `concatenate_files` to reflect its new more general use.
         output:
             "{first}_{second}.txt"
         shell:
-            "cat {input[0]} {input[1]} > {output}""
+            "cat {input[0]} {input[1]} > {output}"
 
 We can now control which input files to use by the name of the file we ask ``Snakemake`` to generate.
 
@@ -256,7 +256,7 @@ Snakemake can generate two types of graphs:
 
 All the graph says is that the output from the rule `convert_to_upper_case` will be used as input to the rule `concatenate_files`. For a more typical bioinformatics project it can look something like this:
 
-.. image:: rulegraph_complex.png
+.. image:: rulegraph_complex.svg
 
 **Job graph**: The second type of graph is based on the jobs, and looks like this for our little workflow (use `--dag` instead of `--rulegraph`).
 
@@ -264,7 +264,7 @@ All the graph says is that the output from the rule `convert_to_upper_case` will
 
  snakemake --dag a_b.txt | dot -Tpng > jobgraph.png
 
-.. image:: jobgraph.png
+.. image:: jobgraph.svg
 
 The main difference here is that now each node is a job instead of a rule. You can see that the wildcards used in each job are also displayed. Another difference is the dotted lines around the nodes. A dotted line is Snakemake's way of indicating that this rule doesn't need to be rerun in order to generate `a_b.txt`. Validate this by running `snakemake -n -r a_b.txt` and it should say that there is nothing to be done.
 
