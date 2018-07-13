@@ -1,19 +1,19 @@
 =================================================================
 Processing and Merging SNVs from multiple isolates to get an MSA
 =================================================================
-What we need to do next is to get a set of high-quality *SNVs* across the whole genome. A *SNV*, single nucleotide variant (variant means substitution here), is defined as a variation in a single locus without any reference to its frequency in the population. A *SNP* or single nucleotide polymorphism, on the other hand is a variation for which we have evidence that it is fixed in the population. That means we should see it in more than a certain (arbitrarily defined but often >1%) number of individuals/isolates. Therefore, not all the *SNV*s are *SNP*s. Although this is the working definition we will be following, there is no consensus on this defition and all single nucleotide variants are called *SNP*s independent of their frequency in the population.
+What we need to do next is to get a set of high-quality SNVs across the whole genome. A SNV, single nucleotide variant (variant means substitution here), is defined as a variation in a single locus without any reference to its frequency in the population. A SNP or single nucleotide polymorphism, on the other hand is a variation for which we have evidence that it is fixed in the population. That means we should see it in more than a certain (arbitrarily defined but often >1%) number of individuals/isolates. Therefore, not all the SNVs are SNPs. Although this is the working definition we will be following, there is no consensus on this defition and all single nucleotide variants are called SNPs independent of their frequency in the population.
 
 
 -------------------------------------------
 Previously in the workshop...
 -------------------------------------------
-``vcf`` file we generated using  ``pilon`` contains unfiltered *SNV*s as well as *indels*. To remind, ``pilon`` did a series of filtering and quality control steps before coming up with this list *SNV*s and *indels*. These steps include
+``vcf`` file we generated using  ``pilon`` contains unfiltered SNVs as well as indels. To remind, ``pilon`` did a series of filtering and quality control steps before coming up with this list SNVs and indels. These steps include
  1. indel realignment
  2. base quality score filtering
  3. mapping quality score filtering
  4. depth of coverage filtering.
 
-So all *SNV*s in our ``vcf`` file have been, to the best of our ability, stripped off any known read mapping/alignment artifacts, has a reasonably high base quality, depth of coverage, and mapping quality.
+So all SNVs in our ``vcf`` file have been, to the best of our ability, stripped off any known read mapping/alignment artifacts, has a reasonably high base quality, depth of coverage, and mapping quality.
 
 Even after these steps, we expect a relatively high false positive rate within this list so we will need to do some further filtering. The assumption is that we are leaning towards minimizing false positive rate. We might be missing some true variants during this strict filtering steps. However, realize that we want to make sure that what we have as a final list (for instance to infer phylogeny) contain only true variants. That is we don't care so much if we do miss few true variants here and there (that is higher false negative rate is somewhat acceptable).
 
@@ -25,11 +25,11 @@ The end point for this analysis is to get an MSA (multiple sequence alignment) o
 
 
 ----------------------------------------------------------------------------------------
-Separating *SNVs* and *indels* and filtering *SNVs* within highly repetitive regions
+Separating SNVs and indels and filtering SNVs within highly repetitive regions
 ----------------------------------------------------------------------------------------
 First, we will need to get rid of the indels (insertion/deletion). As you've heard during the lecture, read mappers donot do a particularly good job with indels. Any called indel by any mapper, you should be very suspicious of. We want to remove them for phylogenetic analysis -we should already have lots of variation to infer phylogeny- as they will bias the phylogenetic inference. In the next step, we will use ``vcftools`` to make 2 separate ``vcf`` files, one that contains only SNVs and the other indels. Concurrently, we will also remove any variant that sits within a highly repetitive region. Next, a few words on why we want to do this, particularly in analyzing *M. tuberculosis* genomes. 
 
-.. note:: **Repetitive regions in *M. tuberculosis* genome:** A significant portion of the genome of *Mycobacterium tuberculosis* contains highly repetitive regions (every microbial genome will have some level of tandem and more complex repetitive regions, regions with low sequence complexity). Short-read sequencing isn't sufficient to make accurate SNV calls within these regions. Therefore we want to remove these regions from further analysis as they will confuse downstream phylogenetic analysis. We have precalculated the repetitive regions, which is provided in the ``Mtb_repeats.bed`` file in ``bed`` format. `bed <https://uswest.ensembl.org/info/website/upload/bed.html>`_ is a file format used to specify genomic intervals.
+.. note:: Repetitive regions in *M. tuberculosis* genome: A significant portion of the genome of *Mycobacterium tuberculosis* contains highly repetitive regions (every microbial genome will have some level of tandem and more complex repetitive regions, regions with low sequence complexity). Short-read sequencing isn't sufficient to make accurate SNV calls within these regions. Therefore we want to remove these regions from further analysis as they will confuse downstream phylogenetic analysis. We have precalculated the repetitive regions, which is provided in the ``Mtb_repeats.bed`` file in ``bed`` format. `bed <https://uswest.ensembl.org/info/website/upload/bed.html>`_ is a file format used to specify genomic intervals.
  Overall, the total length of repetitive regions specified in ``Mtb_repeats.bed`` is ~572 Kb (~13% of the genome). The majority of these regions (~10% of the genome) belong to two large unrelaed gene families (PE and PPE families) clustered in the genome. They code for glycine-rich proteins that are often based on multiple copies of the polymorphic repetitive sequences referred to as PGRSs **r**\ e\ **s**\ tructured **t**\ ext. (**P**olymorphic guanine cytosine–rich (GC-rich) repetitive sequences). Despite their prominence in the genome, we almost know nothing about the biological significance of these regions.
 
 Run ``vcftools`` to separate SNVs/indels and filter repetitive regions:
@@ -44,8 +44,6 @@ Run ``vcftools`` to separate SNVs/indels and filter repetitive regions:
  more ${sample}.indels.recode.vcf
  # and the vcftools log file
  more ${sample}.indels.log
-
-SRCBASE="/data2-raid/ukaraoz/Work/UPMWorkshop/"
 
 .. note:: vcf files are typically huge (~0.5 GB even for a single microbial genome). Compressing vcf files with `bgzip <http://www.htslib.org/doc/bgzip.html>`_  and indexing them with `tabix <http://www.htslib.org/doc/tabix.html>`_  is the standard way vcf files are stored. Once that is done, further processing of the binary files is done with ``bcftools``.
 
@@ -196,9 +194,10 @@ Assuming that we did read mapping etc. for multiple isolates (which you will lea
 Merging step requires a reasonable amount of memory and takes some time. We will be using precalculated file. Now, what we essentially have is a vcf file that contains all the information to make an MSA of the variable position in the genome. Since everything is already 
 defined with respect to a reference genome, we don't need to build an MSA, per se, it will already just fall off once we get rid of the non variable sites. That is what ``snp-sites`` does.
 
-.. warning:: Merging multiple vcf files, the way it has been implemented here, is highly compute heavy. It requires high memory instances when you have 100s t0 1000s of isolates.
+.. warning:: Merging multiple vcf files, the way it has been implemented here, is highly compute heavy. It requires high memory instances when you have 100s to 1000s of isolates.
 
-In what follows, we first convert vcf to a fasta file using ``vcf2phylip.py`` (despite its name, it also does this) before calling SNPs. ** very compute heavy, DONOT RUN**
+In what follows, we first convert vcf to a fasta file using ``vcf2phylip.py`` (despite its name, it also does this) before calling SNPs. **compute heavy, DONOT RUN**
+
 ::
 
  # -m: keep all SNVs independent of their frequency, typically with a larger number of isolates
@@ -209,7 +208,7 @@ In what follows, we first convert vcf to a fasta file using ``vcf2phylip.py`` (d
  snp-sites -m merged-99RussianIsolates.min1.fasta -o 99RussianIsolates.msa.fasta
 
 
- ``99RussianIsolates.msa.fasta`` contains our multiple sequence alignment.
+``99RussianIsolates.msa.fasta`` contains our multiple sequence alignment.
  
 
 
