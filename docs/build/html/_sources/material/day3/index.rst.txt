@@ -2,9 +2,12 @@
 Day 3
 ********
 
-Building computational pipelines with Snakemake `Snakemake <https://snakemake.readthedocs.io/en/stable/>`_
+Variant calling-continued and using Snakemake
 
 .. toctree::
    :maxdepth: 1
 
+   dataset
+   dataprep
+   merge_snvs_from_vcf
    reproducible_research

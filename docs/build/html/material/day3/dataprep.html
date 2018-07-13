@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Day 3 &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <title>Data Prep and Read QC &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,16 +31,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="day-3">
-<h1>Day 3<a class="headerlink" href="#day-3" title="Permalink to this headline">¶</a></h1>
-<p>Variant calling-continued and using Snakemake</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="dataset.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dataprep.html">Data Prep and Read QC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="merge_snvs_from_vcf.html">Processing and Merging SNVs from multiple isolates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reproducible_research.html">Building Bioinformatics Pipelines with Snakemake</a></li>
-</ul>
+  <div class="section" id="data-prep-and-read-qc">
+<h1>Data Prep and Read QC<a class="headerlink" href="#data-prep-and-read-qc" title="Permalink to this headline">¶</a></h1>
+<p>Before starting, make sure that the following variables are defined in your shell environment. That means, you will need to type the following when you launch a new shell terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>MYBASE=/home/mtb_upm/mapping-variantcalling
+MYDATA=$MYBASE/data
+MYRESULTS=$MYBASE/results
+</pre></div>
+</div>
+<p>Create a separate directory for the <code class="docutils literal notranslate"><span class="pre">.vcf</span></code> files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir $MYRESULTS/vcf
+</pre></div>
 </div>
 </div>
 
@@ -53,7 +54,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/material/day3/index.rst.txt"
+      <li><a href="../../_sources/material/day3/dataprep.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>

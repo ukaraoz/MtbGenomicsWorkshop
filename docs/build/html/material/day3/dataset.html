@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Day 3 &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+    <title>Datasets &#8212; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,17 +31,33 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="day-3">
-<h1>Day 3<a class="headerlink" href="#day-3" title="Permalink to this headline">¶</a></h1>
-<p>Variant calling-continued and using Snakemake</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="dataset.html">Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dataprep.html">Data Prep and Read QC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="merge_snvs_from_vcf.html">Processing and Merging SNVs from multiple isolates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reproducible_research.html">Building Bioinformatics Pipelines with Snakemake</a></li>
-</ul>
-</div>
+  <div class="section" id="datasets">
+<h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h1>
+<p>The dataset is a subset of 1000 <em>M. tuberculosis</em> isolates whole genome sequenced by Casali et al.: <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3939361/">Evolution and transmission of drug-resistant tuberculosis in a Russian population</a>. In the previous tutorial, we generated an initial set of variants from a single <em>M. tuberculosis</em> isolate. In this subsequent tutorial, we will be repeating that for additinal isolates. We will then combine all of these variants into a single dataset for further analysis.</p>
+<p>The datasets are located under <cite>/home/mtb_upm/mtb_genomics_workshop_data/mapping-variantcalling/data</cite> directory, which has the following content:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">File</th>
+<th class="head">Content</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Mtb_repeats.bed</td>
+<td>precalculated, coordinates of the repetitive regions in the reference <em>M.tuberculosis</em> genome</td>
+</tr>
+<tr class="row-odd"><td>MTB_illumina60X_R2.fastq</td>
+<td>60X coverage run, Illumina short reads, forward</td>
+</tr>
+<tr class="row-even"><td>MTB_illumina20X_R1.fastq</td>
+<td>20X coverage run, Illumina short reads, forward</td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference external" href="https://tbdreamdb.ki.se/CMS/Download.aspx/">_TBDreamDB</a>.</p>
 </div>
 
 
@@ -53,7 +69,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/material/day3/index.rst.txt"
+      <li><a href="../../_sources/material/day3/dataset.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>

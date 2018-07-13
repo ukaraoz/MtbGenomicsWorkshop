@@ -1,345 +1,214 @@
+==================================================
 Processing and Merging SNVs from multiple isolates
 ==================================================
-What we need to do next is to get a set of high-quality *SNVs* across the whole genome. ``vcf`` file from ``Pilon`` contains unfiltered *SNVs* as well as *indels*.
+What we need to do next is to get a set of high-quality *SNVs* across the whole genome. A *SNV*, single nucleotide variant (variant means substitution here), is defined as a variation in a single locus without any reference to its frequency in the population. A *SNP* or single nucleotide polymorphism, on the other hand is a variation for which we have evidence that it is fixed in the population. That means we should see in more than a certain (arbitrarily defined but often >1%) number of individuals/isolates. Therefore, not all the SNVs are SNPs. Although this is the working definition we will be following, there is no consensus on this defition and all single nucleotide variants are called *SNPs* independent of their frequency in the population.
 
-Separating *SNVs* and *indels*
+
 -------------------------------------------
-
-Filtering *SNVs* within highly repetitive regions
+Previously in the workshop...
 -------------------------------------------
-A significant portion of the genome of *Mycobacterium tuberculosis* contains highly repetitive regions. Short-read sequencing isn't sufficient to make accurate SNV calls within these regions. Therefore we want to remove these regions from further analysis as they will confuse downstream phylogenetic analysis. We have precalculated the repetitive regions, which is provided in the ``Mtb_repeats.bed`` file in ``bed`` format. `bed <https://uswest.ensembl.org/info/website/upload/bed.html>`_ is a file format used to specify genomic intervals.
+``vcf`` file we generated using  ``pilon`` contains unfiltered *SNVs* as well as *indels*. To remind, ``pilon`` did a series of filtering and quality control steps before coming up with this list *SNVs* and *indels*. These included, (1) indel realignment, (2) base quality score filtering, (3) mapping quality score filtering, and (4) depth of coverage filtering.
 
-Overall, the total length of repetitive regions specified in ``Mtb_repeats.bed`` is ~572 Kb (~13% of the genome). The majority of these regions (~10% of the genome) belong to two large unrelaed gene families (PE and PPE families) clustered in the genome. They code for glycine-rich proteins that are often based on multiple copies of the polymorphic repetitive sequences referred to as PGRSs **r**\ e\ **s**\ tructured **t**\ ext. (**P**olymorphic guanine cytosine–rich (GC-rich) repetitive sequences) and 
-
-572 Mb (~13%) 
-
-About 10% of the coding capacity of the genome is devoted to two large unrelated families of acidic, glycine-rich proteins, the PE and PPE families, whose genes are clustered (Figs 1, 2) and are often based on multiple copies of the polymorphic repetitive sequences referred to as PGRSs, and major polymorphic tandem repeats (MPTRs), respectively31,32. The names PE and PPE derive from the motifs Pro – Glu (PE) and Pro – Pro – Glu (PPE) found near the N terminus in most cases33. The 99 members of the PE protein family all have a highly conserved N- terminal domain of  110 amino-acid residues that is predicted to have a globular structure, followed by a C-terminal segment that varies in size, sequence and repeat copy number (Fi
+So any variant in this list has been, to the best of our ability, stripped off any known read mapping/alignment artifacts, has a reasonably high base quality, depth of coverage, and mapping quality. Even after these steps, however, we expect a relatively high false positive rate within this list so we will need to do some further filtering. The assumption is that we are leaning towards minimizing false positive rate. We might be missing some true variants during this strict filtering steps. However, realize that we want to make sure that what we have as a final list (for instance to infer phylogeny) contain only true variants. That is we don't care so much if we do miss few true variants here and there (that is higher false negative rate is somewhat acceptable).
 
 
-Changing sample header in the ``vcf`` file
 -------------------------------------------
-
-Further *SNV* filtering
+Why are we doing all this?
 -------------------------------------------
+The end point for this analysis is to get an MSA (multiple sequence alignment) of the variable sites, which we can then use to infer phylogeny. Keep that in mind as you dive in.
 
 
+----------------------------------------------------------------------------------------
+Separating *SNVs* and *indels* and filtering *SNVs* within highly repetitive regions
+----------------------------------------------------------------------------------------
+First, we will need to get rid of the indels (insertion/deletion). As you've heard during the lecture, read mappers donot do a particularly good job with indels. Any called indel by any mapper, you should be very suspicious off. We want to remove them for phylogenetic analysis -we should already have lots of variation to infer phylogeny- as they will bias the phylogenetic inference. In the next step, we will use ``vcftools`` to make 2 separate ``vcf`` files, one that contains only SNVs and the other indels. Concurrently, we will also remove any variant that sits within a highly repetitive region. Next, a few words on why we want to do this, particularly in analyzing *M. tuberculosis* genomes. 
 
-Setting up an analysis directory
---------------------------------
+.. note:: Repetitive regions in *M. tuberculosis* genome A significant portion of the genome of *Mycobacterium tuberculosis* contains highly repetitive regions (every microbial genome will have some level of tandem and more complex repetitive regions, regions with low sequence complexity). Short-read sequencing isn't sufficient to make accurate SNV calls within these regions. Therefore we want to remove these regions from further analysis as they will confuse downstream phylogenetic analysis. We have precalculated the repetitive regions, which is provided in the ``Mtb_repeats.bed`` file in ``bed`` format. `bed <https://uswest.ensembl.org/info/website/upload/bed.html>`_ is a file format used to specify genomic intervals.
+ Overall, the total length of repetitive regions specified in ``Mtb_repeats.bed`` is ~572 Kb (~13% of the genome). The majority of these regions (~10% of the genome) belong to two large unrelaed gene families (PE and PPE families) clustered in the genome. They code for glycine-rich proteins that are often based on multiple copies of the polymorphic repetitive sequences referred to as PGRSs **r**\ e\ **s**\ tructured **t**\ ext. (**P**olymorphic guanine cytosine–rich (GC-rich) repetitive sequences). Despite their prominence in the genome, we almost know nothing about the biological significance of these regions.
 
-Copying and creating project directories and files
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Run ``vcftools`` to separate SNVs/indels and filter repetitive regions:
+::
 
-The Snakemake pipline is intended to be run on an input one or more
-sequencer bam files, each having a filename represending a sample name.
-The output files are named with the same sample names, and are organized
-into folders corresponding to the steps of the pipeline in which they
-were created.
+ # get rid of "_pilon" in the filename
+ mv ${sample}_pilon.vcf ${sample}.vcf
+ vcftools --gzvcf ${sample}.vcf --exclude-bed $SRCBASE/data/ref/Mtb_repeats.bed --remove-indels --recode --recode-INFO-all --out $sample
+ vcftools --gzvcf ${sample}.vcf --exclude-bed $SRCBASE/data/ref/Mtb_repeats.bed --keep-only-indels --recode --recode-INFO-all --out ${sample}.indels
 
-To get started, create an analysis directory somewhere in your compute
-environment to contain the pipeline input and output files.
+ # take a peek at the indels file! We will be leaving it behind from this point on
+ more ${sample}.indels.recode.vcf
+ # and the vcftools log file
+ more ${sample}.indels.log
 
-Into this directory, copy the following file from the ``viral-ngs/pipes``
-directory:
+SRCBASE="/data2-raid/ukaraoz/Work/UPMWorkshop/"
+
+.. note:: vcf files are typically huge (~0.5 GB even for a single microbial genome). Compressing vcf files with `bgzip <http://www.htslib.org/doc/bgzip.html>`_  and indexing them with `tabix <http://www.htslib.org/doc/tabix.html>`_  is the standard way vcf files are stored. Once that is done, further processing of the binary files is done with ``bcftools``.
+
+Compress and index the vcf file. Notice that we won't use the vcf file for indels for this analysis.
+::
+
+ bgzip ${sample}.recode.vcf
+ tabix -p vcf ${sample}.recode.vcf.gz
+
+We need change the sample header (which is "SAMPLE", the very last column within the data fields) in the vcf file to specify that these variants are from ``$sample``. This is to ensure data provenance: we will soon merge vcf files from multiple samples and they all have the same header at this point. You can do this with ``bcftools`` which requires the header name to be in a text file, so we write the sample name into a file called "sample".
+::
+ 
+ echo $sample > sample
+ bcftools reheader -s sample ${sample}.recode.vcf.gz > m.${sample}.recode.vcf.gz # we add this "m" just to make the filename different in this temp file
+ mv -f m.${sample}.recode.vcf.gz ${sample}.recode.vcf.gz
+
+ # reindex
+ tabix -f -p vcf ${sample}.recode.vcf.gz
+
+ # make sure nothing that ``pilon`` didn't let it "PASS" doesn't get in
+ bcftools view --include 'FILTER="PASS"' ${sample}.recode.vcf.gz -O z -o temp
+
+ mv -f temp ${sample}.recode.vcf.gz
+ # reindex and we are done
+ tabix -f -p vcf ${sample}.recode.vcf.gz     
+
+All we did was here was modifying sample "header" and some "data massaging". If you want, you can unzip the ``${sample}.recode.vcf.gz`` file, peek into it, and do some other quick sanity check:
+::
+ 
+ # OPTIONAL
+ gunzip ${sample}.recode.vcf.gz
+ # pay attention to the column name for the very last column, does it look ok?
+ more ${sample}.recode.vcf
+ wc ${sample}.vcf
+ wc ${sample}.recode.vcf
+
+------------------------------------------
+Merge ``vcf`` files from multiple isolates
+------------------------------------------
+Assuming that we did read mapping etc. for multiple isolates, at this point we can merge all the vcf files from multiple samples into a single vcf file. We will use that file to define *SNPs*.
 
 ::
 
-    config.yaml
-    Snakefile
+ # the way this following command is constructed is intentionally explicit so you can see what is happening
+ # notice that this list of 99 isolates contains our prototyping isolate, "ERS050945", and 98 additional ones
+ bcftools merge \
+ ERS050923.recode.vcf.gz \
+ ERS050924.recode.vcf.gz \
+ ERS050925.recode.vcf.gz \
+ ERS050926.recode.vcf.gz \
+ ERS050927.recode.vcf.gz \
+ ERS050928.recode.vcf.gz \
+ ERS050929.recode.vcf.gz \
+ ERS050930.recode.vcf.gz \
+ ERS050931.recode.vcf.gz \
+ ERS050932.recode.vcf.gz \
+ ERS050933.recode.vcf.gz \
+ ERS050934.recode.vcf.gz \
+ ERS050935.recode.vcf.gz \
+ ERS050936.recode.vcf.gz \
+ ERS050937.recode.vcf.gz \
+ ERS050938.recode.vcf.gz \
+ ERS050939.recode.vcf.gz \
+ ERS050940.recode.vcf.gz \
+ ERS050942.recode.vcf.gz \
+ ERS050943.recode.vcf.gz \
+ ERS050944.recode.vcf.gz \
+ ERS050945.recode.vcf.gz \
+ ERS050946.recode.vcf.gz \
+ ERS050947.recode.vcf.gz \
+ ERS050948.recode.vcf.gz \
+ ERS050949.recode.vcf.gz \
+ ERS050950.recode.vcf.gz \
+ ERS050951.recode.vcf.gz \
+ ERS050953.recode.vcf.gz \
+ ERS050954.recode.vcf.gz \
+ ERS050955.recode.vcf.gz \
+ ERS050956.recode.vcf.gz \
+ ERS050957.recode.vcf.gz \
+ ERS050958.recode.vcf.gz \
+ ERS050959.recode.vcf.gz \
+ ERS050960.recode.vcf.gz \
+ ERS050961.recode.vcf.gz \
+ ERS050962.recode.vcf.gz \
+ ERS050963.recode.vcf.gz \
+ ERS050964.recode.vcf.gz \
+ ERS050965.recode.vcf.gz \
+ ERS050966.recode.vcf.gz \
+ ERS050968.recode.vcf.gz \
+ ERS050969.recode.vcf.gz \
+ ERS050970.recode.vcf.gz \
+ ERS050971.recode.vcf.gz \
+ ERS050972.recode.vcf.gz \
+ ERS053603.recode.vcf.gz \
+ ERS053604.recode.vcf.gz \
+ ERS053605.recode.vcf.gz \
+ ERS053606.recode.vcf.gz \
+ ERS053607.recode.vcf.gz \
+ ERS053608.recode.vcf.gz \
+ ERS053609.recode.vcf.gz \
+ ERS053610.recode.vcf.gz \
+ ERS053611.recode.vcf.gz \
+ ERS053612.recode.vcf.gz \
+ ERS053613.recode.vcf.gz \
+ ERS053614.recode.vcf.gz \
+ ERS053615.recode.vcf.gz \
+ ERS053616.recode.vcf.gz \
+ ERS053617.recode.vcf.gz \
+ ERS053618.recode.vcf.gz \
+ ERS053619.recode.vcf.gz \
+ ERS053620.recode.vcf.gz \
+ ERS053621.recode.vcf.gz \
+ ERS053622.recode.vcf.gz \
+ ERS053623.recode.vcf.gz \
+ ERS053624.recode.vcf.gz \
+ ERS053625.recode.vcf.gz \
+ ERS053626.recode.vcf.gz \
+ ERS053627.recode.vcf.gz \
+ ERS053628.recode.vcf.gz \
+ ERS053629.recode.vcf.gz \
+ ERS053630.recode.vcf.gz \
+ ERS053631.recode.vcf.gz \
+ ERS053632.recode.vcf.gz \
+ ERS053633.recode.vcf.gz \
+ ERS053634.recode.vcf.gz \
+ ERS053635.recode.vcf.gz \
+ ERS053636.recode.vcf.gz \
+ ERS053637.recode.vcf.gz \
+ ERS053638.recode.vcf.gz \
+ ERS053639.recode.vcf.gz \
+ ERS053641.recode.vcf.gz \
+ ERS053642.recode.vcf.gz \
+ ERS053643.recode.vcf.gz \
+ ERS053644.recode.vcf.gz \
+ ERS053651.recode.vcf.gz \
+ ERS053656.recode.vcf.gz \
+ ERS053659.recode.vcf.gz \
+ ERS053661.recode.vcf.gz \
+ ERS053663.recode.vcf.gz \
+ ERS053667.recode.vcf.gz \
+ ERS053672.recode.vcf.gz \
+ ERS053684.recode.vcf.gz \
+ ERS096323.recode.vcf.gz \
+ ERS181351.recode.vcf.gz \
+ ERS181603.recode.vcf.gz \
+ -O v -o merged-99RussianIsolates.vcf
 
-Since the file ``config.yaml`` is project-specific, you will need to
-make changes to it as approprate for your usage. The config file changes
-are described in greater detail below.
+Merging step requires a reasonable amount of memory and takes some time. We will be using precalculated file. Now, what we essentially have is a vcf file that contains all the information to make an MSA of the variable position in the genome. Since everything is already 
+defined with respect to a reference genome, we don't need to build an MSA, per se, it will already just fall off once we get rid of the non variable sites. That is what ``snp-sites`` does.
 
-Next, ``cd`` to the analysis directory and create symbolic links to the
-following:
+.. warning:: Merging multiple vcf files, the way it has been implemented here, is highly compute heavy. It requires high memory instances when you have 100s t0 1000s of isolates.
 
--  The viral-ngs virtual environment:
-
-   ``ln -s /path/to/venv-viral-ngs venv``
-
--  The viral-ngs project, checked out from GitHub or extracted from a
-   version-tagged archive:
-
-   ``ln -s /path/to/viral-ngs bin``
-
-Within the analysis directory, create the directories and files used by
-the Snakemake pipeline:
-
+In what follows, we first convert vcf to a fasta file using ``vcf2phylip.py`` (despite its name, it also does this) before calling SNPs. ** very compute heavy, DONOT RUN**
 ::
 
-    data/
-        00_raw/
-        01_cleaned/
-        01_per_sample/
-        02_align_to_self/
-        02_assembly/
-        03_align_to_ref/
-        03_interhost/
-        04_intrahost/
-    log/
-    reports/
-    tmp/
+ # -m: keep all SNVs independent of their frequency, typically with a larger number of isolates
+ # we would want to impose a threshold
+ vcf2phylip.py --fasta --phylip-disable -m 1 --input merged-99RussianIsolates.vcf
+ 
+ # -m: output fasta, -v: output VCF, -p: output PHYLIP
+ snp-sites -m merged-test.min1.fasta -o 99RussianIsolates.fasta
+ 
 
-The directory structure created needs to match the locations specified
-in ``config.yaml``.
 
-Adding input data
-~~~~~~~~~~~~~~~~~
 
--  Copy each of the raw sample bam files to the ``00_raw/`` directory
-   and ensure the file names follow the convention of ``{sample}.bam``.
 
--  Create a file, ``samples-depletion.txt``, to list all of the samples
-   that should be run through the depletion pipeline, with one
-   samplename per line as {sample}, following the format of the input
-   bam file: ``{sample}.bam``. For example, if you copied a file called
-   "G1190.bam" into ``00_raw/``, then then ``samples-depletion.txt``
-   would contain the line:
 
-   ``G1190``
 
--  Create a file, ``samples-assembly.txt``, to list all of the samples
-   that should be run through the assembly pipeline.
--  Create a file, ``samples-runs.txt``, to list all of the samples that
-   should be run through the int\ **er**\ host analysis pipeline.
--  Create a blank file, ``samples-assembly-failures.txt``, that may be
-   filled in later.
 
-Modifying the ``config.yaml`` file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Minimal modification to the config file is necessary, though there are a
-few things you need to specify:
 
-An email address for when the pipeline fetches reference data from the
-NCBI via their `Entrez
-API <http://www.ncbi.nlm.nih.gov/books/NBK25501/>`__:
 
-::
-
-    email_point_of_contact_for_ncbi: "someone@example.com"
-
-The path to the depletion databases to be used by BMTagger, along with
-the file prefixes of the specific databases to use. The process for
-creating BMTagger depletion databases is described in the `NIH BMTagger
-docs <ftp://ftp.ncbi.nih.gov/pub/agarwala/bmtagger/README.bmtagger.txt>`__.
-
-::
-
-    bmtagger_db_dir: "/path/to/depletion_databases"
-    bmtagger_dbs_remove:
-      - "hg19"
-      - "GRCh37.68_ncRNA-GRCh37.68_transcripts-HS_rRNA_mitRNA"
-      - "metagenomics_contaminants_v3"
-
-Pre-built depletion databases are available in both \*.tar.gz and \*.lz4 
-format, for removing human reads and common metagenomic contaminants:
-
--  `GRCh37.68_ncRNA-GRCh37.68_transcripts-HS_rRNA_mitRNA.tar.gz <https://storage.googleapis.com/sabeti-public/depletion_dbs/GRCh37.68_ncRNA-GRCh37.68_transcripts-HS_rRNA_mitRNA.tar.gz>`__ (`*.lz4 <https://storage.googleapis.com/sabeti-public/depletion_dbs/GRCh37.68_ncRNA-GRCh37.68_transcripts-HS_rRNA_mitRNA.lz4>`__)
--  `hg19.tar.gz <https://storage.googleapis.com/sabeti-public/depletion_dbs/hg19.tar.gz>`__ (`*.lz4 <https://storage.googleapis.com/sabeti-public/depletion_dbs/hg19.lz4>`__)
--  `metagenomics_contaminants_v3.tar.gz <https://storage.googleapis.com/sabeti-public/depletion_dbs/metagenomics_contaminants_v3.tar.gz>`__ (`*.lz4 <https://storage.googleapis.com/sabeti-public/depletion_dbs/metagenomics_contaminants_v3.lz4>`__)
-
-Note that these databases must be extracted prior to use.
-
-In addition to the databases used by BMTagger, you will need to specify
-the location and file prefix of the BLAST database to be used for
-depletion. The process for creating the BLAST database is described in
-the `NIH BLAST
-docs <ftp://ftp.ncbi.nih.gov/blast/documents/formatdb.html>`__, and on
-`this
-website <http://www.compbio.ox.ac.uk/analysis_tools/BLAST/formatdb.shtml>`__
-from the University of Oxford.
-
-::
-
-    blast_db_dir: "/path/to/depletion_databases"
-    blast_db_remove: "metag_v3.ncRNA.mRNA.mitRNA.consensus"
-
-A pre-built depletion database is also available for BLAST:
-
--  `metag_v3.ncRNA.mRNA.mitRNA.consensus.tar.gz <https://storage.googleapis.com/sabeti-public/depletion_dbs/metag_v3.ncRNA.mRNA.mitRNA.consensus.tar.gz>`__ (`*.lz4 <https://storage.googleapis.com/sabeti-public/depletion_dbs/metag_v3.ncRNA.mRNA.mitRNA.consensus.lz4>`__)
-
-Note that this database must be extracted prior to use.
-
-Additional databases are needed to perform metagenomic classification 
-using `Kraken <https://ccb.jhu.edu/software/kraken/>`__, 
-`Diamond <https://github.com/bbuchfink/diamond>`__, or 
-`Krona <https://github.com/marbl/Krona/wiki>`__.
-
-::
-
-    kraken_db: "/path/to/kraken_full_20150910"
-
-    diamond_db: "/path/to/diamond_db/nr"
-
-    krona_db: "/path/to/krona"
-
-Pre-built databases for Kraken, Diamond, and Krona are available:
-
--  `kraken_ercc_db_20160718.tar.gz <https://storage.googleapis.com/sabeti-public/meta_dbs/kraken_ercc_db_20160718.tar.gz>`__ including `ERCC spike-in RNA seqs <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3166838/>`__ (`*.lz4 <https://storage.googleapis.com/sabeti-public/meta_dbs/kraken_ercc_db_20160718.tar.lz4>`__)
--  `kraken_db.tar.gz <https://storage.googleapis.com/sabeti-public/meta_dbs/kraken_db.tar.gz>`__ (`*.lz4 <https://storage.googleapis.com/sabeti-public/meta_dbs/kraken_db.tar.lz4>`__)
--  `krona_taxonomy_20160502.tar.gz <https://storage.googleapis.com/sabeti-public/meta_dbs/krona_taxonomy_20160502.tar.gz>`__ (`*.lz4 <https://storage.googleapis.com/sabeti-public/meta_dbs/krona_taxonomy_20160502.tar.lz4>`__)
--  `nr.dmnd.gz <https://storage.googleapis.com/sabeti-public/meta_dbs/nr.dmnd.gz>`__ (`*.lz4 <https://storage.googleapis.com/sabeti-public/meta_dbs/nr.dmnd.lz4>`__)
-
-Note that these databases must be extracted prior to use.
-
-An array of the `NCBI GenBank
-CoreNucleotide <http://www.ncbi.nlm.nih.gov/nuccore/>`__ accessions for
-the sequences comprising the reference genome to be used for contig
-assembly as well as for int\ **er**\ host and int\ **ra**\ host variant
-analysis. In addition, you will need to specify a file prefix to be used
-to represent the full reference genome file used downstream.
-
-::
-
-    accessions_for_ref_genome_build:
-      - "KJ660346.2"
-
-An optional file containing a list of accessions may be specified for
-filtering reads via `LAST <http://last.cbrc.jp/doc/lastal.txt>`__. This is
-intended to narrow to a genus. If this file is not provided, viral-ngs
-defaults to using the accessions specified for the reference genome.
-
-::
-
-    accessions_file_for_lastal_db_build: "/path/to/lastal_accessions.txt"
-
-A FASTA file to be used by Trimmomatic during assembly to remove
-contaminents from reads:
-
-::
-
-    trim_clip_db: "/path/to/depletion_databases/contaminants.fasta"
-
-Pre-built databases for Trimmomatic:
-
--  `contaminants.fasta.tar.gz <https://storage.googleapis.com/sabeti-public/depletion_dbs/contaminants.fasta.tar.gz>`__ (`*.lz4 <https://storage.googleapis.com/sabeti-public/depletion_dbs/contaminants.fasta.lz4>`__)
-
-A FASTA file containing spike-ins to be reported:
-
-::
-
-    spikeins_db: "/path/to/references/ercc_spike-ins.fasta"
-
-Modifying the ``Snakefile``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Depending on the state of your input data, and where in the pipeline it
-may enter, it may be necessary to omit certain processing steps. For
-example, if your sequencing center has already demultiplexed your data
-and no demultiplexing is needed, you can comment out the following line
-in the ``Snakefile``:
-
-::
-
-    include: os.path.join(pipesDir, 'demux.rules’)
-
-Running the pipeline
---------------------
-
-Configuring for your compute platform
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Running the pipeline directly
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-After the above setup is complete, run the pipeline directly by calling
-``snakemake`` within the analysis directory.
-
-Running the pipeline on GridEngine (UGER)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Within ``config.yaml``, set the "project" to one that exists on the
-cluster system.
-
-Inside the analysis directory, run the job submission command. Ex.:
-
-::
-
-    use UGER
-    qsub -cwd -b y -q long -l m_mem_free=4G ./bin/pipes/Broad_UGER/run-pipe.sh
-
-To kill all jobs that exited (qstat status "Eqw") with an error:
-
-::
-
-    qdel $(qstat | grep Eqw | awk '{print $1}')
-
-Running the pipeline on LSF
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Inside the analysis directory, run the job submission command. Ex.:
-
-::
-
-    bsub -o log/run.out -q forest ./bin/pipes/Broad_LSF/run-pipe.sh
-
-If you notice jobs hanging in the **PEND** state, an upstream job may
-have failed. Before killing such jobs, verify that the jobs are pending
-due to their dependency:
-
-::
-
-    bjobs -al | grep -A 1 "PENDING REASONS" | grep -v "PENDING REASONS" | grep -v '^--$'
-
-To kill all **PEND**\ ing jobs:
-
-::
-
-    bkill `bjobs | grep PEND | awk '{print $1}'` > /dev/null
-
-When things go wrong
-~~~~~~~~~~~~~~~~~~~~
-
-The pipeline may fail with errors during execution, usually while
-generating assemblies with Trinity. If this occurs, examine the output,
-add the failing sample names to ``samples-assembly-failures.txt``,
-keeping the good ones in ``samples-assembly.txt``, and re-run the
-pipeline. Due to sample degradation prior to sequencing in the wet lab,
-not all samples have the integrity to complete the pipeline, and it may
-necessary to skip over these samples by adding them to the
-``samples-assembly-failures.txt``.
-
-Assembly of pre-filtered reads
-------------------------------
-
-Taxonomic filtration of raw reads
----------------------------------
-
-Starting from Illumina BCL directories
---------------------------------------
-
-When starting from Illumina run directories, the viral-ngs Snakemake pipeline can demultiplex raw BCL files,
-and merge samples from multiple flowcell lanes or libraries. To use viral-ngs in this way, create the following files:
-
-``flowcells.txt`` (example below): A tab-delimited file describing the flowcells to demultiplex, as well as the lane to use, 
-a path to the file listing the barcodes used in the lane, the ``bustard_dir`` (the run directory as written by an Illumina sequencer), 
-and an optional column for ``max_mismatches``, which specifies how many bases are allowed to differ for a read to be assigned to a particular barcode (default: 0). The column ``max_mismatches`` may be omitted, including its header.
-
-::
-
-    flowcell        lane    barcode_file    bustard_dir     max_mismatches
-    H32G3ADXY       1       /path/to/barcodes.txt    /path/to/illumina/run/directory/run_BH32G3ADXY 1
-    H32G3ADXY       2       /path/to/barcodes.txt    /path/to/illumina/run/directory/run_BH32G3ADXY 1
-    AKJ6R   1       /path/to/barcodes.txt      /path/to/illumina/run/directory/run_AKJ6R      1
-
-
-``barcodes.txt`` (example below): A tab-delimited file describing the barcodes used for a given sample, along with a library ID.
-
-::
-
-    sample  barcode_1       barcode_2       library_id_per_sample
-    41C     TAAGGCGA        TATCCTCT        AP2
-    21P     CGTACTAG        TATCCTCT        AP2
-    42C     AGGCAGAA        TATCCTCT        AP2
-    41P     TCCTGAGC        TATCCTCT        AP2
-    42P     GGACTCCT        TATCCTCT        AP2
-    61C     TAGGCATG        TATCCTCT        AP2
-    61P     CTCTCTAC        AGAGTAGA        AP2
-    62C     CAGAGAGG        AGAGTAGA        AP2
-    62P     GCTACGCT        AGAGTAGA        AP2
-    142C    CGAGGCTG        AGAGTAGA        AP2
-    WATERCTL        AAGAGGCA        AGAGTAGA        AP2
-
-``samples-depletion.txt``: the list of sample names to deplete `as described above <#adding-input-data>`__.
