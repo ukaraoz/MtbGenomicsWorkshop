@@ -194,9 +194,10 @@ Assuming that we did read mapping etc. for multiple isolates (which you will lea
 Merging step requires a reasonable amount of memory and takes some time. We will be using precalculated file. Now, what we essentially have is a vcf file that contains all the information to make an MSA of the variable position in the genome. Since everything is already 
 defined with respect to a reference genome, we don't need to build an MSA, per se, it will already just fall off once we get rid of the non variable sites. That is what ``snp-sites`` does.
 
-.. warning:: Merging multiple vcf files, the way it has been implemented here, is highly compute heavy. It requires high memory instances when you have 100s t0 1000s of isolates.
+.. warning:: Merging multiple vcf files, the way it has been implemented here, is highly compute heavy. It requires high memory instances when you have 100s to 1000s of isolates.
 
-In what follows, we first convert vcf to a fasta file using ``vcf2phylip.py`` (despite its name, it also does this) before calling SNPs. ** very compute heavy, DONOT RUN**
+In what follows, we first convert vcf to a fasta file using ``vcf2phylip.py`` (despite its name, it also does this) before calling SNPs. **compute heavy, DONOT RUN**
+
 ::
 
  # -m: keep all SNVs independent of their frequency, typically with a larger number of isolates
@@ -207,7 +208,7 @@ In what follows, we first convert vcf to a fasta file using ``vcf2phylip.py`` (d
  snp-sites -m merged-99RussianIsolates.min1.fasta -o 99RussianIsolates.msa.fasta
 
 
- ``99RussianIsolates.msa.fasta`` contains our multiple sequence alignment.
+``99RussianIsolates.msa.fasta`` contains our multiple sequence alignment.
  
 
 
