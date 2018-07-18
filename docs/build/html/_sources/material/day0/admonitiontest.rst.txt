@@ -25,6 +25,10 @@
 .. warning::
   warning
 
+.. rst-class:: html-toggle
+
+  fdafsdf
+
 .. code-block:: r
 
 	pop <- data.frame(x=d)

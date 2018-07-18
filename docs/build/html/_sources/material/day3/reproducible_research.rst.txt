@@ -256,7 +256,7 @@ Snakemake can generate two types of graphs:
 
 All the graph says is that the output from the rule `convert_to_upper_case` will be used as input to the rule `concatenate_files`. For a more typical bioinformatics project it can look something like this:
 
-.. image:: rulegraph_complex.svg
+.. image:: rulegraph_complex.png
 
 **Job graph**: The second type of graph is based on the jobs, and looks like this for our little workflow (use `--dag` instead of `--rulegraph`).
 
@@ -264,7 +264,7 @@ All the graph says is that the output from the rule `convert_to_upper_case` will
 
  snakemake --dag a_b.txt | dot -Tpng > jobgraph.png
 
-.. image:: jobgraph.svg
+.. image:: jobgraph.png
 
 The main difference here is that now each node is a job instead of a rule. You can see that the wildcards used in each job are also displayed. Another difference is the dotted lines around the nodes. A dotted line is Snakemake's way of indicating that this rule doesn't need to be rerun in order to generate `a_b.txt`. Validate this by running `snakemake -n -r a_b.txt` and it should say that there is nothing to be done.
 
