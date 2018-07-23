@@ -3,6 +3,11 @@ Welcome to Bioinformatics Workshop for *M. tuberculosis* genomics and phylogenom
 ---------------------------------------------------------------------------------------------------------------------
 This workshop is co-organized by `Berkeley Lab Ecology Department <https://eesa.lbl.gov/departments/ecology>`_, `UCSF Division of Pulmonary, Critical Care, Allergy and Sleep Medicine <https://pulmonary.ucsf.edu/>`_, and `The Philippine Genome Center (PGC) <https://pgc.up.edu.ph/>`_.
 
+.. image:: logo.png
+	:height: 148 px
+	:width: 853.3801 px
+	:scale: 100
+
 ^^^^^^^^^
 Overview
 ^^^^^^^^^
@@ -19,22 +24,24 @@ Keynote
 `Midori Kato-Maeda, MD <https://globalprojects.ucsf.edu/investigator/midori-kato-maeda-md>`_ (UCSF): Genomics to improve the diagnosis of drug resistant tuberculosis
 
 
-.. image:: logo.png
-	:height: 357
-	:width: 570
-	:scale: 100
-
+^^^^^^^^^^^^^^^^^^
+Workshop Agenda
+^^^^^^^^^^^^^^^^^^
 .. toctree::
-	:maxdepth: 2
-    :caption: Table of Contents
+	:maxdepth: 1
 
-   agenda/index
-   material/index
-   	day0/index
-	day1/index
-	day2/index
-	day3/index
-	day4/index
+	agenda
 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Workshop Computer Labs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. toctree::
+	:maxdepth: 1
+
+	material/day1/index
+	material/day2/index
+	material/day3/index
+	material/day4/index
+	material/day5/index
 
 

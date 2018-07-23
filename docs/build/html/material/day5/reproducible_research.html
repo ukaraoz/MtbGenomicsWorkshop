@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building Bioinformatics Pipelines with Snakemake &mdash; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Day 5: Building Reproducible Computational Pipelines" href="index.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> M. tuberculosis Bioinformatics Workshop
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../agenda.html">Agenda</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../day1/index.html">Day 1: Unix Shell Refresher for Bioinformatics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day2/index.html">Day 2: Microbial Genome Assembly (from short and long reads) and Genome Annotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day3/index.html">Day 3: Read mapping and variant calling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day4/index.html">Day 4: Phylogenetics/Phylogenomics and Building Reproducible Computational Pipelines</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Day 5: Building Reproducible Computational Pipelines</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Building Bioinformatics Pipelines with Snakemake</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-basics">The basics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#activating-snakemake-environment-within-the-vm">Activating <code class="docutils literal notranslate"><span class="pre">snakemake</span></code> environment within the VM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rules">Rules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wildcards">Wildcards</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#visualization-logging-and-workflow-management">Visualization, logging and workflow management</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">M. tuberculosis Bioinformatics Workshop</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Day 5: Building Reproducible Computational Pipelines</a> &raquo;</li>
+        
+      <li>Building Bioinformatics Pipelines with Snakemake</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/material/day5/reproducible_research.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-bioinformatics-pipelines-with-snakemake">
+<h1>Building Bioinformatics Pipelines with <a class="reference external" href="https://snakemake.readthedocs.io/en/stable/">Snakemake</a><a class="headerlink" href="#building-bioinformatics-pipelines-with-snakemake" title="Permalink to this headline">¶</a></h1>
+<p>A workflow management system (WMS) is a piece of software that sets up, performs and monitors a defined sequence of computational tasks (i.e. “a workflow”). <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> is a WMS that was developed in the bioinformatics community, and as such it has some features that make it particularly well suited for creating reproducible and scalable data analyses.</p>
+<ul class="simple">
+<li>The language you use to formulate your workflows is based on Python, which is a language with strong standing in academia. However, users are not required to know how to code in Python to work efficiently with <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code>.</li>
+<li>Workflows can easily be scaled from your desktop to server, cluster, grid or cloud environments. This makes it possible to develop a workflow on your laptop, maybe using only a small subset of your data, and then run the real analysis on a cluster.</li>
+<li><code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> has several features for defining the environment which each task is carried out in. This is important in bioinformatics, where workflows often involve running a large number of small third-party tools.</li>
+<li><code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> is primarily intended to work on _files_ (rather than for example streams, reading/writing from databases or passing variables in memory). This fits well with many fields of bioinformatics, notably next-generation sequencing, that often involve computationally expensive operations on large files. It’s also a good fit for a scientific research setting, where the exact specifications of the final workflow aren’t always known at the beginning of a project.</li>
+<li>Lastly, a WMS is a very important tool for making your analyses reproducible. By keeping track of when each file was generated, and by which operation, it is possible to ensure that there is a consistent “paper trail” from raw data to final results. Snakemake also has features which allow you to package and distribute the workflow, and any files it involves, once it’s done.</li>
+</ul>
+<div class="section" id="the-basics">
+<h2>The basics<a class="headerlink" href="#the-basics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="activating-snakemake-environment-within-the-vm">
+<h3>Activating <code class="docutils literal notranslate"><span class="pre">snakemake</span></code> environment within the VM<a class="headerlink" href="#activating-snakemake-environment-within-the-vm" title="Permalink to this headline">¶</a></h3>
+<p>In the tutorial virtual machine, <code class="docutils literal notranslate"><span class="pre">snakemake</span></code> is installed within a <code class="docutils literal notranslate"><span class="pre">python3.5</span></code> environment. Activate the environment as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">activate</span> <span class="n">snakemake</span>
+<span class="c1"># check is snakemake is available</span>
+<span class="n">snakemake</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<p>Create a directory to hold our work:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">mtb_genomics_workshop</span><span class="o">/</span><span class="n">snakemake</span><span class="o">/</span><span class="n">example</span>
+<span class="n">cd</span> <span class="o">~/</span><span class="n">mtb_genomics_workshop</span><span class="o">/</span><span class="n">snakemake</span><span class="o">/</span><span class="n">example</span>
+</pre></div>
+</div>
+<p>In this part of the tutorial we will create a very simple workflow from scratch, in order to show the fundamentals of how <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> works. The workflow will take two files as inputs, <cite>a.txt</cite> and <cite>b.txt</cite>, and the purpose is to convert the text in the files to upper case and then to concatenate them.</p>
+<p>Run the following shell commands. The first one will make an empty file named <cite>Snakefile</cite>, which will later contain our example workflow. The second and third commands generate two files containing some arbitrary text.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">touch</span> <span class="n">Snakefile</span>
+<span class="n">echo</span> <span class="s2">&quot;This is a.txt&quot;</span> <span class="o">&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">echo</span> <span class="s2">&quot;This is b.txt&quot;</span> <span class="o">&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>Then open <cite>Snakefile</cite> in a text editor. You can use <a class="reference external" href="https://www.sublimetext.com/">SublimeText</a>, which you can invoke from command line with <code class="docutils literal notranslate"><span class="pre">subl</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">subl</span> <span class="n">Snakefile</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rules">
+<h3>Rules<a class="headerlink" href="#rules" title="Permalink to this headline">¶</a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> workflow is based on rules which take some file(s) as input, performs some type of operation on them, and generate some file(s) as outputs. Here is a very simple rule that takes <cite>a.txt</cite> as an input and produces <cite>a.upper.txt</cite> as an output. Copy this rule to your <cite>Snakefile</cite> and save it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="n">convert_to_upper_case</span><span class="p">:</span>
+   <span class="nb">input</span><span class="p">:</span>
+       <span class="s2">&quot;a.txt&quot;</span>
+   <span class="n">output</span><span class="p">:</span>
+       <span class="s2">&quot;a.upper.txt&quot;</span>
+   <span class="n">shell</span><span class="p">:</span>
+       <span class="s2">&quot;tr [a-z] [A-Z] &lt; {input} &gt; {output}&quot;</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Indentation is important in Snakefiles, so make sure that you have the correct number of spaces before <cite>input</cite>/<cite>output</cite>/<cite>shell</cite> and their respective subsections. The number of spaces per level doesn’t matter as long as you’re consistent. Here we use four, but you could just as well use two for a more compact look. Don’t use tabs (unless your editor automatically converts them to spaces).</p>
+</div>
+<ul class="simple">
+<li>A rule has a name, here it’s <cite>convert_to_upper_case</cite>. Make an effort to name your rules in a way that makes it easy to understand. The purpose of the rule, as rule names, are one of the main ways to interact with the workflow.</li>
+<li>The <cite>shell</cite> section contains the shell commands that will convert the text in the input file to upper case and send it to the output file. In the shell command string, we can refer to elements of the rule via curly brackets. Here, we refer to the output file by specifying <cite>{output}</cite> and to the input file by specifying <cite>{input}</cite>. This particular command can be read like “send the contents of <cite>a.txt</cite> to the program <cite>tr</cite>, which will convert all characters in the set [a-z] to the corresponding character in the set [A-Z], and then send the output to <cite>a.upper.txt</cite>”.</li>
+</ul>
+<p>Now let’s run our first <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> workflow. When a workflow is executed <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> tries to generate a set of target files. Target files can be specified via the command line (or, as you will see later, in several other ways). Here we ask <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> to make the file <cite>a.upper.txt</cite>. It’s good practice to first run with the flag <cite>–dryrun`(or `-n</cite>), which will show what Snakemake plans to do without actually running anything. You can also use the flag <cite>–printshellcmds</cite> (or <cite>-p</cite>, for showing the shell commands that it will execute, and the flag <cite>–reason</cite> (or <cite>-r</cite> for showing the reason for running a specific rule. <cite>snakemake –help</cite> will show you all available flags.</p>
+<p>Do a dry-run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">snakemake</span> <span class="o">--</span><span class="n">dryrun</span> <span class="o">--</span><span class="n">reason</span> <span class="o">--</span><span class="n">printshellcmds</span> <span class="n">a</span><span class="o">.</span><span class="n">upper</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Building</span> <span class="n">DAG</span> <span class="n">of</span> <span class="n">jobs</span><span class="o">...</span>
+<span class="n">Job</span> <span class="n">counts</span><span class="p">:</span>
+   <span class="n">count</span>   <span class="n">jobs</span>
+   <span class="mi">1</span>       <span class="n">convert_to_upper_case</span>
+   <span class="mi">1</span>
+
+<span class="n">rule</span> <span class="n">convert_to_upper_case</span><span class="p">:</span>
+   <span class="nb">input</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">txt</span>
+   <span class="n">output</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">upper</span><span class="o">.</span><span class="n">txt</span>
+   <span class="n">jobid</span><span class="p">:</span> <span class="mi">0</span>
+   <span class="n">reason</span><span class="p">:</span> <span class="n">Missing</span> <span class="n">output</span> <span class="n">files</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">upper</span><span class="o">.</span><span class="n">txt</span>
+
+<span class="n">tr</span> <span class="p">[</span><span class="n">a</span><span class="o">-</span><span class="n">z</span><span class="p">]</span> <span class="p">[</span><span class="n">A</span><span class="o">-</span><span class="n">Z</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="o">.</span><span class="n">txt</span> <span class="o">&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">upper</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">Job</span> <span class="n">counts</span><span class="p">:</span>
+   <span class="n">count</span>   <span class="n">jobs</span>
+   <span class="mi">1</span>       <span class="n">convert_to_upper_case</span>
+   <span class="mi">1</span>
+</pre></div>
+</div>
+<p>You can see that <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> plans to run 1 job: the rule <cite>convert_to_upper_case</cite> with <cite>a.txt</cite> as input and <cite>a.upper.txt</cite> as output. The reason for doing this is that it’s missing the file <cite>a.upper.txt</cite>.</p>
+<p>Now execute the workflow without the <cite>–dryrun</cite> flag and check that the contents of <cite>a.upper.txt</cite> is as expected. Then try running the same command again. What do you see? It turns out that Snakemake only reruns jobs if <strong>one of the input files is newer than one of the output files, or if one of the input files will be updated by another job</strong>. This is how Snakemake ensures that everything in the workflow is up to date.</p>
+</div>
+<div class="section" id="wildcards">
+<h3>Wildcards<a class="headerlink" href="#wildcards" title="Permalink to this headline">¶</a></h3>
+<p>We are going to next introduce the concept of <code class="docutils literal notranslate"><span class="pre">wildcards</span></code> in <code class="docutils literal notranslate"><span class="pre">snakemake</span></code>. What if we ask Snakemake to generate the file b.upper.txt?</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ snakemake --dryrun --reason --printshellcmds b.upper.txt
+Building DAG of jobs...
+MissingRuleException:
+No rule to produce b.upper.txt (if you use input functions make sure that they don&#39;t raise unexpected exceptions).
+</pre></div>
+</div>
+<p>That didn’t work. We could copy the rule to make a similar one for <cite>b.txt</cite>, but that would be a bit cumbersome. Here is where named wildcards come in; one of the most powerful features of <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code>. Simply change the input from <cite>input: “a.txt”</cite> to <cite>input: “{some_name}.txt”</cite> and the output to <cite>output: “{some_name}.upper.txt”</cite>.</p>
+<p>Your updated <cite>Snakefile</cite> should look as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="n">convert_to_upper_case</span><span class="p">:</span>
+   <span class="nb">input</span><span class="p">:</span>
+       <span class="s2">&quot;</span><span class="si">{some_name}</span><span class="s2">.txt&quot;</span>
+   <span class="n">output</span><span class="p">:</span>
+       <span class="s2">&quot;</span><span class="si">{some_name}</span><span class="s2">.upper.txt&quot;</span>
+   <span class="n">shell</span><span class="p">:</span>
+       <span class="s2">&quot;tr [a-z] [A-Z] &lt; </span><span class="si">{input}</span><span class="s2"> &gt; </span><span class="si">{output}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Now try asking for <cite>b.upper.txt</cite> again:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ snakemake b.upper.txt
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+   count   jobs
+   1       convert_to_upper_case
+   1
+
+rule convert_to_upper_case:
+   input: b.txt
+   output: b.upper.txt
+   jobid: 0
+   wildcards: some_name=b
+
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /home/mtb_upm/mtb_genomics_workshop/snakemake/example/.snakemake/log/2018-07-05T134652.700927.snakemake.log
+</pre></div>
+</div>
+<p>What happens here is that <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> looks at all the rules it has available (actually only one in this case) and tries to assign values to all wildcards so that the targeted files can be generated. In this case it was quite simple, you can see that it says that <cite>wildcards: some_name=b</cite>, but for large workflows and multiple wildcards it can get much more complex. Named wildcards is what enables a workflow (or single rules) to be efficiently generalized and reused between projects or shared between people and make scaling up computational workflows feasible.</p>
+<p>It seems we have the first part of our workflow working, now it’s time to make the second rule for concatenating the outputs from <cite>convert_to_upper_case</cite>. The rule structure will be similar; the only difference is that here we have two inputs instead of one. This can be expressed in two ways, either with named inputs like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span><span class="p">:</span>
+   <span class="n">firstFile</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+   <span class="n">secondFile</span><span class="o">=</span><span class="s2">&quot;...&quot;</span>
+<span class="n">shell</span><span class="p">:</span>
+   <span class="n">some_function</span> <span class="p">{</span><span class="nb">input</span><span class="o">.</span><span class="n">firstFile</span><span class="p">}</span> <span class="p">{</span><span class="nb">input</span><span class="o">.</span><span class="n">secondFile</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Or with indices like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span><span class="p">:</span>
+   <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;...&quot;</span>
+<span class="n">shell</span><span class="p">:</span>
+   <span class="n">some_function</span> <span class="p">{</span><span class="nb">input</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span> <span class="p">{</span><span class="nb">input</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">If you have multiple inputs or outputs they need to be delimited with a comma (as seen above). This is a very common mistake when writing Snakemake workflows. The parser will complain, but sometimes the error message can be difficult to interpret.</p>
+</div>
+<p>Now try to construct this rule yourself and name it <cite>concatenate_a_and_b</cite>. The syntax for concatenating two files in <code class="docutils literal notranslate"><span class="pre">Bash</span></code> is <cite>cat first_file second_file &gt; output_file</cite>. Call the output <cite>c.txt</cite>. Run the workflow in <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> and validate that the output looks as expected.</p>
+<p>Wouldn’t it be nice if our workflow could be used for <em>any</em> files, not just <cite>a.txt</cite> and <cite>b.txt</cite>? We can achieve this by using named wildcards (or in other ways as we will discuss later). As we’ve mentioned, <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> looks at all the rules it has available and tries to assign values to all wildcards so that the targeted files can be generated. We therefore have to name the output file in a way so that it also contains information about which input files it should be based on. Try to figure out how to do this yourself.</p>
+<p>Rename the rule to <cite>concatenate_files</cite> to reflect its new more general use.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="n">concatenate_files</span><span class="p">:</span>
+    <span class="nb">input</span><span class="p">:</span>
+        <span class="s2">&quot;{first}.upper.txt&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;{second}.upper.txt&quot;</span>
+    <span class="n">output</span><span class="p">:</span>
+        <span class="s2">&quot;{first}_{second}.txt&quot;</span>
+    <span class="n">shell</span><span class="p">:</span>
+        <span class="s2">&quot;cat {input[0]} {input[1]} &gt; {output}&quot;</span>
+</pre></div>
+</div>
+<p>We can now control which input files to use by the name of the file we ask <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> to generate.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ snakemake a_b.txt
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+        count   jobs
+        1       concatenate_files
+        1       convert_to_upper_case
+        2
+
+rule convert_to_upper_case:
+    input: a.txt
+    output: a.upper.txt
+    jobid: 2
+    wildcards: some_name=a
+
+Finished job 2.
+1 of 2 steps (50%) done
+
+rule concatenate_files:
+    input: a.upper.txt, b.upper.txt
+    output: a_b.txt
+    jobid: 0
+    wildcards: second=b, first=a
+
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /home/mtb_upm/mtb_genomics_workshop/snakemake/example/.snakemake/log/2018-07-05T135145.499632.snakemake.log
+</pre></div>
+</div>
+<p>What we have learned so far:
+* How a simple <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> rule looks
+* How to define target files when executing a workflow
+* How to use named wildcards for writing generic and flexible rules.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">You can name a file whatever you want in a Snakemake workflow, but you will find that everything makes much more sense if the filename reflects the file’s path through the workflow, e.g. <cite>sample_a.trimmed.deduplicated.sorted.bam</cite>.</p>
+</div>
+</div>
+<div class="section" id="visualization-logging-and-workflow-management">
+<h3>Visualization, logging and workflow management<a class="headerlink" href="#visualization-logging-and-workflow-management" title="Permalink to this headline">¶</a></h3>
+<p>What we’ve done so far could have been quite easily  done in a simple shell script that takes the input files as parameters. Let’s now take a look at some of the features where <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> really adds value compared to a more straightforward approach. One such feature is the possibility to visualize your workflow.</p>
+<p>Snakemake can generate two types of graphs:</p>
+<ol class="arabic simple">
+<li>rules graph that shows how the rules are connected</li>
+<li>jobs graph that shows how the jobs (i.e. an execution of a rule with some given inputs/outputs/settings) are connected.</li>
+</ol>
+<p><strong>Rule graph</strong>: First we look at the rule graph. The following command will generate a rule graph in the dot language and pipe it to the program <code class="docutils literal notranslate"><span class="pre">dot</span></code>, which in turn will save a visualization of the graph as a png file (if you’re having troubles displaying png files you could use svg or jpg instead).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">snakemake</span> <span class="o">--</span><span class="n">rulegraph</span> <span class="n">a_b</span><span class="o">.</span><span class="n">txt</span> <span class="o">|</span> <span class="n">dot</span> <span class="o">-</span><span class="n">Tpng</span> <span class="o">&gt;</span> <span class="n">rulegraph</span><span class="o">.</span><span class="n">png</span>
+</pre></div>
+</div>
+<img alt="material/day5/rulegraph.png" src="material/day5/rulegraph.png" />
+<p>All the graph says is that the output from the rule <cite>convert_to_upper_case</cite> will be used as input to the rule <cite>concatenate_files</cite>. For a more typical bioinformatics project it can look something like this:</p>
+<img alt="material/day5/rulegraph_complex.png" src="material/day5/rulegraph_complex.png" />
+<p><strong>Job graph</strong>: The second type of graph is based on the jobs, and looks like this for our little workflow (use <cite>–dag</cite> instead of <cite>–rulegraph</cite>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">snakemake</span> <span class="o">--</span><span class="n">dag</span> <span class="n">a_b</span><span class="o">.</span><span class="n">txt</span> <span class="o">|</span> <span class="n">dot</span> <span class="o">-</span><span class="n">Tpng</span> <span class="o">&gt;</span> <span class="n">jobgraph</span><span class="o">.</span><span class="n">png</span>
+</pre></div>
+</div>
+<img alt="material/day5/jobgraph.png" src="material/day5/jobgraph.png" />
+<p>The main difference here is that now each node is a job instead of a rule. You can see that the wildcards used in each job are also displayed. Another difference is the dotted lines around the nodes. A dotted line is Snakemake’s way of indicating that this rule doesn’t need to be rerun in order to generate <cite>a_b.txt</cite>. Validate this by running <cite>snakemake -n -r a_b.txt</cite> and it should say that there is nothing to be done.</p>
+<p>We’ve discussed before that one of the main purposes of using a WMS is that it automatically makes sure that everything is up to date. This is done by recursively checking that outputs are always newer than inputs for all the rules involved in the generation of your target files.</p>
+<p>Now try to change the contents of <cite>a.txt</cite> to some other text and save it. What do you think will happen if you run <cite>snakemake -n -r a_b.txt</cite> again?</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ snakemake -n -r a_b.txt
+
+   rule convert_to_upper_case:
+       input: a.txt
+       output: a.upper.txt
+       jobid: 2
+       reason: Updated input files: a.txt
+       wildcards: some_name=a
+
+
+
+   rule concatenate_files:
+       input: a.upper.txt, b.upper.txt
+       output: a_b.txt
+       jobid: 0
+       reason: Input files updated by another job: a.upper.txt
+       wildcards: first=a, second=b
+
+   Job counts:
+           count   jobs
+           1       concatenate_files
+           1       convert_to_upper_case
+           2
+   ```
+</pre></div>
+</div>
+<p>Also generate the job graph and compare to the one generated above. What’s the difference?</p>
+<p>Now rerun without <cite>-n</cite> and validate that <cite>a_b.txt</cite> contains the new text. Note that <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> doesn’t look at the contents of files when trying to determine what has changed, only at the timestamp for when they were last modified.</p>
+<p>We’ve seen that <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> keeps track of if files in the workflow have changed, and automatically makes sure that any results depending on such files are regenerated. What about if the rules themselves are changed? It turns out that there are multiple ways to do this, but the most straightforward is to manually specify that you want to rerun a rule (and thereby also all the steps between that rule and your target). Let’s say that we want to modify the rule <cite>concatenate_files</cite> to also include which files were concatenated.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="n">concatenate_files</span><span class="p">:</span>
+   <span class="nb">input</span><span class="p">:</span>
+       <span class="s2">&quot;{first}.upper.txt&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;{second}.upper.txt&quot;</span>
+   <span class="n">output</span><span class="p">:</span>
+       <span class="s2">&quot;{first}_{second}.txt&quot;</span>
+   <span class="n">shell</span><span class="p">:</span>
+       <span class="s2">&quot;echo &#39;Concatenating {input}&#39; | cat - {input[0]} {input[1]} &gt; {output}&quot;&quot;</span>
+</pre></div>
+</div>
+<p>If you now run the workflow as before you should get “Nothing to be done”, because no files involved in the workflow have been changed. Instead we have to force Snakemake to rerun the rule by using the <a href="#id1"><span class="problematic" id="id2">`</span></a>-R`flag. Let’s try a dry-run.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">snakemake</span> <span class="n">a_b</span><span class="o">.</span><span class="n">txt</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">n</span> <span class="o">-</span><span class="n">R</span> <span class="n">concatenate_files</span>
+</pre></div>
+</div>
+<p>Note that the reason for the job is now “Forced execution”. You can target files as well as rules, so you would get the same result with <cite>-R a_b.txt</cite>. Whenever you’ve made changes to a rule that will affect the output it’s good practice to force re-execution like this. Still, there can be situations where you don’t know if any rules have been changed. Maybe several people collaborate on the same workflow but are using it on different files for example. Snakemake keeps track of how all files were generated (when, by which rule, which version of the rule, and by which commands). You can export this information to a tab-delimited file like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">snakemake</span> <span class="n">a_b</span><span class="o">.</span><span class="n">txt</span> <span class="o">-</span><span class="n">D</span> <span class="o">&gt;</span> <span class="n">summary</span><span class="o">.</span><span class="n">tsv</span>
+</pre></div>
+</div>
+<p>The contents of <cite>summary.tsv</cite> is shown in the table below (scroll to see the full table).</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="13%" />
+<col width="12%" />
+<col width="6%" />
+<col width="8%" />
+<col width="13%" />
+<col width="20%" />
+<col width="15%" />
+<col width="6%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">output_file</th>
+<th class="head">date</th>
+<th class="head">rule</th>
+<th class="head">version</th>
+<th class="head">log-file(s)</th>
+<th class="head">input-file(s)</th>
+<th class="head">shellcmd</th>
+<th class="head">status</th>
+<th class="head">plan</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>a_b.txt</td>
+<td>Thu Nov 16 12:03:11 2017</td>
+<td>concatenate_files</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>&#160;</td>
+<td>a.upper.txt,b.upper.txt</td>
+<td>cat a.upper.txt b.upper.txt &gt; a_b.txt</td>
+<td>rule implementation changed</td>
+<td>no update</td>
+</tr>
+<tr class="row-even"><td>a.upper.txt</td>
+<td>Thu Nov 16 12:03:11 2017</td>
+<td>convert_to_upper_case</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>&#160;</td>
+<td>a.txt</td>
+<td>tr [a-z] [A-Z] &lt; a.txt &gt; a.upper.txt</td>
+<td>ok</td>
+<td>no update</td>
+</tr>
+<tr class="row-odd"><td>b.upper.txt</td>
+<td>Thu Nov 16 12:03:11 2017</td>
+<td>convert_to_upper_case</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>&#160;</td>
+<td>b.txt</td>
+<td>tr [a-z] [A-Z] &lt; b.txt &gt; b.upper.txt</td>
+<td>ok</td>
+<td>no update</td>
+</tr>
+</tbody>
+</table>
+<p>You can see in the second last column that the rule implementation for a_b.txt has changed. The last column shows if Snakemake plans to regenerate the files when it’s next executed. None of the files will be regenerated because Snakemake doesn’t regenerate files by default if the rule implementation changes. From a reproducibility perspective maybe it would be better if this was done automatically, but it would be very computationally expensive and cumbersome if you had to rerun your whole workflow every time you fix a spelling mistake in a comment somewhere. So, it’s up to us to look at the summary table and rerun things as needed. You can get a list of the files for which the rule implementation has changed, and then force Snakemake to regenerate these files with the <cite>-R</cite> flag.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>snakemake a_b.txt -R $(snakemake a_b.txt --list-code-changes)
+</pre></div>
+</div>
+<p>There are a number of these <cite>–list-xxx-changes</cite> flags that can help you keep track of your workflow. You can list all options with <cite>snakemake –help</cite>. Run with the <cite>-D</cite> flag again to make sure that the summary table now looks like expected.</p>
+<p>You might wonder where Snakemake keeps track of all these things? It stores all information in a hidden subdirectory called <cite>.snakemake</cite>. This is convenient since it’s easy to delete if you don’t need it anymore and everything is contained in the project directory.</p>
+<p>By now you should be familiar with the basic functionality of Snakemake, and you can build advanced workflows with only the features we have discussed here. There’s a lot we haven’t covered though, in particular when it comes to making your workflow more reusable. In the following section we will start with a workflow for calling variants.</p>
+<p>We’ve learned:</p>
+<ul class="simple">
+<li>How to use <cite>–dag</cite> and <cite>–rulegraph</cite> for visualizing the job and rule graphs, respectively.</li>
+<li>How to force Snakemake to rerun relevant parts of the workflow after there have been changes.</li>
+<li>How logging in Snakemake works.</li>
+</ul>
+<p><strong>Reference</strong>: Koster, J. and Rahmann, S. (2012). Snakemake–a scalable bioinformatics workflow engine. Bioinformatics, 28(19), 2520–2522.</p>
+<p><strong>Resources</strong>:</p>
+<ul class="simple">
+<li>The <code class="docutils literal notranslate"><span class="pre">Snakemake</span></code> <a class="reference external" href="https://snakemake.readthedocs.io/en/stable/#">documentation</a></li>
+<li>Here is the <em>official</em> <a class="reference external" href="https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html#tutorial">tutorial</a></li>
+<li>Further questions? Check out stack <a href="#id3"><span class="problematic" id="id4">overflow_</span></a>.</li>
+<li>There is a <code class="docutils literal notranslate"><span class="pre">snakemake</span></code> <a class="reference external" href="https://groups.google.com/forum/#!forum/snakemake">Googlegroups</a>.</li>
+</ul>
+<p><strong>Credit</strong>: <a class="reference external" href="https://nbis-reproducible-research.readthedocs.io/en/latest/snakemake">NBIS Reproducible research course</a>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Day 5: Building Reproducible Computational Pipelines" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Ulas Karaoz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

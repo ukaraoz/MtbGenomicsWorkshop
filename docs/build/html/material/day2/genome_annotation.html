@@ -1,0 +1,248 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Microbial Genome Annotation &mdash; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> M. tuberculosis Bioinformatics Workshop
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../agenda.html">Agenda</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Workshop Computer Labs</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">M. tuberculosis Bioinformatics Workshop</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Microbial Genome Annotation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/material/day2/genome_annotation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="microbial-genome-annotation">
+<h1>Microbial Genome Annotation<a class="headerlink" href="#microbial-genome-annotation" title="Permalink to this headline">¶</a></h1>
+<p>Now that we have assembled the reads into contigs, we will annotate the genome. That means we will predict genes and assign functional annotation to them. <em>M. tuberculosis</em> is a very clonal organism and its genome is already well annotated so typically when we assemble a new <em>M. tuberculosis</em> isolate, there is no need to do <code class="docutils literal notranslate"><span class="pre">de</span> <span class="pre">novo</span></code> annotation. Although we are using <em>M. tuberculosis</em> as a working example here, the methodology is applicable to all microbial genomes.</p>
+<p>A set of programs are available for genome annotation tasks. Here we will use <code class="docutils literal notranslate"><span class="pre">Prokka</span></code>, a pipeline comprising several open source bioinformatic tools and databases. <code class="docutils literal notranslate"><span class="pre">Prokka</span></code> automates the process of locating open reading frames (ORFs) and RNA regions on contigs, translating ORFs to protein sequences, searching for protein homologs and producing standard output files. For gene finding and translation, <code class="docutils literal notranslate"><span class="pre">Prokka</span></code> uses a program named <code class="docutils literal notranslate"><span class="pre">prodigal</span></code>. Homology searches are then performed using <code class="docutils literal notranslate"><span class="pre">BLAST</span></code> and <code class="docutils literal notranslate"><span class="pre">HMMER</span></code> based on the translated protein sequences as queries against a set of public databases (CDD, PFAM, TIGRFAM) as well as custom databases that are included with <code class="docutils literal notranslate"><span class="pre">Prokka</span></code>.</p>
+<p>Create a directory to hold the annotation results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir -p $MYRESULTSDIR/annotation
+</pre></div>
+</div>
+<p>Define a shell variable for the final contigs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FINALCONTIGS=$MYRESULTSDIR/short_long_reads_assembly/polished_pacbio_assembly/MTB_pacbio_assembly_shortreadcorrected.fasta
+</pre></div>
+</div>
+<p>Run <code class="docutils literal notranslate"><span class="pre">Prokka</span></code> (will take ~30 minutes for our assembly). <strong>DONOT RUN</strong>, copy the precalculated results.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>prokka $FINALCONTIGS --outdir $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected --norrna --notrna --metagenome --cpus 8
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Prokka</span></code> produces several types of output:</p>
+<ul class="simple">
+<li>a <code class="docutils literal notranslate"><span class="pre">.gff</span></code> file, which is a standardised, tab-delimited, format for genome annotations</li>
+<li>a Genbank (<code class="docutils literal notranslate"><span class="pre">.gbk</span></code>) file, which is a more detailed description of nucleotide sequences and the genes encoded in these.</li>
+</ul>
+<p>Copy the precalculated results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir -p $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected/
+cp ~/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/prokka_precalculated/* $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected/
+</pre></div>
+</div>
+<p>When your dataset has been annotated you can view the annotations directly in the <code class="docutils literal notranslate"><span class="pre">gff</span></code> file. Peak into the <code class="docutils literal notranslate"><span class="pre">gff</span></code> file by doing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>more -S $MYRESULTSDIR/annotation/MTB_pacbio_assembly_shortreadcorrected/PROKKA_07052018.gff
+</pre></div>
+</div>
+<p>Question: How many coding regions were found by Prodigal? (Hint: use <code class="docutils literal notranslate"><span class="pre">grep</span></code>)
+Question: How many of the coding regions were given an enzyme identifier?
+Question: How many were given a COG identifier?</p>
+<div class="section" id="visualizing-the-annotations-with-artemis">
+<h2>Visualizing the annotations with Artemis<a class="headerlink" href="#visualizing-the-annotations-with-artemis" title="Permalink to this headline">¶</a></h2>
+<p>Artemis is a graphical Java program to browse annotated genomes.
+Launch Artemis and load <code class="docutils literal notranslate"><span class="pre">gff</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">art</span><span class="o">&amp;</span>
+</pre></div>
+</div>
+<p>Pick one of favorite <em>M. tuberculosis</em> genes, and try finding it (Goto–&gt;Navigator–&gt;Goto Feature with Key Name)</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Ulas Karaoz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

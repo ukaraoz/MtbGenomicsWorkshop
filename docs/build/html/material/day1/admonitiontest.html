@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>&lt;no title&gt; &mdash; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> M. tuberculosis Bioinformatics Workshop
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../agenda.html">Agenda</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Day 1: Unix Shell Refresher for Bioinformatics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day2/index.html">Day 2: Microbial Genome Assembly (from short and long reads) and Genome Annotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day3/index.html">Day 3: Read mapping and variant calling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day4/index.html">Day 4: Phylogenetics/Phylogenomics and Building Reproducible Computational Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day5/index.html">Day 5: Building Reproducible Computational Pipelines</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">M. tuberculosis Bioinformatics Workshop</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>&lt;no title&gt;</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/material/day1/admonitiontest.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">attention</p>
+</div>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p class="last">caution</p>
+</div>
+<div class="admonition danger">
+<p class="first admonition-title">Danger</p>
+<p class="last">danger</p>
+</div>
+<div class="admonition error">
+<p class="first admonition-title">Error</p>
+<p class="last">error</p>
+</div>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">hint</p>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">important</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">note</p>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">tip</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">warning</p>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span>pop <span class="o">&lt;-</span> <span class="kt">data.frame</span><span class="p">(</span>x<span class="o">=</span>d<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">some_function</span><span class="p">():</span>
+    <span class="n">interesting</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="hll">    <span class="k">print</span> <span class="s1">&#39;This line is highlighted.&#39;</span>
+</span>    <span class="k">print</span> <span class="s1">&#39;This one is not...&#39;</span>
+<span class="hll">    <span class="k">print</span> <span class="s1">&#39;...but this one is.&#39;</span>
+</span></pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Your note should consist of one or more paragraphs, all indented
+so that they clearly belong to the note and not to the text or
+directive that follow
+Many other directives are also supported, including: warning,
+versionadded, versionchanged, seealso, deprecated, rubric,
+centered, hlist, glossary, productionlist.</p>
+</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Or say &quot;highlight::&quot; once to set the language for all of the</span>
+<span class="cm">   code blocks that follow it.  Options include &quot;:linenos:&quot;,</span>
+<span class="cm">   &quot;:linenothreshold:&quot;, and &quot;:emphasize-lines: 1,2,3&quot;. */</span>
+
+<span class="kt">char</span> <span class="n">s</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;You can also say &#39;python&#39;, &#39;ruby&#39;, ..., or &#39;guess&#39;!&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<span class="target" id="module-httplib"></span><dl class="class">
+<dt id="httplib.Request">
+<em class="property">class </em><code class="descclassname">httplib.</code><code class="descname">Request</code><a class="headerlink" href="#httplib.Request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zero or more paragraphs of introductory material for the class.</p>
+<dl class="method">
+<dt id="httplib.Request.send">
+<code class="descname">send</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#httplib.Request.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of the send() method.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="httplib.Request.url">
+<code class="descname">url</code><a class="headerlink" href="#httplib.Request.url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of the url attribute.</p>
+</dd></dl>
+
+<p>Many more members are possible than just method and attribute,
+and non-Python languages are supported too; see the Sphinx docs
+for more possibilities!</p>
+</dd></dl>
+
+<span class="target" id="custom-label"></span><p id="index-0">This paragraph can be targeted with <span class="xref std std-ref">custom-label</span>, and will also
+be the <span class="target" id="index-1"></span>target of several index entries!</p>
+<p id="index-2">This paragraph will be listed in the index under both “wire, copper”
+and “copper, wire.”  See the Sphinx documentation for even more complex
+ways of building index entries.</p>
+<p>Many kinds of cross-reference can be used inside of a paragraph:</p>
+<p><span class="xref std std-ref">custom-label</span>             <code class="xref py py-class docutils literal notranslate"><span class="pre">class</span></code>
+<span class="xref std std-doc">quick-sphinx</span>             <code class="xref py py-attr docutils literal notranslate"><span class="pre">method()</span></code>
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">module</span></code>                   :attr: <cite>~module.class.attribute</cite></p>
+<p>(See the Sphinx “Inline Markup” chapter for MANY more examples!)</p>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Ulas Karaoz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,15 +1,11 @@
-********
-Day 4
-********
-
-Microbial Genome Assembly
+================================================================================================
+Day 4: Phylogenetics/Phylogenomics and Building Reproducible Computational Pipelines
+================================================================================================
 
 .. toctree::
    :maxdepth: 1
 
-   datasets
+   dataset
    dataprep
-   read_qc
-   assembly
-   assembly_qc
-   assembly_curation
+   merge_snvs_from_vcf
+   reproducible_research

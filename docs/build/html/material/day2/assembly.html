@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Assembly &mdash; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> M. tuberculosis Bioinformatics Workshop
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../agenda.html">Agenda</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Workshop Computer Labs</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">M. tuberculosis Bioinformatics Workshop</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Assembly</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/material/day2/assembly.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="assembly">
+<h1>Assembly<a class="headerlink" href="#assembly" title="Permalink to this headline">¶</a></h1>
+<p>We can now proceed with the assembly of short and long reads. We will assemble each library (2 short and 1 long reads library) reseparately and compare the assemblies.</p>
+<div class="section" id="assembly-using-illumina-short-reads">
+<h2>Assembly using Illumina short reads<a class="headerlink" href="#assembly-using-illumina-short-reads" title="Permalink to this headline">¶</a></h2>
+<p>We will assemble the <em>M. tuberculosis</em> genome using the <em>qced</em> short reads, separately for 20X and 60X libraries. We will be using <code class="docutils literal notranslate"><span class="pre">SPAdes</span></code> assembler, which is a <code class="docutils literal notranslate"><span class="pre">de</span> <span class="pre">Bruijn</span> <span class="pre">graph</span></code> based short read assembler.</p>
+<p>The parameters that go into a short read assembler can be tricky to optimize and tuning them is quite time consuming. The most important parameter is the <code class="docutils literal notranslate"><span class="pre">k-mer</span></code> size to be used to built the <code class="docutils literal notranslate"><span class="pre">de</span> <span class="pre">Bruijn</span> <span class="pre">graph</span></code>. <code class="docutils literal notranslate"><span class="pre">SPAdes</span></code> makes the parameterization quite easy and will select parameter values automatically.</p>
+<p>The assembly for the 20X library will be computed quickly but for the 60X library the computation will take a few hours. <strong>ONLY RUN for 20X</strong>, <strong>DONOT RUN for 60X</strong>. For 60X, we will use precalculated results.</p>
+<p>You can run <code class="docutils literal notranslate"><span class="pre">SPAdes</span></code> as follows using 4 threads (<code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">4</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>spades.py -o $MYRESULTSDIR/short_long_reads_assembly/MTB_illumina20X_spades -t 4 --12 $MYRESULTSDIR/qc/MTB_illumina20X_qced_R1R2.fastq
+spades.py -o $MYRESULTSDIR/short_long_reads_assembly/MTB_illumina60X_spades -t 4 --12 $MYRESULTSDIR/qc/MTB_illumina60X_qced_R1R2.fastq
+</pre></div>
+</div>
+<p>Copy the precalculated assembly directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp -r ~/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/MTB_illumina60X_spades $MYRESULTSDIR/short_long_reads_assembly/MTB_illumina60X_spades
+</pre></div>
+</div>
+</div>
+<div class="section" id="assembly-using-pacbio-long-reads">
+<h2>Assembly using PacBio long reads<a class="headerlink" href="#assembly-using-pacbio-long-reads" title="Permalink to this headline">¶</a></h2>
+<p>Now, we will generate an assembly of the <em>M. tuberculosis</em> genome using PacBio long reads. Longer reads are better at resolving repeats and therefor will typically give more contiguous assemblies compared to short reads. However, long reads have a significantly higher error rate so consensus base qualities are expected to be much lower.</p>
+<p>To assemble long reads, we will use <code class="docutils literal notranslate"><span class="pre">canu</span></code>, an <code class="docutils literal notranslate"><span class="pre">overlap-layour-consensus</span></code> assembler. Generate the assembly with the following command (this will take about ~30 min.).
+Again, we will use precomputed results.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">canu</span> <span class="n">gnuplotTested</span><span class="o">=</span><span class="n">true</span> <span class="o">-</span><span class="n">p</span> <span class="n">MTB_pacbio_canu</span> <span class="o">-</span><span class="n">d</span> <span class="n">MTB_pacbio_canu_auto</span> <span class="n">genomeSize</span><span class="o">=</span><span class="mf">4.4</span><span class="n">m</span> <span class="o">-</span><span class="n">pacbio</span><span class="o">-</span><span class="n">raw</span> <span class="n">MTB_pacbio_circular</span><span class="o">-</span><span class="n">consensus</span><span class="o">-</span><span class="n">sequence</span><span class="o">-</span><span class="n">reads</span><span class="o">.</span><span class="n">fastq</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Copy the precomputed assembly:</dt>
+<dd>cp -r ~/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/MTB_pacbio_canu_auto $MYRESULTSDIR/short_long_reads_assembly/MTB_pacbio_canu_auto</dd>
+</dl>
+<p>Now you should have 3 separate <em>M. tuberculosis</em> assemblies. Copy the <code class="docutils literal notranslate"><span class="pre">fasta</span></code> files for the assembled contigs into a separate directory for convenience:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir $MYRESULTSDIR/short_long_reads_assembly/assemblies
+cp $MYRESULTSDIR/short_long_reads_assembly/MTB_pacbio_canu_auto/MTB_pacbio_canu.contigs.fasta $MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_pacbio_assembly.fasta
+cp $MYRESULTSDIR/short_long_reads_assembly/MTB_illumina20X_spades/contigs.fasta $MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_illumina20X_assembly.fasta
+cp $MYRESULTSDIR/short_long_reads_assembly/MTB_illumina60X_spades/contigs.fasta $MYRESULTSDIR/short_long_reads_assembly/assemblies/MTB_illumina60X_assembly.fasta
+</pre></div>
+</div>
+<p>Next, we will look into these assemblies in detail.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Ulas Karaoz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

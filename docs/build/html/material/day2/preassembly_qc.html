@@ -1,0 +1,242 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Pre-assembly Quality Control &mdash; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> M. tuberculosis Bioinformatics Workshop
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../agenda.html">Agenda</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Workshop Computer Labs</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">M. tuberculosis Bioinformatics Workshop</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Pre-assembly Quality Control</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/material/day2/preassembly_qc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pre-assembly-quality-control">
+<h1>Pre-assembly Quality Control<a class="headerlink" href="#pre-assembly-quality-control" title="Permalink to this headline">¶</a></h1>
+<p>Before running <code class="docutils literal notranslate"><span class="pre">sga</span> <span class="pre">preqc</span></code>, we need to <em>interleave</em> <em>forward</em> and <em>reverse</em> reads into a single file. <em>Interleaving</em> reads mean rearranging <em>forward</em> and <em>reverse</em> reads into a single file, keeping the original order and for each pair writing <em>forward</em> read followed by the <em>reverse</em> read.</p>
+<p>To interleave reads, we will use <code class="docutils literal notranslate"><span class="pre">seqtk</span></code> tool:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>seqtk mergepe $MYRESULTSDIR/qc/MTB_illumina20X_qced_R1.fastq $MYRESULTSDIR/qc/MTB_illumina20X_qced_R2.fastq &gt; $MYRESULTSDIR/qc/MTB_illumina20X_qced_R1R2.fastq
+seqtk mergepe $MYRESULTSDIR/qc/MTB_illumina60X_qced_R1.fastq $MYRESULTSDIR/qc/MTB_illumina60X_qced_R2.fastq &gt; $MYRESULTSDIR/qc/MTB_illumina60X_qced_R1R2.fastq
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">sga</span></code> computations will take several hours on a single core for the 60X library. To save time, we won’t be doing these computations but simply copy the results from the precalculated directory. Here is how to do these computations (<strong>DONOT RUN</strong>).</p>
+<p>First, index the data using <code class="docutils literal notranslate"><span class="pre">sga</span> <span class="pre">index</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sga index -t 4 -a ropebwt $MYRESULTSDIR/qc/MTB_illumina20X_qced_R1R2.fastq
+sga index -t 4 -a ropebwt $MYRESULTSDIR/qc/MTB_illumina60X_qced_R1R2.fastq
+</pre></div>
+</div>
+<p>Run <em>sga preqc</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sga preqc -t 4 $MYRESULTSDIR/qc/MTB_illumina20X_qced_R1R2.fastq &gt; $MYRESULTSDIR/qc/MTB_illumina20X_qced_R1R2.preqc
+sga preqc -t 4 $MYRESULTSDIR/qc/MTB_illumina60X_qced_R1R2.fastq &gt; $MYRESULTSDIR/qc/MTB_illumina60X_qced_R1R2.preqc
+</pre></div>
+</div>
+<p>Copy the precalculated results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cp /home/mtb_upm/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/MTB_illumina20X_qced_R1R2.preqc $MYRESULTSDIR/qc
+cp /home/mtb_upm/mtb_genomics_workshop_data/genome-assembly-annotation/precalculated/MTB_illumina60X_qced_R1R2.preqc $MYRESULTSDIR/qc
+</pre></div>
+</div>
+<p>Make the report:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sga</span><span class="o">-</span><span class="n">preqc</span><span class="o">-</span><span class="n">report</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">P</span> <span class="n">genome_size</span> \
+<span class="o">-</span><span class="n">P</span> <span class="n">branch_classification_error</span> <span class="o">-</span><span class="n">P</span> <span class="n">branch_classification_repeat</span> <span class="o">-</span><span class="n">P</span> <span class="n">branch_classification_variant</span> \
+<span class="o">-</span><span class="n">P</span> <span class="n">de_bruijn_simulation_lengths</span> <span class="o">-</span><span class="n">P</span> <span class="n">kmer_distribution</span> <span class="o">-</span><span class="n">P</span> <span class="n">gc_distribution</span> <span class="o">-</span><span class="n">P</span> <span class="n">fragment_sizes</span> \
+<span class="n">MTB_illumina20X_qced_R1R2</span><span class="o">.</span><span class="n">preqc</span> <span class="n">MTB_illumina60X_qced_R1R2</span><span class="o">.</span><span class="n">preqc</span> <span class="o">-</span><span class="n">o</span> <span class="n">sga</span><span class="o">-</span><span class="n">preqc</span><span class="o">-</span><span class="n">report</span><span class="o">.</span><span class="n">pdf</span>
+</pre></div>
+</div>
+<p>Open the PDF report and interpret the results.</p>
+<p>Questions:
+* Was the genome size estimated correctly?
+* What differences do you observe between the 20x (blue) and the 60X (red) datasets?
+* Which library will be easier to assemble?</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Ulas Karaoz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

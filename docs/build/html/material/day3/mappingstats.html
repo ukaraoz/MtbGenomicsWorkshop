@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Inspecting, summarizing, and manipulating the read alignments &mdash; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> M. tuberculosis Bioinformatics Workshop
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../agenda.html">Agenda</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Workshop Computer Labs</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">M. tuberculosis Bioinformatics Workshop</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Inspecting, summarizing, and manipulating the read alignments</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/material/day3/mappingstats.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="inspecting-summarizing-and-manipulating-the-read-alignments">
+<h1>Inspecting, summarizing, and manipulating the read alignments<a class="headerlink" href="#inspecting-summarizing-and-manipulating-the-read-alignments" title="Permalink to this headline">¶</a></h1>
+<p>We will now inspect and further process the mapping output. For this, we will use <code class="docutils literal notranslate"><span class="pre">samtools</span></code> suite, which as its name suggests let us <em>massage</em> the mapping information.</p>
+<p>In this section, we will also be playing with the read alignments to have a working understanding of how to get information from and manipulate them.</p>
+<div class="section" id="converting-sam-to-bam-and-back">
+<h2>Converting <code class="docutils literal notranslate"><span class="pre">sam</span></code> to <code class="docutils literal notranslate"><span class="pre">bam</span></code> and back<a class="headerlink" href="#converting-sam-to-bam-and-back" title="Permalink to this headline">¶</a></h2>
+<p>First, let’s convert our <code class="docutils literal notranslate"><span class="pre">.sam</span></code> mapping output to its binary counterpart <code class="docutils literal notranslate"><span class="pre">.bam</span></code>. The binary format is much easier for computers to process but very difficult for humans to read.</p>
+<p>To convert <code class="docutils literal notranslate"><span class="pre">.sam</span></code> to <code class="docutils literal notranslate"><span class="pre">.bam</span></code>, we use the <code class="docutils literal notranslate"><span class="pre">samtools</span> <span class="pre">view</span></code> command. We must specify that our input is in <code class="docutils literal notranslate"><span class="pre">.sam</span></code> format (by default it expects <code class="docutils literal notranslate"><span class="pre">.bam</span></code>) using the <em>-S</em> option. We will also explicitely specify that we want the output to be <code class="docutils literal notranslate"><span class="pre">.bam</span></code> (by default it also produces <code class="docutils literal notranslate"><span class="pre">bam</span></code>) with the -b option. <code class="docutils literal notranslate"><span class="pre">samtools</span></code> follows the UNIX convention of sending its output to the UNIX STDOUT, so we need to use a redirect operator (“&gt;”) to create a BAM file from the output.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools view -S -b $MYRESULTS/mapping/${sample}.mapped.sam &gt; $MYRESULTS/mapping/${sample}.mapped.bam
+</pre></div>
+</div>
+<p>If you need to convert back <code class="docutils literal notranslate"><span class="pre">.bam</span></code> to <code class="docutils literal notranslate"><span class="pre">.sam</span></code> and look at it on the fly without saving to disk, you would do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools view $MYRESULTS/mapping/${sample}.mapped.bam | head -n 10
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-mapping-stats-directly-from-bam">
+<h2>Getting mapping stats directly from <code class="docutils literal notranslate"><span class="pre">.bam</span></code><a class="headerlink" href="#getting-mapping-stats-directly-from-bam" title="Permalink to this headline">¶</a></h2>
+<p>We can also determine mapping statistics directly from the <code class="docutils literal notranslate"><span class="pre">bam</span></code> file. Use for instance the following (which uses FLAG options, <em>-F</em> and <em>-f</em>, more on that later below):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools view -c -F 4 $MYRESULTS/mapping/${sample}.mapped.bam
+samtools view -c -f 4 $MYRESULTS/mapping/${sample}.mapped.bam
+</pre></div>
+</div>
+<p>What does these numbers outputted to STDOUT represent -invoke <code class="docutils literal notranslate"><span class="pre">samtools</span></code>’s help to answer this-. Do things make sense and add up?</p>
+</div>
+<div class="section" id="sorting-the-read-alignments">
+<h2>Sorting the read alignments<a class="headerlink" href="#sorting-the-read-alignments" title="Permalink to this headline">¶</a></h2>
+<p>When you map and align the reads to the reference, the resulting read alignments  are in random order with respect to their position in the reference genome. In other words, the <code class="docutils literal notranslate"><span class="pre">.bam</span></code> file is in the order that the sequences occurred in the input <code class="docutils literal notranslate"><span class="pre">.fastq</span></code>. Prove to yourself  that this is the case:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools view $MYRESULTS/mapping/${sample}.mapped.bam | more
+</pre></div>
+</div>
+<p>Doing anything useful downstream such as calling variants or visualizing the alignments requires that the <code class="docutils literal notranslate"><span class="pre">.bam</span></code> is further manipulated. It must be sorted such that the alignments occur in “genome order”. That is, ordered positionally based upon their alignment coordinates on each chromosome (we obviously have a single one here). Sort the <code class="docutils literal notranslate"><span class="pre">.bam</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools sort $MYRESULTS/mapping/${sample}.mapped.bam -o $MYRESULTS/mapping/${sample}.sorted.bam
+</pre></div>
+</div>
+<p>After sorting, check the order:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools view $MYRESULTS/mapping/${sample}.sorted.bam | more
+</pre></div>
+</div>
+<p>Question (easy!): What do you notice?</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Sorting can also be done using <a class="reference external" href="https://broadinstitute.github.io/picard/">picard</a>. We will be using <code class="docutils literal notranslate"><span class="pre">picard</span></code> for removing duplicate alignments after sorting. When we build our variant calling pipeline, we will do the sorting with <code class="docutils literal notranslate"><span class="pre">picard</span></code> just to keep things consistent with downstream processing. The results should be identical.</p>
+</div>
+</div>
+<div class="section" id="indexing-read-alignments-i-e-indexing-bam">
+<h2>Indexing read alignments (i.e. indexing <code class="docutils literal notranslate"><span class="pre">.bam</span></code>)<a class="headerlink" href="#indexing-read-alignments-i-e-indexing-bam" title="Permalink to this headline">¶</a></h2>
+<p>Indexing a genome sorted <code class="docutils literal notranslate"><span class="pre">.bam</span></code> file allows one to quickly extract alignments overlapping particular genomic regions. Indexing is also required by genome viewers (for instance IGV) so that the viewers can quickly display alignments in each genomic region to which you navigate.
+This is essential for large genomes.</p>
+<p>Index your <code class="docutils literal notranslate"><span class="pre">.bam</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools index $MYRESULTS/mapping/${sample}.sorted.bam
+</pre></div>
+</div>
+<p>This will create an additional index file -what’s that file’s extension?-</p>
+<p>For instance, now that we have indexed the <code class="docutils literal notranslate"><span class="pre">.bam</span></code> file, we have the flexibility to extract the alignments from a defined genomic region.
+We can, for example, extract alignments from the 150th kilobase of the genome.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools view $MYRESULTS/mapping/${sample}.sorted.bam NC_000962.3:150000-151000
+</pre></div>
+</div>
+<p>Question: How many alignments are within <em>NC_000962.3:150000-151000</em>?</p>
+</div>
+<div class="section" id="detailed-inspection-of-some-alignments">
+<h2>Detailed inspection of some alignments<a class="headerlink" href="#detailed-inspection-of-some-alignments" title="Permalink to this headline">¶</a></h2>
+<p>Again, let’s inspect the first 10 alignments in our <code class="docutils literal notranslate"><span class="pre">.bam</span></code> file in detail:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools view $MYRESULTS/mapping/${sample}.sorted.bam | head -n 10
+</pre></div>
+</div>
+<p>Let’s also inspect just the header. The <em>header</em> in a <code class="docutils literal notranslate"><span class="pre">bam</span></code> file records important information regarding the reference genome to which the reads were aligned, as well as other information about how the BAM has been processed. We can ask the view command to report solely the header by using the -H option. As the downstream programs further process the alignments, they will typically add information about what they did to the header. For now, our header contain bare minimum information.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools view -H $MYRESULTS/mapping/${sample}.sorted.bam
+</pre></div>
+</div>
+<p>The FLAG field in the <code class="docutils literal notranslate"><span class="pre">.bam</span></code> format encodes several key pieces of information regarding how an alignment aligned to the reference genome. We can use this information to isolate specific types of alignments that we want to use in our analysis. Here is a table for the flags right from the manual:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Bit</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0x1</td>
+<td>template having multiple segments in sequencing</td>
+</tr>
+<tr class="row-odd"><td>0x2</td>
+<td>each segment properly aligned according to the aligner</td>
+</tr>
+<tr class="row-even"><td>0x4</td>
+<td>segment unmapped</td>
+</tr>
+<tr class="row-odd"><td>0x8</td>
+<td>next segment in the template unmapped</td>
+</tr>
+<tr class="row-even"><td>0x10</td>
+<td>SEQ being reverse complemented</td>
+</tr>
+<tr class="row-odd"><td>0x20</td>
+<td>SEQ of the next segment in the template being reversed</td>
+</tr>
+<tr class="row-even"><td>0x40</td>
+<td>the first segment in the template</td>
+</tr>
+<tr class="row-odd"><td>0x80</td>
+<td>the last segment in the template</td>
+</tr>
+<tr class="row-even"><td>0x100</td>
+<td>secondary alignment</td>
+</tr>
+<tr class="row-odd"><td>0x200</td>
+<td>not passing quality controls</td>
+</tr>
+<tr class="row-even"><td>0x400</td>
+<td>PCR or optical duplicate</td>
+</tr>
+<tr class="row-odd"><td>0x800</td>
+<td>supplementary alignment</td>
+</tr>
+</tbody>
+</table>
+<p>For example, we often want to call variants solely from paired-end sequences that aligned “properly” to the reference genome. Can you tell why?</p>
+<p>To ask the view command to report solely “proper pairs” we use the <em>-f</em> option and ask for alignments where the second bit is true (proper pair is true).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>samtools view -f 0x2 $MYRESULTS/mapping/${sample}.sorted.bam
+</pre></div>
+</div>
+<ul class="simple">
+<li>Question: How many properly paired alignments are there? How does that number compare to the number you got above using <code class="docutils literal notranslate"><span class="pre">-F</span></code>?</li>
+<li>Question: How many improperly paired alignments are there?</li>
+<li>Question: Using what you played with, how would you calculate the fragment size distribution?</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Ulas Karaoz.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
