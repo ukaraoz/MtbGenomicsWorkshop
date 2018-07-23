@@ -55,6 +55,7 @@ Friday
 AM
 +++++++
 **Lecture**: :download:`Microbial phylogenetics and phylogenomics <pdf/Phylogenetics_Phylogenomics.pdf>`
+
 **Lecture**: Reproducible research in high-throughput biology and building bioinformatics pipelines 
 
 +++++++
