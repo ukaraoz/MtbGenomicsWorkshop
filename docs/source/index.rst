@@ -1,9 +1,9 @@
 ---------------------------------------------------------------------------------------------------------------------
 Welcome to Bioinformatics Workshop for *M. tuberculosis* genomics and phylogenomics at The Philippine Genome Center (July 9-14 2018)
 ---------------------------------------------------------------------------------------------------------------------
-This workshop is co-organized by `Berkeley Lab Ecology Department <https://eesa.lbl.gov/departments/ecology>`_, `UCSF Division of Pulmonary, Critical Care, Allergy and Sleep Medicine <https://pulmonary.ucsf.edu/>`_, and `The Philippine Genome Center (PGC) <https://pgc.up.edu.ph/>`_.
+This workshop was co-organized by `Berkeley Lab Ecology Department <https://eesa.lbl.gov/departments/ecology>`_, `UCSF Division of Pulmonary, Critical Care, Allergy and Sleep Medicine <https://pulmonary.ucsf.edu/>`_, and `The Philippine Genome Center (PGC) <https://pgc.up.edu.ph/>`_.
 
-Participants were from `National Institutes of Health at theUniversity of the Philippines <http://nih.upm.edu.ph/>`_, `Research Institute for Tropical Medicine <http://www.ritm.gov.ph/>`_, and `The Philippine Genome Center (PGC) <https://pgc.up.edu.ph/>`_.
+Participants were from `National Institutes of Health at the University of the Philippines <http://nih.upm.edu.ph/>`_, `Research Institute for Tropical Medicine <http://www.ritm.gov.ph/>`_, and `The Philippine Genome Center (PGC) <https://pgc.up.edu.ph/>`_.
 
 .. image:: mainlogo.png
 	:height: 148 px
