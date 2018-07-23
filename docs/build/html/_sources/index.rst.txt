@@ -5,7 +5,7 @@ This workshop is co-organized by `Berkeley Lab Ecology Department <https://eesa.
 
 Participants were from `National Institutes of Health at theUniversity of the Philippines <http://nih.upm.edu.ph/>`_, `Research Institute for Tropical Medicine <http://www.ritm.gov.ph/>`_, and `The Philippine Genome Center (PGC) <https://pgc.up.edu.ph/>`_.
 
-.. image:: logo.png
+.. image:: mainlogo.png
 	:height: 148 px
 	:width: 853.3801 px
 	:scale: 100
