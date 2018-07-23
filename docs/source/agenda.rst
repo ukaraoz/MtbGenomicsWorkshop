@@ -1,6 +1,6 @@
-::::::::::
-Agenda
-::::::::::
+::::::::::::::::::::::::::::::
+Agenda and Lectures' Slides
+::::::::::::::::::::::::::::::
 
 ^^^^^^^
 Tuesday
@@ -11,12 +11,12 @@ PM
 Intermediate to Advanced Unix Shell for Bioinformatics
 
 
-^^^^^^^
+^^^^^^^^^^^^^^
 Wednesday
-^^^^^^^
-+++++++
+^^^^^^^^^^^^^^
+++++++++++++++
 AM
-+++++++
+++++++++++++++
 **Lecture**: :download:`Whole-genome sequencing: technologies and data <pdf/WGS_TechnologyandData.pdf>`
  + Overview of short and long read sequencing technologies
  + Project design considerations: library complexity, data quantity and quality
@@ -33,14 +33,13 @@ Hands-on computer lab:
  + Assembly Quality Control
  + Genome Annotation
 
-^^^^^^^
+^^^^^^^^^^^^^^
 Thursday
-^^^^^^^
+^^^^^^^^^^^^^^
 +++++++
 AM
 +++++++
-**Lecture**: Read Mapping and variant calling-Part 1
-**Lecture**: Read Mapping and variant calling-Part 2
+**Lecture**: :download:`Read Mapping and variant calling <pdf/ReadMapping_VariantCalling.pdf>`
 
 +++++++
 PM
@@ -55,8 +54,7 @@ Friday
 +++++++
 AM
 +++++++
-**Lecture**: Microbial phylogenetics and phylogenomics
-
+**Lecture**: :download:`Microbial phylogenetics and phylogenomics <pdf/Phylogenetics_Phylogenomics.pdf>`
 **Lecture**: Reproducible research in high-throughput biology and building bioinformatics pipelines 
 
 +++++++
@@ -67,11 +65,10 @@ Hands-on practical:
  + Building computational pipelines with Snakemake
 
 
-^^^^^^^
+^^^^^^^^^^^^^^
 Saturday
-^^^^^^^
-
+^^^^^^^^^^^^^^
+++
 AM
 ++
-
-**Lecture & Practical**: An Introduction to Data Analysis with R
+**Lecture & Practical**: Building computational pipelines with python and Snakemake

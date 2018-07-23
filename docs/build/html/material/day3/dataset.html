@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Datasets &mdash; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
+  <title>Dataset &mdash; M. tuberculosis Bioinformatics Workshop 0.1 documentation</title>
   
 
   
@@ -27,7 +27,9 @@
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Data Prep and Read QC" href="dataprep_readqc.html" />
+    <link rel="prev" title="Day 3: Read mapping and variant calling" href="index.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -79,8 +81,20 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../agenda.html">Agenda</a></li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Workshop Hands-on Practicals</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../day1/index.html">Day 1: Unix Shell Refresher for Bioinformatics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day2/index.html">Day 2: Microbial Genome Assembly (from short and long reads) and Genome Annotation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Day 3: Read mapping and variant calling</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataprep_readqc.html">Data Prep and Read QC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mapping.html">Mapping Reads to the Reference Genome</a></li>
+<li class="toctree-l2"><a class="reference internal" href="igv.html">Visualizing the read alignments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mappingstats.html">Inspecting, summarizing, and manipulating the read alignments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alignment_qc_filter.html">QCing and filtering the read alignments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../day4/index.html">Day 4: Phylogenetics/Phylogenomics and Building Reproducible Computational Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day5/index.html">Day 5: Building Reproducible Computational Pipelines</a></li>
 </ul>
 
             
@@ -126,7 +140,9 @@
     
       <li><a href="../../index.html">Docs</a> &raquo;</li>
         
-      <li>Datasets</li>
+          <li><a href="index.html">Day 3: Read mapping and variant calling</a> &raquo;</li>
+        
+      <li>Dataset</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -145,25 +161,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="datasets">
-<h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h1>
-<p>The dataset is a subset of 1000 <em>M. tuberculosis</em> isolates whole genome sequenced by Casali et al.: <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3939361/">Evolution and transmission of drug-resistant tuberculosis in a Russian population</a>. In the previous tutorial, we generated an initial set of variants from a single <em>M. tuberculosis</em> isolate. In this subsequent tutorial, we will be repeating that for additinal isolates. We will then combine all of these variants into a single dataset for further analysis.</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="21%" />
-<col width="79%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">File</th>
-<th class="head">Content</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Mtb_repeats.bed</td>
-<td>precalculated, coordinates of the repetitive regions in the reference <em>M.tuberculosis</em> genome</td>
-</tr>
-</tbody>
-</table>
+  <div class="section" id="dataset">
+<h1>Dataset<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h1>
+<p>The dataset we will be using for today’s and tomorrow’s practicals is a subset of 1000 <em>M. tuberculosis</em> isolates from a Russian population. The results of this study was published by Casali et al.: <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3939361/">Evolution and transmission of drug-resistant tuberculosis in a Russian population</a>. These isolates have been whole-genome shotgun sequenced using Illumina platform (2x100 bp). Raw read data has been deposited to European Nucleotide Archive under Study Accession <a class="reference external" href="https://www.ebi.ac.uk/ena/data/view/PRJEB2138">PRJEB2138</a>. For this tutorial, we will focus on a subset of these isolates (n=99 isolates).</p>
 </div>
 
 
@@ -171,6 +171,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dataprep_readqc.html" class="btn btn-neutral float-right" title="Data Prep and Read QC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Day 3: Read mapping and variant calling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

@@ -27,7 +27,9 @@
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Advanced Beginner/Intermediate Shell" href="unixintermediate.html" />
+    <link rel="prev" title="Day 1: Unix Shell Refresher for Bioinformatics" href="index.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -79,8 +81,55 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../agenda.html">Agenda</a></li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Workshop Computer Labs</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Day 1: Unix Shell Refresher for Bioinformatics</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Introductory Unix Shell</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#credits">Credits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-the-shell">What is the shell?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#information-on-the-shell">Information on the shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-with-the-shell">Starting with the shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-commands">Running commands</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#files-and-directories">Files and directories</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#command-line-options">Command line options</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#the-unix-directory-file-structure">The Unix directory file structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#moving-around-the-file-system">Moving around the file system</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#looking-folder-within-folder-within-folder-within">Looking folder within folder within folder within…</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shortcut-tab-completion">Shortcut: Tab Completion</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#full-vs-relative-paths">Full vs. Relative Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#saving-time-with-shortcuts-wild-cards-and-tab-completion">Saving time with shortcuts, wild cards, and tab completion</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#shortcuts">Shortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#our-dataset-fastq-files">Our dataset: FASTQ files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#wild-cards">Wild cards</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#when-wildcards-go-bad">When wildcards go bad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examining-files">Examining Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#searching-files">Searching files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-moving-copying-and-removing">Creating, moving, copying, and removing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#writing-files">Writing files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-programs-revisited">Running programs, revisited</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#writing-scripts">Writing scripts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#challenge">Challenge:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#more-resources">More resources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="unixintermediate.html">Advanced Beginner/Intermediate Shell</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../day2/index.html">Day 2: Microbial Genome Assembly (from short and long reads) and Genome Annotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day3/index.html">Day 3: Read mapping and variant calling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day4/index.html">Day 4: Phylogenetics/Phylogenomics and Building Reproducible Computational Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../day5/index.html">Day 5: Building Reproducible Computational Pipelines</a></li>
 </ul>
 
             
@@ -125,6 +174,8 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Day 1: Unix Shell Refresher for Bioinformatics</a> &raquo;</li>
         
       <li>Introductory Unix Shell</li>
     
@@ -875,6 +926,15 @@ don’t really need to automate….</p>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="unixintermediate.html" class="btn btn-neutral float-right" title="Advanced Beginner/Intermediate Shell" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Day 1: Unix Shell Refresher for Bioinformatics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
